@@ -8,4 +8,15 @@ RSpec.describe Question, :type => :model do
   it { should ensure_length_of(:body).is_at_most(1000) }
 
   it { should have_many(:answers) }
+
+  describe 'answer association' do
+    let!(:question) { FactoryGirl.create(:question) }
+    let!(:old_answer) { FactoryGirl.create(:answer, question: question, body: 'Old answer', created_at: 1.month.ago)  }
+    let!(:newer_answer) { FactoryGirl.create(:answer, question:question, body: 'New answer', created_at: 1.day.ago)  }
+
+    it "should have answers in the right order" do
+      expect(question.answers.to_a).to eq [old_answer, newer_answer]
+    end
+
+  end
 end
