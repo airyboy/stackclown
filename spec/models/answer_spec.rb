@@ -7,4 +7,8 @@ RSpec.describe Answer, :type => :model do
   it { should ensure_length_of(:body).is_at_most(10000) }
 
   it { should belong_to(:question) }
+
+  describe 'comments association' do
+    it { should have_many(:comments) }
+  end
 end

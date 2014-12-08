@@ -3,4 +3,5 @@ class Question < ActiveRecord::Base
   validates :body, presence: true, length: { maximum: 1000 }
 
   has_many :answers, dependent: :destroy
+  has_many :comments, as: :commentable
 end
