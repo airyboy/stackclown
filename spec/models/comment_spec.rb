@@ -9,11 +9,11 @@ RSpec.describe Comment, :type => :model do
     let(:question) { FactoryGirl.create(:question) }
     before { @comment = question.comments.create(body:"Comment") }
 
-    it "should have right comment" do
+    it "should have the right comment" do
       expect(question.comments.first).to eq @comment
     end
 
-    it "should have right question" do
+    it "should have the right question" do
       expect(@comment.commentable).to eq question
     end
   end
@@ -22,11 +22,11 @@ RSpec.describe Comment, :type => :model do
     let(:answer) { FactoryGirl.create(:question) }
     before { @comment = answer.comments.create(body:"Comment") }
 
-    it "should have right comment" do
+    it "should have the right comment" do
       expect(answer.comments.first).to eq @comment
     end
 
-    it "should have right answer" do
+    it "should have the right answer" do
       expect(@comment.commentable).to eq answer
     end
   end
