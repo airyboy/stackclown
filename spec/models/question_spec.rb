@@ -16,7 +16,7 @@ RSpec.describe Question, :type => :model do
     let!(:old_answer) { FactoryGirl.create(:answer, question: question, body: 'Old answer', created_at: 1.month.ago)  }
     let!(:newer_answer) { FactoryGirl.create(:answer, question:question, body: 'New answer', created_at: 1.day.ago)  }
 
-    it "should have answers in the right order" do
+    it 'should have answers in the right order' do
       expect(question.answers.to_a).to eq [old_answer, newer_answer]
     end
   end
@@ -28,21 +28,28 @@ RSpec.describe Question, :type => :model do
   describe 'tags association' do
     it { should have_many(:tags) }
 
-    let(:tag) { FactoryGirl.create(:tag) }
-
-    it 'should assign a tag' do
-      before { question.assign_tag(tag) }
-
-      expect(question.tags).to include(tag)
+    before do
+      Tag.create(tag_name: 'tag-text')
+      @tag = 'tag-text'
     end
 
-    it 'should create a tag with a new name' do
-      @new_tag = "new"
-      expect(question.assign_tag(@new_tag).to change(question.tags, :count).by(1))
+    describe 'when assigning an existing tag' do
+      before { @the_tag = question.assign_tag(@tag) }
+
+      it 'should assign this tag' do
+        expect(question.tags).to include(@the_tag)
+      end
+
+      it 'should not assign the same tag twice' do
+        expect{ question.assign_tag(@tag) }.not_to change(question.tags, :count)
+      end
     end
 
-    it 'should not be able to assign the same tag twice' do
-
+    describe 'when assigning a new tag' do
+      before { @new_tag = 'new-tag-text' }
+      it 'should create a tag with a new name' do
+        expect{ question.assign_tag(@new_tag) }.to change(question.tags, :count).by(1)
+      end
     end
   end
 end
