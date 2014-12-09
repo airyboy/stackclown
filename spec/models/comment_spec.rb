@@ -5,7 +5,7 @@ RSpec.describe Comment, :type => :model do
   it { should validate_presence_of(:commentable_id) }
   it { should ensure_length_of(:body).is_at_most(1000) }
 
-  describe "question association" do
+  context "question association" do
     let(:question) { FactoryGirl.create(:question) }
     before { @comment = question.comments.create(body:"Comment") }
 
@@ -18,11 +18,11 @@ RSpec.describe Comment, :type => :model do
     end
   end
 
-  describe "answer association" do
+  context "answer association" do
     let(:answer) { FactoryGirl.create(:question) }
     before { @comment = answer.comments.create(body:"Comment") }
 
-    it "should have right answer" do
+    it "should have right comment" do
       expect(answer.comments.first).to eq @comment
     end
 
