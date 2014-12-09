@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Comment, :type => :model do
   it { should validate_presence_of(:body) }
   it { should validate_presence_of(:commentable_id) }
-  it { should ensure_length_of(:body).is_at_most(1000) }
+  it { should ensure_length_of(:body).is_at_most(GlobalConstants::COMMENT_BODY_MAX_LENGTH) }
 
   context "question association" do
     let(:question) { FactoryGirl.create(:question) }

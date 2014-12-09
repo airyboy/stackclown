@@ -1,6 +1,6 @@
 class Question < ActiveRecord::Base
-  validates :title, presence: true, length: { maximum: 30 }
-  validates :body, presence: true, length: { maximum: 1000 }
+  validates :title, presence: true, length: { maximum: GlobalConstants::QUESTION_TITLE_MAX_LENGTH }
+  validates :body, presence: true, length: { maximum: GlobalConstants::QUESTION_BODY_MAX_LENGTH }
 
   has_many :answers, dependent: :destroy
   has_many :comments, as: :commentable

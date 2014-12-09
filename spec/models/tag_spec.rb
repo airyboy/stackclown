@@ -4,7 +4,7 @@ RSpec.describe Tag, :type => :model do
   it { should validate_presence_of(:tag_name) }
   it { should have_many(:questions) }
   it { should validate_uniqueness_of(:tag_name).case_insensitive }
-	it { should ensure_length_of(:tag_name).is_at_most(12) }
+	it { should ensure_length_of(:tag_name).is_at_most(GlobalConstants::TAG_NAME_MAX_LENGTH) }
 
   before { @tag = Tag.new(tag_name: 'some-tag')}
 
