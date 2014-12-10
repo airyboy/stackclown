@@ -23,17 +23,33 @@ RSpec.describe Question, :type => :model do
 
   describe 'comments association' do
     it { should have_many(:comments) }
+
+    let!(:new_comment) { FactoryGirl.create(:comment, commentable: question, created_at: 1.hour.ago) }
+    let!(:old_comment) { FactoryGirl.create(:comment, commentable: question, created_at: 1.day.ago) }
+
+    it 'should have comments in the right order' do
+      expect(question.comments.to_a).to eq [old_comment, new_comment]
+    end
   end
 
   describe 'tags association' do
     it { should have_many(:tags) }
 
+    let(:tag) { FactoryGirl.create(:tag) }
+
     before do
-      Tag.create(tag_name: 'tag-text')
       @tag = 'tag-text'
+      Tag.create(tag_name: @tag)
     end
 
-    describe 'when assigning an existing tag' do
+    context 'when assigning a new tag' do
+      before { @new_tag = 'new-tag-text' }
+      it 'should create a tag with a new name' do
+        expect{ question.assign_tag(@new_tag) }.to change(question.tags, :count).by(1)
+      end
+    end
+
+    context 'when assigning an existing tag' do
       before { @the_tag = question.assign_tag(@tag) }
 
       it 'should assign this tag' do
@@ -45,10 +61,11 @@ RSpec.describe Question, :type => :model do
       end
     end
 
-    describe 'when assigning a new tag' do
-      before { @new_tag = 'new-tag-text' }
-      it 'should create a tag with a new name' do
-        expect{ question.assign_tag(@new_tag) }.to change(question.tags, :count).by(1)
+    context 'when removing the tag' do
+      before { question.tags << tag }
+
+      it 'should remove this tag from the question' do
+        expect{ question.remove_tag(tag) }.to change(question.tags, :count).by(-1)
       end
     end
   end

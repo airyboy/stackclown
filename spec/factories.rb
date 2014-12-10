@@ -15,6 +15,5 @@ FactoryGirl.define do
 
   factory :comment do
   	body "RTFM"
-  	commentable question
   end
 end

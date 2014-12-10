@@ -14,4 +14,8 @@ class Question < ActiveRecord::Base
 
     tag
   end
+
+  def remove_tag(tag)
+    tag_relationships.find_by(tag_id: tag.id).destroy!
+  end
 end
