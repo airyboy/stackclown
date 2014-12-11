@@ -67,6 +67,8 @@ RSpec.describe Question, :type => :model do
       it 'should remove this tag from the question' do
         expect{ question.remove_tag(tag) }.to change(question.tags, :count).by(-1)
       end
+
+
     end
   end
 end
