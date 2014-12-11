@@ -4,7 +4,7 @@ FactoryGirl.define do
     body 'A long body.'*40
   end
 
-  factory :invalid_question, class: "Question" do
+  factory :invalid_question, class: 'Question' do
     title 'How patch KDE under FreeBSD?'
     body nil	
   end
@@ -12,6 +12,10 @@ FactoryGirl.define do
   factory :answer do
     body 'Answer body'*40
     question
+  end
+
+  factory :invalid_answer, class: 'Answer' do
+    body nil
   end
 
   factory :tag do
