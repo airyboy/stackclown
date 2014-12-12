@@ -7,7 +7,7 @@ class AnswersController < ApplicationController
       redirect_to question_path(@question)
     else
       flash[:error] = 'Error'
-      redirect_to question_path(@question)
+      render 'questions/show'
     end
   end
 

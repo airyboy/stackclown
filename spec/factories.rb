@@ -23,6 +23,10 @@ FactoryGirl.define do
   end
 
   factory :comment do
-  	body "RTFM"
+  	body 'RTFM'
+
+    association :commentable, :factory => :question
   end
+
+
 end

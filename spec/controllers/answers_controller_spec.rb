@@ -3,6 +3,18 @@ require 'rails_helper'
 RSpec.describe AnswersController, :type => :controller do
   let!(:question) { create(:question) }
 
+  describe 'GET #new' do
+    before { get :new, question_id: question }
+
+    it 'assigns a new answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'renders partial new view' do
+      expect(response).to render_template(partial: :new)
+    end
+  end
+
   describe 'POST #create' do
     context 'when attributes are valid' do
       it 'should save the new answer to the DB' do
@@ -26,7 +38,7 @@ RSpec.describe AnswersController, :type => :controller do
 
       it 'should redirect to the question with error message' do
         post :create, question_id: question, answer: attributes_for(:invalid_answer)
-        expect(response).to redirect_to question_path(question)
+        expect(response).to render_template(partial: 'new')
         expect(flash[:error]).to be_present
       end
     end

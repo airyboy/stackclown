@@ -1,33 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Comment, :type => :model do
+  it { should belong_to(:commentable) }
+
   it { should validate_presence_of(:body) }
   it { should validate_presence_of(:commentable_id) }
   it { should ensure_length_of(:body).is_at_most(GlobalConstants::COMMENT_BODY_MAX_LENGTH) }
 
-  context "question association" do
-    let(:question) { FactoryGirl.create(:question) }
-    before { @comment = question.comments.create(body:"Comment") }
+  describe 'when comments are requested' do
+    let!(:new_comment) { create(:comment, created_at: 1.hour.ago) }
+    let!(:old_comment) { create(:comment, created_at: 1.day.ago) }
 
-    it "should have the right comment" do
-      expect(question.comments.first).to eq @comment
-    end
-
-    it "should have the right question" do
-      expect(@comment.commentable).to eq question
-    end
-  end
-
-  context "answer association" do
-    let(:answer) { FactoryGirl.create(:question) }
-    before { @comment = answer.comments.create(body:"Comment") }
-
-    it "should have the right comment" do
-      expect(answer.comments.first).to eq @comment
-    end
-
-    it "should have the right answer" do
-      expect(@comment.commentable).to eq answer
+    it 'should be in the right order' do
+      expect(Comment.all.to_a).to eq [old_comment, new_comment]
     end
   end
 end
