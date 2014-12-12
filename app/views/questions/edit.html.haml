@@ -1,0 +1,10 @@
+= provide(:title, 'Edit question')
+%h1 Edit question
+= form_for(@question) do |q|
+ = q.label :title
+ = q.text_field :title
+ %br
+ = q.label :body
+ = q.text_area :body
+ %br
+ = q.submit 'Create'

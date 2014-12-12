@@ -6,6 +6,7 @@ class QuestionsController < ApplicationController
 	end
 
 	def show
+		redirect_to question_answers_path(@question)
 	end
 
 	def new

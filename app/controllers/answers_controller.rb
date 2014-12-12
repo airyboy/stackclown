@@ -1,19 +1,28 @@
 class AnswersController < ApplicationController
-  before_action :load_question, only: [:create, :destroy]
+  before_action :load_question, only: [:index, :create, :destroy]
+
+  def new
+    @answer = @question.build
+  end
+
+  def index
+    @answers = @question.answers
+    @new_answer = Answer.new
+  end
 
   def create
     @answer = @question.answers.build(answer_params)
     if @answer.save
-      redirect_to question_path(@question)
+      redirect_to question_answers_path(@question)
     else
       flash[:error] = 'Error'
-      render 'questions/show'
+      render :index
     end
   end
 
   def destroy
-    @answer = @question.answers.find_by(id: params[:id])
-    @answer.destroy!
+    @answer = @question.answers.find(params[:id])
+    @answer.destroy
     redirect_to question_path(@question)
   end
 

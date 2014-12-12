@@ -1,0 +1,12 @@
+= provide(:title, 'New question')
+%h1 New question
+= form_for(@question) do |q|
+  %p
+    = q.label :title
+    %br
+    = q.text_field :title
+  %p
+    = q.label :body
+    %br
+    = q.text_area :body
+  = q.submit 'Create'

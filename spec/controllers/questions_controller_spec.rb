@@ -20,12 +20,8 @@ RSpec.describe QuestionsController, :type => :controller do
 	describe 'GET #show' do
 		before { get :show, id: question }
 
-		it 'assigns the requested question to @question' do			
-			expect(assigns(:question)).to eq question
-		end
-
-		it 'renders show view' do
-			expect(response).to render_template :show
+		it 'renders question answers view' do
+			expect(response).to redirect_to question_answers_path(question)
 		end
 	end
 

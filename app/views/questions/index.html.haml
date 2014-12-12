@@ -1,0 +1,12 @@
+= provide(:title, 'Questions')
+
+%h1 Questions
+%ul
+  - @questions.each do |question|
+    %br
+    %span.title
+      = link_to(question.title, question)
+    %br
+    %span.body
+      = question.body
+    %hr

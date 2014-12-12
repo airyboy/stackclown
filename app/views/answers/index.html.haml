@@ -1,0 +1,15 @@
+= provide(:title, 'Show question')
+%h2
+  = @question.title
+%span
+  = @question.body
+%br
+- @answers.each do |answer|
+  %p
+    %small
+      = answer.body
+%br
+= form_for @new_answer, url: { action: 'create' } do |a|
+  = a.text_area :body
+  %br
+  = a.submit 'Write comment'
