@@ -33,6 +33,6 @@ class AnswersController < ApplicationController
     end
 
     def load_question
-      @question = Question.find_by(id: params[:question_id])
+      @question = Question.find(params[:question_id])
     end
 end

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :commentable do
-    resources :answers, concerns: :commentable
+    resources :answers, concerns: :commentable, shallow: true
   end
 
 

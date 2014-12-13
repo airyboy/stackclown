@@ -9,7 +9,7 @@ RSpec.describe CommentsController, :type => :controller do
 
       it 'should save the new comment of the answer to the DB' do
         expect do
-          post :create, question_id: question, answer_id: answer, comment: attributes_for(:comment_to_answer)
+          post :create, answer_id: answer, comment: attributes_for(:comment_to_answer)
         end.to change(answer.comments, :count).by(1)
       end
 
@@ -20,7 +20,7 @@ RSpec.describe CommentsController, :type => :controller do
       end
 
       it 'should redirect to question' do
-        post :create, question_id: question, answer_id: answer, comment: attributes_for(:comment_to_answer)
+        post :create, answer_id: answer, comment: attributes_for(:comment_to_answer)
         expect(response).to redirect_to question_answers_path(question)
       end
     end
@@ -28,7 +28,7 @@ RSpec.describe CommentsController, :type => :controller do
     context 'when attributes are invalid' do
       it 'should not save the new comment of the answer to the DB' do
         expect do
-          post :create, question_id: question, answer_id: answer, comment: { body:nil }
+          post :create, answer_id: answer, comment: { body:nil }
         end.not_to change(answer.comments, :count)
       end
 
@@ -39,7 +39,7 @@ RSpec.describe CommentsController, :type => :controller do
       end
 
       it 'should render question answers with error' do
-        post :create, question_id: question, answer_id: answer, comment: { body:nil }
+        post :create, answer_id: answer, comment: { body:nil }
         expect(response).to render_template 'answers/index'
       end
     end
@@ -66,12 +66,12 @@ RSpec.describe CommentsController, :type => :controller do
 
       it 'should delete the comment of the answer' do
         expect do
-          delete :destroy, question_id: question, answer_id: answer, id: answer_comment
+          delete :destroy, answer_id: answer, id: answer_comment
         end.to change(answer.comments, :count).by(-1)
       end
 
       it 'should redirect to question' do
-        delete :destroy, question_id: question, answer_id: answer, id: answer_comment
+        delete :destroy, answer_id: answer, id: answer_comment
         expect(response).to redirect_to question_answers_path(question)
       end
     end

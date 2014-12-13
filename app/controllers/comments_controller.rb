@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :find_commentable, only: [:create, :destroy]
+  before_action :find_commentable
   before_action :load_question
 
   def create
@@ -25,11 +25,15 @@ class CommentsController < ApplicationController
           @commentable = $1.classify.constantize.find(value)
         end
       end
-      nil
     end
 
     def load_question
-      @question = Question.find(params[:question_id])
+      find_commentable
+      if @commentable.instance_of?(Question)
+        @question = @commentable
+      elsif @commentable.instance_of?(Answer)
+        @question = @commentable.question
+      end
     end
 
     def comment_params
