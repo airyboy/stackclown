@@ -20,6 +20,5 @@ def make_answers
     5.times do |n|
       q.answers.create(body: "somebody #{n}")
     end
-
   end
 end
