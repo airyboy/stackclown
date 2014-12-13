@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
   root 'questions#index'
 
-  resources :questions do
-    resources :answers
+  concern :commentable do
+    resources :comments, only: [:create, :destroy]
   end
+
+  resources :questions, concerns: :commentable do
+    resources :answers, concerns: :commentable
+  end
+
+
 
 
   # The priority is based upon order of creation: first created -> highest priority.
