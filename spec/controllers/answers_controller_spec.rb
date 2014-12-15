@@ -97,12 +97,12 @@ RSpec.describe AnswersController, :type => :controller do
     let!(:answer) { question.answers.create(attributes_for(:answer)) }
     it 'should delete the answer' do
       expect do
-        delete :destroy, question_id: question, id: answer
+        delete :destroy, id: answer
       end.to change(question.answers, :count).by(-1)
     end
 
     it 'should redirect to question' do
-      delete :destroy, question_id: question, id: answer
+      delete :destroy, id: answer
       expect(response).to redirect_to question_answers_path(question)
     end
   end

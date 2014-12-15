@@ -1,6 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :find_commentable
-  before_action :load_question
+  before_action :find_commentable, only: [:create]
 
   def create
     comment = @commentable.comments.build(comment_params)
@@ -15,8 +14,10 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    comment = Comment.(params[:id])
-    @commentable.comments..destroy
+    comment = Comment.find(params[:id])
+    @commentable = comment.commentable
+    load_question
+    comment.destroy
     redirect_to question_answers_path(@question)
   end
 
@@ -27,10 +28,10 @@ class CommentsController < ApplicationController
           @commentable = $1.classify.constantize.find(value)
         end
       end
+      load_question
     end
 
     def load_question
-      find_commentable
       if @commentable.instance_of?(Question)
         @question = @commentable
       elsif @commentable.instance_of?(Answer)

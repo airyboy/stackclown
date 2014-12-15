@@ -56,12 +56,12 @@ RSpec.describe CommentsController, :type => :controller do
 
       it 'should delete the comment of the question' do
         expect do
-          delete :destroy, question_id: question, id: question_comment
+          delete :destroy, id: question_comment
         end.to change(question.comments, :count).by(-1)
       end
 
       it 'should redirect to question' do
-        delete :destroy, question_id: question, id: question_comment
+        delete :destroy, id: question_comment
         expect(response).to redirect_to question_answers_path(question)
       end
     end
@@ -71,12 +71,12 @@ RSpec.describe CommentsController, :type => :controller do
 
       it 'should delete the comment of the answer' do
         expect do
-          delete :destroy, answer_id: answer, id: answer_comment
+          delete :destroy, id: answer_comment
         end.to change(answer.comments, :count).by(-1)
       end
 
       it 'should redirect to question' do
-        delete :destroy, answer_id: answer, id: answer_comment
+        delete :destroy, id: answer_comment
         expect(response).to redirect_to question_answers_path(question)
       end
     end
