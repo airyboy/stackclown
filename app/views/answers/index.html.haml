@@ -3,13 +3,26 @@
   = @question.title
 %span
   = @question.body
-%br
+- if @question.comments.any?
+  - @question.comments.each do |comm|
+    %p
+      %small
+        = comm.body
+        = link_to 'x', comm, method: :delete, question_id: @question
+%p
+  = form_for @new_comment, url: question_comments_path(@question) do |c|
+    = c.text_area :body
+    %br
+      = c.submit 'Submit'
+
+%hr
 - @answers.each do |answer|
   %p
     %small
       = answer.body
+      = link_to 'x', answer, data: {question_id: @question.id}, method: :delete
 %br
-= form_for @new_answer, url: { action: 'create' } do |a|
+= form_for @new_answer, url: question_answers_path(@question) do |a|
   = a.text_area :body
   %br
-  = a.submit 'Write comment'
+  = a.submit 'Answer'

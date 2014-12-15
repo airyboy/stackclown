@@ -1,0 +1,6 @@
+- provide(:title, 'Edit answer')
+= form_for @answer do |a|
+  = a.label :body
+  %br
+  = a.text_area :body
+  = a.submit 'Update answer'

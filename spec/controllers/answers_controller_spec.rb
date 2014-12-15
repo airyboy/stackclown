@@ -22,6 +22,10 @@ RSpec.describe AnswersController, :type => :controller do
     it 'assigns a new answer to @new_answer' do
       expect(assigns(:new_answer)).to be_a_new(Answer)
     end
+
+    it 'assigns a new comment to @new_comment' do
+      expect(assigns(:new_comment)).to be_a_new(Comment)
+    end
   end
 
   describe 'POST #create' do
@@ -53,6 +57,42 @@ RSpec.describe AnswersController, :type => :controller do
     end
   end
 
+  describe 'PATCH#update' do
+    context 'when attributes are valid' do
+      let(:answer) { create(:answer, question: question) }
+      before { patch :update, question_id: question, id: answer, answer: {body: 'NewBody'} }
+
+      it 'should assign answer to @answer' do
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'should update the answer attributes' do
+        answer.reload
+        expect(answer.body).to eq 'NewBody'
+      end
+
+      it 'should redirect to question' do
+        expect(response).to redirect_to question_answers_path(question)
+      end
+    end
+
+    context 'when attributes are invalid' do
+      let(:answer) { create(:answer, question: question) }
+      let(:old_body) { answer.body }
+      before { patch :update, question_id: question, id: answer, answer: {body: nil} }
+
+      it 'should not update the answer attributes' do
+        answer.reload
+        expect(answer.body).to eq old_body
+      end
+
+      it 'should re render answer edit page' do
+        expect(response).to render_template :edit
+      end
+    end
+
+  end
+
   describe 'DELETE #destroy' do
     let!(:answer) { question.answers.create(attributes_for(:answer)) }
     it 'should delete the answer' do
@@ -63,7 +103,7 @@ RSpec.describe AnswersController, :type => :controller do
 
     it 'should redirect to question' do
       delete :destroy, question_id: question, id: answer
-      expect(response).to redirect_to(question)
+      expect(response).to redirect_to question_answers_path(question)
     end
   end
 end

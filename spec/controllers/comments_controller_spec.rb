@@ -38,6 +38,11 @@ RSpec.describe CommentsController, :type => :controller do
         end.not_to change(question.comments, :count)
       end
 
+      it 'should populate an array of answers' do
+        post :create, question_id: question, comment: { body:nil }
+        expect(assigns(:answers)).to match_array(question.answers.to_a)
+      end
+
       it 'should render question answers with error' do
         post :create, answer_id: answer, comment: { body:nil }
         expect(response).to render_template 'answers/index'

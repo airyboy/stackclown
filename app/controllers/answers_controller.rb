@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :load_question, only: [:index, :create, :destroy]
+  before_action :load_question, only: [:index, :create, :update]
 
   def new
     @answer = @question.build
@@ -8,6 +8,16 @@ class AnswersController < ApplicationController
   def index
     @answers = @question.answers
     @new_answer = Answer.new
+    @new_comment = Comment.new
+  end
+
+  def update
+    @answer = @question.answers.find(params[:id])
+    if @answer.update(answer_params)
+      redirect_to question_answers_path(@question)
+    else
+      render :edit
+    end
   end
 
   def create
@@ -15,15 +25,17 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to question_answers_path(@question)
     else
+      prepare_data(@question)
       flash[:error] = 'Error'
       render :index
     end
   end
 
   def destroy
-    @answer = @question.answers.find(params[:id])
+    @answer = Answer.find(params[:id])
+    @question = @answer.question
     @answer.destroy
-    redirect_to question_path(@question)
+    redirect_to question_answers_path(@question)
   end
 
   private

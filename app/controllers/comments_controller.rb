@@ -8,13 +8,15 @@ class CommentsController < ApplicationController
     if comment.save
       redirect_to question_answers_path(@question)
     else
+      prepare_data(@question)
       flash[:error] = 'Error'
       render 'answers/index'
     end
   end
 
   def destroy
-    @commentable.comments.find(params[:id]).destroy
+    comment = Comment.(params[:id])
+    @commentable.comments..destroy
     redirect_to question_answers_path(@question)
   end
 

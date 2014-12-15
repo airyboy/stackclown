@@ -22,6 +22,10 @@ FactoryGirl.define do
     tag_name "linux"
   end
 
+  factory :comment do
+    body 'RTFM'
+  end
+
   factory :comment_to_question, class: 'Comment' do
   	body 'RTFM'
 
