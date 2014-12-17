@@ -1,6 +1,7 @@
 = provide(:title, 'Questions')
 
 %h1 Questions
+= link_to 'Ask question', new_question_path
 %ul
   - @questions.each do |question|
     %br

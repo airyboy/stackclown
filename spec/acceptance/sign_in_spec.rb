@@ -18,7 +18,7 @@ feature 'User sign in', %q{
     expect(current_path).to eq root_path
   end
 
-  scenario 'Unregistered user tries to sign in' do
+  scenario 'Non-registered user tries to sign in' do
     visit '/signin'
     fill_in 'Email', with: 'bar@foo.com'
     fill_in 'Password', with: 'qwerty123'

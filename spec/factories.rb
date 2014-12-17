@@ -37,4 +37,13 @@ FactoryGirl.define do
 
     association :commentable, :factory => :answer
   end
+
+  factory :user do
+    email 'foo@bar.com'
+    password 'qwerty123'
+    password_confirmation 'qwerty123'
+    salt  'asdasdastr4325234324sdfds'
+    crypted_password  Sorcery::CryptoProviders::BCrypt.encrypt('secret',
+                                                               'asdasdastr4325234324sdfds')
+  end
 end

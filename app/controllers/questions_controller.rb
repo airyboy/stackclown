@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
 	before_action :load_question, only: [:show, :edit, :update, :destroy]
+	before_filter :require_login, only: [:new, :create, :update, :destroy], :except => [:not_authenticated]
 
 	def index
 		@questions = Question.all
@@ -20,6 +21,7 @@ class QuestionsController < ApplicationController
 		@question = Question.create(question_params)
 
 		if @question.save
+			flash[:notice] = 'Your question was created'
 			redirect_to @question
 		else
 			render :new 
