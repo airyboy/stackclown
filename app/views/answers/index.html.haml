@@ -16,13 +16,16 @@
       = c.submit 'Submit'
 
 %hr
-- @answers.each do |answer|
-  %p
-    %small
-      = answer.body
-      = link_to 'x', answer, data: {question_id: @question.id}, method: :delete
+  .answers
+    - @answers.each do |answer|
+      %p
+        %small
+          = answer.body
+          = link_to 'x', answer, data: {question_id: @question.id}, method: :delete
 %br
-= form_for @new_answer, url: question_answers_path(@question) do |a|
-  = a.text_area :body
-  %br
-  = a.submit 'Answer'
+  - if logged_in?
+    = form_for @new_answer, url: question_answers_path(@question) do |a|
+      = a.label :body, 'Your answer'
+      = a.text_area :body
+      %br
+      = a.submit 'Create'

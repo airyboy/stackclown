@@ -26,5 +26,4 @@ feature 'User sign in', %q{
 
     expect(page).to have_content('Login failed')
   end
-
 end

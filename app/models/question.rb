@@ -1,4 +1,5 @@
 class Question < ActiveRecord::Base
+  belongs_to :user
   has_many :answers, dependent: :destroy
   has_many :comments, as: :commentable
 
@@ -7,6 +8,7 @@ class Question < ActiveRecord::Base
 
   validates :title, presence: true, length: { maximum: GlobalConstants::QUESTION_TITLE_MAX_LENGTH }
   validates :body, presence: true, length: { maximum: GlobalConstants::QUESTION_BODY_MAX_LENGTH }
+  validates :user_id, presence: true
 
   def assign_tag(tag_name)
     tag = Tag.find_or_create_by(tag_name: tag_name)
