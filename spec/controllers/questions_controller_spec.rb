@@ -1,12 +1,6 @@
 require 'rails_helper'
 
-
 RSpec.describe QuestionsController, :type => :controller do
-
-	shared_examples_for 'action requiring signed in user' do
-		action
-		expect(response).to redirect_to new_user_session_path
-	end
 
 	let!(:user){ create(:user) }
 	let(:question) { create(:question) }
@@ -50,10 +44,17 @@ RSpec.describe QuestionsController, :type => :controller do
 	end
 
 	describe 'GET #edit' do
-		before { get :edit, id: question }
+
+		it_should_behave_like 'action requiring signed in user' do
+			let(:action) { get :edit, id: question }
+		end
 
 		context 'when user is signed in' do
-			sign_in_user
+			before do
+				login_user(user)
+				get :edit, id: question
+			end
+
 			it 'assigns the requested question to @question' do
 				expect(assigns(:question)).to eq question
 			end
@@ -65,10 +66,6 @@ RSpec.describe QuestionsController, :type => :controller do
 	end
 
 	describe 'POST #create' do
-		it_should_behave_like 'action requiring signed in user' do
-			post :create, question: attributes_for(:question)
-		end
-
 		context 'with valid attributes' do
 
 			before { login_user(user) }
@@ -98,11 +95,8 @@ RSpec.describe QuestionsController, :type => :controller do
 	end
 
 	describe 'DELETE #destroy' do
-		context 'when user is not signed in' do
-			it 'redirects to sign in page' do
-				post :create, question: attributes_for(:question)
-				expect(response).to redirect_to new_user_session_path
-			end
+		it_should_behave_like 'action requiring signed in user' do
+			let(:action) { delete :destroy, id: question }
 		end
 
 		context 'when user is signed in' do
@@ -120,7 +114,13 @@ RSpec.describe QuestionsController, :type => :controller do
 	end
 
 	describe 'PATCH #update' do
+
+		it_should_behave_like 'action requiring signed in user' do
+			let(:action) { patch :update, id: question, question: attributes_for(:question) }
+		end
+
 		context 'with valid attributes' do
+			before { login_user(user) }
 			it 'assigns the requested question to @question' do
 				patch :update, id: question, question: attributes_for(:question)
 				expect(assigns(:question)).to eq question
@@ -141,6 +141,7 @@ RSpec.describe QuestionsController, :type => :controller do
 
 		context 'with invalid attributes' do
 			before do
+				login_user(user)
 				@old_title = question.title
 				@old_body = question.body
 				patch :update, id: question, question: {title: 'new title', body: nil}

@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, :type => :controller do
-  let!(:question) { create(:question) }
+  let!(:user) { create(:user) }
+  let!(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
-    let(:answers) { create_list(:answer, 2, question: question) }
+    let(:answers) { create_list(:answer, 2, question: question, user: user) }
     before { get :index, question_id: question  }
 
     it 'assigns question to @question' do
@@ -29,7 +30,12 @@ RSpec.describe AnswersController, :type => :controller do
   end
 
   describe 'POST #create' do
+    it_should_behave_like 'action requiring signed in user' do
+      let(:action) {  post :create, question_id: question, answer: attributes_for(:answer) }
+    end
+
     context 'when attributes are valid' do
+      before { login_user(user) }
       it 'should save the new answer to the DB' do
         expect do
           post :create, question_id: question, answer: attributes_for(:answer)
@@ -43,6 +49,7 @@ RSpec.describe AnswersController, :type => :controller do
     end
 
     context 'when attributes are invalid' do
+      before { login_user(user) }
       it 'should not save the answer to the DB' do
         expect do
           post :create, question_id: question, answer: attributes_for(:invalid_answer)
@@ -58,9 +65,17 @@ RSpec.describe AnswersController, :type => :controller do
   end
 
   describe 'PATCH#update' do
+    let(:answer) { create(:answer, question: question) }
+
+    it_should_behave_like 'action requiring signed in user' do
+      let(:action) { delete :destroy, id: answer }
+    end
+
     context 'when attributes are valid' do
-      let(:answer) { create(:answer, question: question) }
-      before { patch :update, question_id: question, id: answer, answer: {body: 'NewBody'} }
+      before do
+        login_user(user)
+        patch :update, question_id: question, id: answer, answer: {body: 'NewBody'}
+      end
 
       it 'should assign answer to @answer' do
         expect(assigns(:answer)).to eq answer
@@ -79,7 +94,10 @@ RSpec.describe AnswersController, :type => :controller do
     context 'when attributes are invalid' do
       let(:answer) { create(:answer, question: question) }
       let(:old_body) { answer.body }
-      before { patch :update, question_id: question, id: answer, answer: {body: nil} }
+      before do
+        login_user(user)
+        patch :update, question_id: question, id: answer, answer: {body: nil}
+      end
 
       it 'should not update the answer attributes' do
         answer.reload
@@ -94,16 +112,24 @@ RSpec.describe AnswersController, :type => :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:answer) { question.answers.create(attributes_for(:answer)) }
-    it 'should delete the answer' do
-      expect do
-        delete :destroy, id: answer
-      end.to change(question.answers, :count).by(-1)
+    let!(:answer) { create(:answer, question: question, user: user) }
+
+    it_should_behave_like 'action requiring signed in user' do
+      let(:action) { delete :destroy, id: answer }
     end
 
-    it 'should redirect to question' do
-      delete :destroy, id: answer
-      expect(response).to redirect_to question_answers_path(question)
+    context 'when user is signed in' do
+      before { login_user(user) }
+      it 'should delete the answer' do
+        expect do
+          delete :destroy, id: answer
+        end.to change(question.answers, :count).by(-1)
+      end
+
+      it 'should redirect to question' do
+        delete :destroy, id: answer
+        expect(response).to redirect_to question_answers_path(question)
+      end
     end
   end
 end

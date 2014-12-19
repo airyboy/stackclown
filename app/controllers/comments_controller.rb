@@ -1,8 +1,10 @@
 class CommentsController < ApplicationController
   before_action :find_commentable, only: [:create]
+  before_filter :require_login
 
   def create
     comment = @commentable.comments.build(comment_params)
+    comment.user = current_user
 
     if comment.save
       redirect_to question_answers_path(@question)

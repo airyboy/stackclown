@@ -5,7 +5,7 @@ feature 'Answering a question', %q{
     As a user
     I want to be able to submit an answer to the question
  } do
-  given!(:user) { create(:user) }
+  given!(:user) { create(:foo_user) }
   given!(:question) { create(:question) }
   scenario 'Registered user tries to answer a question' do
     login_user_post('foo@bar.com', 'qwerty123')

@@ -52,4 +52,13 @@ FactoryGirl.define do
     crypted_password  Sorcery::CryptoProviders::BCrypt.encrypt('secret',
                                                                'asdasdastr4325234324sdfds')
   end
+
+  factory :foo_user, class: 'User' do
+    email 'foo@bar.com'
+    password 'qwerty123'
+    password_confirmation 'qwerty123'
+    salt  'asdasdastr4325234324sdfds'
+    crypted_password  Sorcery::CryptoProviders::BCrypt.encrypt('secret',
+                                                               'asdasdastr4325234324sdfds')
+  end
 end

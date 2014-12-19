@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
   before_action :load_question, only: [:index, :create, :update]
+  before_filter :require_login, only: [:create, :destroy, :update]
 
   def new
     @answer = @question.build
@@ -22,6 +23,7 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.build(answer_params)
+    @answer.user = current_user
     if @answer.save
       redirect_to question_answers_path(@question)
     else

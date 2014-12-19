@@ -5,7 +5,7 @@ feature 'Asking a question', %q{
     As a user
     I want to be able to submit a question
  } do
-  given!(:user) { create(:user) }
+  given!(:user) { create(:foo_user) }
   scenario 'Registered user tries to ask a question' do
     login_user_post('foo@bar.com', 'qwerty123')
     visit root_path

@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
 	before_action :load_question, only: [:show, :edit, :update, :destroy]
-	before_filter :require_login, only: [:new, :create, :update, :destroy], :except => [:not_authenticated]
+	before_filter :require_login, only: [:new, :create, :edit, :update, :destroy], :except => [:not_authenticated]
 
 	def index
 		@questions = Question.all
