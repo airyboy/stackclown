@@ -1,6 +1,5 @@
-.answers
-  - @answers.each do |answer|
-    %p
-      %small
-        = answer.body
-        = link_to 'x', answer, data: {question_id: @question.id}, method: :delete
+- @question.answers.each do |answer|
+  %p
+    %small
+      = answer.body
+      = link_to 'x', answer, data: {question_id: @question.id}, method: :delete

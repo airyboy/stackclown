@@ -5,10 +5,11 @@
   = @question.body
 = render 'comments_to_question'
 %hr
-= render 'answers'
+.answers
+  = render 'answers'
 %br
   - if logged_in?
-    = form_for @new_answer, url: question_answers_path(@question) do |a|
+    = form_for @new_answer, url: question_answers_path(@question), remote: true do |a|
       = a.label :body, 'Your answer'
       = a.text_area :body
       %br

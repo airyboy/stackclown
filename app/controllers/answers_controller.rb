@@ -25,7 +25,10 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(answer_params)
     @answer.user = current_user
     if @answer.save
-      redirect_to question_answers_path(@question)
+      respond_to do |format|
+        format.html { redirect_to question_answers_path(@question) }
+        format.js
+      end
     else
       prepare_data(@question)
       flash[:error] = 'Error'
