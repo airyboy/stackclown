@@ -1,12 +1,6 @@
 = provide(:title, 'New question')
 %h1 New question
-= form_for(@question) do |q|
-  %p
-    = q.label :title
-    %br
-    = q.text_field :title
-  %p
-    = q.label :body
-    %br
-    = q.text_area :body
-  = q.submit 'Create'
+= simple_form_for(@question, html: { class: 'form-horizontal' }) do |q|
+  = q.input :title
+  = q.input :body
+  = q.button :submit, 'Create'

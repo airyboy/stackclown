@@ -3,9 +3,11 @@
     %p
       %small
         = comm.body
-        = link_to 'x', comm, method: :delete, question_id: @question
+        - if current_user
+          = link_to 'x', comm, method: :delete, question_id: @question
       %p
-  = form_for @new_comment, url: question_comments_path(@question) do |c|
-    = c.text_area :body
-    %br
-      = c.submit 'Submit'
+  - if current_user
+    = form_for @new_comment, url: question_comments_path(@question) do |c|
+      = c.text_area :body
+      %br
+        = c.submit 'Submit'

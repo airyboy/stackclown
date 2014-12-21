@@ -1,0 +1,13 @@
+%header.navbar.navbar-inverse.navbar-fixed-top
+  .navbar-inner
+    .container
+      = link_to 'Stack Clown', root_path, id: 'logo'
+      %nav
+        = link_to 'Ask question', new_question_path, class: 'btn btn-default navbar-btn', style: 'margin-left: 25px'
+        %ul.nav.navbar-nav.pull-right
+          - if current_user
+            %li= link_to 'Edit Profile', edit_user_path(current_user.id)
+            %li= link_to 'Logout', :logout, method: :post
+          - else
+            %li= link_to 'Register', new_user_path
+            %li= link_to 'Login', :login

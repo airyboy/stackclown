@@ -19,8 +19,8 @@ end
 
 def make_questions
   10.times do |n|
-    title = "Question N#{n}"
-    body = "I wanna to ask about #{n}"
+    title = Faker::Lorem.sentence
+    body = Faker::Lorem.paragraph
     user = User.find_by(email: "foo#{rand(4)}@bar.com")
     Question.create(title: title, body: body, user: user)
   end
@@ -31,7 +31,7 @@ def make_answers
   questions.each do |q|
     5.times do |n|
       user = User.find_by(email: "foo#{rand(4)}@bar.com")
-      q.answers.create(body: "somebody #{n}", user: user)
+      q.answers.create(body: Faker::Lorem.paragraph, user: user)
     end
   end
 end
@@ -41,7 +41,7 @@ def make_comments
   questions.each do |q|
     2.times do |n|
       user = User.find_by(email: "foo#{rand(4)}@bar.com")
-      q.comments.create(body: "comment N#{n}", user: user)
+      q.comments.create(body: Faker::Lorem.paragraph, user: user)
     end
   end
 end
