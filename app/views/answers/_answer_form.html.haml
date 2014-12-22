@@ -1,2 +1,3 @@
-= simple_form_for @answer, method: :patch   do |f|
+= simple_form_for @answer, method: :patch, html: { id: 'edit-form' }   do |f|
+  = f.input :question_id, :as => :hidden, :input_html => { :value => @answer.question.id.to_s }
   = f.input :body

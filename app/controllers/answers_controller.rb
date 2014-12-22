@@ -62,6 +62,10 @@ class AnswersController < ApplicationController
     end
 
     def load_question
-      @question = Question.find(params[:question_id])
+      if params.has_key?(:question_id)
+        @question = Question.find(params[:question_id])
+      else
+        @question = @answer.question
+      end
     end
 end
