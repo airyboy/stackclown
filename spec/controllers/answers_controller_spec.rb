@@ -91,7 +91,7 @@ RSpec.describe AnswersController, :type => :controller do
   describe 'PATCH#update' do
     let!(:answer) { create(:answer, question: question) }
     it_should_behave_like 'action requiring signed in user' do
-      let(:action) { delete :destroy, id: answer }
+      let(:action) { patch :update, question_id: question, id: answer, answer: {body: 'NewBody'}, format: :js }
     end
 
     context 'when attributes are valid' do

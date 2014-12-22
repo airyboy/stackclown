@@ -5,8 +5,9 @@
     = @question.body
   = render 'comments_to_question'
 %hr
+= render 'bootstrap_edit_form'
 .answers
-  = render 'bootstrap_edit_form'
+
   = render 'answers'
 %br
   - if logged_in?

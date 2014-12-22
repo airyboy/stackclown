@@ -12,7 +12,8 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :commentable do
-    resources :answers, only: [:index, :edit, :create, :destroy, :update], concerns: :commentable, shallow: true
+    resources :answers, only: [:index, :edit, :create, :destroy], concerns: :commentable, shallow: true
+    resources :answers, only: [:update]
   end
 
 
