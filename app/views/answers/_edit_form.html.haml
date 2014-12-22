@@ -1,0 +1,11 @@
+#myModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} &times;
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title Edit answer
+      .modal-body
+      .modal-footer
+        %button.btn.btn-primary{:type => "button"} Save

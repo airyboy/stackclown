@@ -29,7 +29,31 @@ RSpec.describe AnswersController, :type => :controller do
     end
   end
 
+  describe 'GET #edit' do
+    let!(:answer) { create(:answer, question: question) }
+
+    it_should_behave_like 'action requiring signed in user' do
+      let(:action) {  get :edit, id: answer, question_id: question, format: :html }
+    end
+
+    context 'signed in user' do
+      before do
+        login_user(user)
+        xhr :get, :edit, id: answer, question_id: question, format: :js
+      end
+
+      it 'assigns the requested answer to @answer' do
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'renders edit view' do
+        expect(response).to render_template :edit
+      end
+    end
+  end
+
   describe 'POST #create' do
+    let!(:answer) { create(:answer, question: question) }
     it_should_behave_like 'action requiring signed in user' do
       let(:action) {  post :create, question_id: question, answer: attributes_for(:answer) }
     end
@@ -65,8 +89,7 @@ RSpec.describe AnswersController, :type => :controller do
   end
 
   describe 'PATCH#update' do
-    let(:answer) { create(:answer, question: question) }
-
+    let!(:answer) { create(:answer, question: question) }
     it_should_behave_like 'action requiring signed in user' do
       let(:action) { delete :destroy, id: answer }
     end
@@ -74,7 +97,7 @@ RSpec.describe AnswersController, :type => :controller do
     context 'when attributes are valid' do
       before do
         login_user(user)
-        patch :update, question_id: question, id: answer, answer: {body: 'NewBody'}
+        patch :update, question_id: question, id: answer, answer: {body: 'NewBody'}, format: :js
       end
 
       it 'should assign answer to @answer' do
@@ -84,6 +107,17 @@ RSpec.describe AnswersController, :type => :controller do
       it 'should update the answer attributes' do
         answer.reload
         expect(answer.body).to eq 'NewBody'
+      end
+
+      it 'should render update template' do
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'when html format' do
+      before do
+        login_user(user)
+        patch :update, question_id: question, id: answer, answer: {body: 'NewBody'}, format: :html
       end
 
       it 'should redirect to question' do

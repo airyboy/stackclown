@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :load_question, only: [:index, :create, :update]
-  before_filter :require_login, only: [:create, :destroy, :update]
+  before_filter :require_login, only: [:create, :destroy, :update, :edit]
 
   def new
     @answer = @question.build
@@ -12,10 +12,22 @@ class AnswersController < ApplicationController
     @new_comment = Comment.new
   end
 
+  def edit
+    @answer = Answer.find(params[:id])
+    @question = @answer.question
+    respond_to do |format|
+      format.html { render :edit }
+      format.js
+    end
+  end
+
   def update
     @answer = @question.answers.find(params[:id])
     if @answer.update(answer_params)
-      redirect_to question_answers_path(@question)
+      respond_to do |format|
+        format.html { redirect_to question_answers_path(@question) }
+        format.js
+      end
     else
       render :edit
     end
