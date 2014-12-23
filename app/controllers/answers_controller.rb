@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :load_question, only: [:index, :create, :update]
+  before_action :load_question, only: [:index, :create]
   before_filter :require_login, only: [:create, :destroy, :update, :edit]
+  before_filter :require_owning_answer, only: [:edit, :update, :destroy]
 
   def new
     @answer = @question.build
@@ -13,8 +14,6 @@ class AnswersController < ApplicationController
   end
 
   def edit
-    @answer = Answer.find(params[:id])
-    @question = @answer.question
     respond_to do |format|
       format.html { render :edit }
       format.js
@@ -22,14 +21,13 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer = @question.answers.find(params[:id])
     if @answer.update(answer_params)
       respond_to do |format|
         format.html { redirect_to question_answers_path(@question) }
         format.js
       end
     else
-      render :edit
+      render :edit, status: 400
     end
   end
 
@@ -49,8 +47,6 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer = Answer.find(params[:id])
-    @question = @answer.question
     @answer.destroy
     redirect_to question_answers_path(@question)
   end
@@ -62,10 +58,13 @@ class AnswersController < ApplicationController
     end
 
     def load_question
-      if params.has_key?(:question_id)
-        @question = Question.find(params[:question_id])
-      else
-        @question = @answer.question
-      end
+      @question = Question.find(params[:question_id])
+    end
+
+    def require_owning_answer
+      @answer = Answer.includes(:question).find(params[:id])
+      @question = @answer.question
+
+      return head(:unauthorized) unless @answer.user == current_user
     end
 end

@@ -6,3 +6,11 @@ shared_examples 'action requiring signed in user' do
     end
   end
 end
+
+shared_examples 'action requiring to own an object' do
+  it 'should respond with 403 error' do
+    login_user(user)
+    action
+    expect(response.status).to eq 403
+  end
+end

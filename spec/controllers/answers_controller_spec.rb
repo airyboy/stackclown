@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, :type => :controller do
   let!(:user) { create(:user) }
+  let!(:other_user) { create(:user) }
   let!(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
@@ -30,16 +31,16 @@ RSpec.describe AnswersController, :type => :controller do
   end
 
   describe 'GET #edit' do
-    let!(:answer) { create(:answer, question: question) }
+    let!(:answer) { create(:answer, question: question, user: user) }
 
     it_should_behave_like 'action requiring signed in user' do
-      let(:action) {  get :edit, id: answer, question_id: question, format: :html }
+      let(:action) {  get :edit, id: answer, format: :html }
     end
 
     context 'signed in user' do
       before do
         login_user(user)
-        xhr :get, :edit, id: answer, question_id: question, format: :js
+        xhr :get, :edit, id: answer, format: :js
       end
 
       it 'assigns the requested answer to @answer' do
@@ -48,6 +49,15 @@ RSpec.describe AnswersController, :type => :controller do
 
       it 'renders edit view' do
         expect(response).to render_template :edit
+      end
+    end
+
+    context "when the answer of another user" do
+      let(:others_answer) { create(:answer, user: other_user) }
+      it 'should respond with error' do
+        login_user(user)
+        xhr :get, :edit, id: others_answer
+        expect(response.status).to eq 401
       end
     end
   end
@@ -89,15 +99,15 @@ RSpec.describe AnswersController, :type => :controller do
   end
 
   describe 'PATCH#update' do
-    let!(:answer) { create(:answer, question: question) }
+    let!(:answer) { create(:answer, question: question, user: user) }
     it_should_behave_like 'action requiring signed in user' do
-      let(:action) { patch :update, question_id: question, id: answer, answer: {body: 'NewBody'}, format: :js }
+      let(:action) { patch :update, id: answer, answer: {body: 'NewBody'}, format: :js }
     end
 
     context 'when attributes are valid' do
       before do
         login_user(user)
-        patch :update, question_id: question, id: answer, answer: {body: 'NewBody'}, format: :js
+        patch :update, id: answer, answer: {body: 'NewBody'}, format: :js
       end
 
       it 'should assign answer to @answer' do
@@ -117,7 +127,7 @@ RSpec.describe AnswersController, :type => :controller do
     context 'when html format' do
       before do
         login_user(user)
-        patch :update, question_id: question, id: answer, answer: {body: 'NewBody'}, format: :html
+        patch :update, id: answer, answer: {body: 'NewBody'}, format: :html
       end
 
       it 'should redirect to question' do
@@ -126,11 +136,11 @@ RSpec.describe AnswersController, :type => :controller do
     end
 
     context 'when attributes are invalid' do
-      let(:answer) { create(:answer, question: question) }
+      let(:answer) { create(:answer, question: question, user: user) }
       let(:old_body) { answer.body }
       before do
         login_user(user)
-        patch :update, question_id: question, id: answer, answer: {body: nil}
+        patch :update, id: answer, answer: {body: nil}
       end
 
       it 'should not update the answer attributes' do
@@ -143,6 +153,16 @@ RSpec.describe AnswersController, :type => :controller do
       end
     end
 
+    context "when the answer of another user" do
+      let(:others_answer) { create(:answer, user: other_user) }
+
+      it 'should respond with error' do
+        login_user(user)
+        patch :update, id: others_answer, answer: {body: 'NewBody'}, format: :js
+        expect(response.status).to eq 401
+      end
+    end
+
   end
 
   describe 'DELETE #destroy' do
@@ -150,6 +170,15 @@ RSpec.describe AnswersController, :type => :controller do
 
     it_should_behave_like 'action requiring signed in user' do
       let(:action) { delete :destroy, id: answer }
+    end
+
+    context "when the answer of another user" do
+      let(:others_answer) { create(:answer, user: other_user) }
+      it 'should respond with error' do
+        login_user(user)
+        delete :destroy, id: others_answer
+        expect(response.status).to eq 401
+      end
     end
 
     context 'when user is signed in' do
