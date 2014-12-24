@@ -2,5 +2,6 @@
   %p
     %small
       = answer.body
-      = link_to 'edit', edit_answer_path(answer), data: { question_id: @question.id }, remote: true
-      = link_to 'x', answer, data: {question_id: @question.id}, method: :delete
+      - if current_user == answer.user
+        = link_to 'edit', edit_answer_path(answer), data: { question_id: @question.id }, remote: true
+        = link_to 'x', answer, data: {question_id: @question.id}, method: :delete

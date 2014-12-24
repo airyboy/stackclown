@@ -3,7 +3,7 @@
     %p
       %small
         = comm.body
-        - if current_user
+        - if current_user == comm.user
           = link_to 'x', comm, method: :delete, question_id: @question
       %p
   - if current_user
