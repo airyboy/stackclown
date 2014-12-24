@@ -4,4 +4,4 @@
       = answer.body
       - if current_user == answer.user
         = link_to 'edit', edit_answer_path(answer), data: { question_id: @question.id }, remote: true
-        = link_to 'x', answer, data: {question_id: @question.id}, method: :delete
+        = link_to 'x', answer, data: {question_id: @question.id}, method: :delete, data: { confirm: 'You sure?' }

@@ -12,5 +12,5 @@
   - if logged_in?
     = simple_form_for @new_answer, url: question_answers_path(@question), remote: true do |a|
       = a.label :body, 'Your answer'
-      = a.input :body, label: false
+      = a.input :body, label: false, input_html: { rows: 6 }
       = a.button :submit, 'Create'
