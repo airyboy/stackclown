@@ -4,6 +4,7 @@ RSpec.describe AnswersController, :type => :controller do
   let!(:user) { create(:user) }
   let!(:other_user) { create(:user) }
   let!(:question) { create(:question, user: user) }
+  let(:others_answer) { create(:answer, user: other_user) }
 
   describe 'GET #index' do
     let(:answers) { create_list(:answer, 2, question: question, user: user) }
@@ -52,13 +53,8 @@ RSpec.describe AnswersController, :type => :controller do
       end
     end
 
-    context "when the answer of another user" do
-      let(:others_answer) { create(:answer, user: other_user) }
-      it 'should respond with error' do
-        login_user(user)
-        xhr :get, :edit, id: others_answer
-        expect(response.status).to eq 401
-      end
+    it_should_behave_like 'action requiring to own an object' do
+      let(:action) { xhr :get, :edit, id: others_answer }
     end
   end
 
@@ -153,16 +149,9 @@ RSpec.describe AnswersController, :type => :controller do
       end
     end
 
-    context "when the answer of another user" do
-      let(:others_answer) { create(:answer, user: other_user) }
-
-      it 'should respond with error' do
-        login_user(user)
-        patch :update, id: others_answer, answer: {body: 'NewBody'}, format: :js
-        expect(response.status).to eq 401
-      end
+    it_should_behave_like 'action requiring to own an object' do
+      let(:action) { patch :update, id: others_answer, answer: {body: 'NewBody'}, format: :js }
     end
-
   end
 
   describe 'DELETE #destroy' do
@@ -172,13 +161,8 @@ RSpec.describe AnswersController, :type => :controller do
       let(:action) { delete :destroy, id: answer }
     end
 
-    context "when the answer of another user" do
-      let(:others_answer) { create(:answer, user: other_user) }
-      it 'should respond with error' do
-        login_user(user)
-        delete :destroy, id: others_answer
-        expect(response.status).to eq 401
-      end
+    it_should_behave_like 'action requiring to own an object' do
+      let(:action) {  delete :destroy, id: others_answer }
     end
 
     context 'when user is signed in' do

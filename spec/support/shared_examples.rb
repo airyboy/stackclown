@@ -8,9 +8,10 @@ shared_examples 'action requiring signed in user' do
 end
 
 shared_examples 'action requiring to own an object' do
-  it 'should respond with 403 error' do
+  let(:user) { create(:user) }
+  it 'should respond with 401 error' do
     login_user(user)
     action
-    expect(response.status).to eq 403
+    expect(response.status).to eq 401
   end
 end
