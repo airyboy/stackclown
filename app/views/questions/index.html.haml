@@ -1,10 +1,13 @@
 = provide(:title, 'Questions')
 
 - @questions.each do |question|
-  %br
-  %span.title
-    = link_to(question.title, question)
-  %br
-  %span.body
-    = question.body
-  %hr
+  .question
+    %span.title
+      = link_to(question.title, question)
+    %br
+    %span.body
+      = question.body
+    .footer
+      %span.user
+        = link_to question.user.email, user_path(question.user)
+    %hr

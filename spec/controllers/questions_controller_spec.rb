@@ -3,7 +3,9 @@ require 'rails_helper'
 RSpec.describe QuestionsController, :type => :controller do
 
 	let!(:user){ create(:user) }
-	let(:question) { create(:question) }
+	let!(:other_user){ create(:user) }
+	let(:question) { create(:question, user: user) }
+	let(:other_question) { create(:question, user: other_user) }
 
 	describe 'GET #index' do
 		let(:questions) { create_list(:question, 2, user: user) }
@@ -62,6 +64,10 @@ RSpec.describe QuestionsController, :type => :controller do
 			it 'renders edit view' do
 				expect(response).to render_template :edit
 			end
+
+			it_should_behave_like 'action requiring to own an object' do
+				let(:action) { get :edit, id: other_question }
+			end
 		end
 	end
 
@@ -110,6 +116,10 @@ RSpec.describe QuestionsController, :type => :controller do
 				delete :destroy, id: question
 				expect(response).to redirect_to questions_path
 			end
+
+			it_should_behave_like 'action requiring to own an object' do
+				let(:action) { delete :destroy, id: other_question }
+			end
 		end
 	end
 
@@ -136,6 +146,10 @@ RSpec.describe QuestionsController, :type => :controller do
 			it 'should redirect to show view' do
 				patch :update, id: question, question: {title: 'new title', body: 'new body'}
 				expect(response).to redirect_to question
+			end
+
+			it_should_behave_like 'action requiring to own an object' do
+				let(:action) { patch :update, id: other_question, question: {title: 'new title', body: 'new body'} }
 			end
 		end
 

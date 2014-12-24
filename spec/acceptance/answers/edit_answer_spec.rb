@@ -1,4 +1,4 @@
-require_relative 'acceptance_helper'
+require 'acceptance_helper'
 
 feature 'Edit an answer', %q{
     In order to correct an answer of a question

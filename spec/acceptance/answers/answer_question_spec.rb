@@ -1,4 +1,4 @@
-require_relative 'acceptance_helper'
+require 'acceptance_helper'
 
 feature 'Answering a question', %q{
     In order to give an answer to a question
@@ -21,8 +21,6 @@ feature 'Answering a question', %q{
       expect(page).to have_content 'new answer'
     end
   end
-
-  scenario ''
 
   scenario 'Non-registered user tries to answer a question' do
     visit question_answers_path(question)

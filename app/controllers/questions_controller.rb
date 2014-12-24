@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
-	before_action :load_question, only: [:show, :edit, :update, :destroy]
+	prepend_before_action :load_question, only: [:show, :edit, :update, :destroy]
 	before_filter :require_login, only: [:new, :create, :edit, :update, :destroy], :except => [:not_authenticated]
+	before_filter :require_owning_object, only: [:edit, :update, :destroy]
 
 	def index
 		@questions = Question.all
@@ -45,6 +46,7 @@ class QuestionsController < ApplicationController
 
 		def load_question
 			@question = Question.find(params[:id])
+			@object = @question
 		end
 
 		def question_params

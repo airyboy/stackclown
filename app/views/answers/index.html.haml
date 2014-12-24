@@ -1,11 +1,18 @@
 = provide(:title, 'Show question')
-%div.qtitle= @question.title
-%p
-  %span.qbody
-    = @question.body
+.full-question
+  .qtitle= @question.title
+  .qbody= @question.body
+  .question-footer
+    %span.user
+      = link_to @question.user.email, user_path(@question.user)
+    - if current_user == @question.user
+      |
+      = link_to 'edit', edit_question_path(@question), remote: true
+      = link_to 'x', @question, method: :delete, data: { confirm: 'You sure?' }
+.comments
   = render 'comments_to_question'
 %hr
-= render 'bootstrap_edit_form'
+= render 'shared/bootstrap_edit_form'
 .answers
   = render 'answers'
 %br

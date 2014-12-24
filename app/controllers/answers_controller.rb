@@ -1,7 +1,9 @@
 class AnswersController < ApplicationController
   before_action :load_question, only: [:index, :create]
   before_filter :require_login, only: [:create, :destroy, :update, :edit]
-  before_filter :require_owning_answer, only: [:edit, :update, :destroy]
+  prepend_before_action :load_answer, only: [:edit, :update, :destroy]
+  before_filter :require_owning_object, only: [:edit, :update, :destroy]
+
 
   def new
     @answer = @question.build
@@ -61,10 +63,9 @@ class AnswersController < ApplicationController
       @question = Question.find(params[:question_id])
     end
 
-    def require_owning_answer
+    def load_answer
       @answer = Answer.includes(:question).find(params[:id])
       @question = @answer.question
-
-      return head(:unauthorized) unless @answer.user == current_user
+      @object = @answer
     end
 end

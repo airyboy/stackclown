@@ -14,4 +14,8 @@ class ApplicationController < ActionController::Base
       @new_comment = Comment.new
       @answers = question.answers
     end
+
+    def require_owning_object
+      return head(:unauthorized) unless @object.user == current_user
+    end
 end

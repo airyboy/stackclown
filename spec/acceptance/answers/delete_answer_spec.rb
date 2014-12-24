@@ -1,4 +1,4 @@
-require_relative '../../acceptance/acceptance_helper'
+require 'acceptance_helper'
 
 feature 'Deleting an answer', %q{
     In order to remove answer
