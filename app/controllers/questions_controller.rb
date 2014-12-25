@@ -16,6 +16,10 @@ class QuestionsController < ApplicationController
 	end
 
 	def edit
+		respond_to do |format|
+			format.html { render :edit }
+			format.js
+		end
 	end
 
 	def create 
@@ -31,7 +35,10 @@ class QuestionsController < ApplicationController
 
 	def update
 		if @question.update(question_params)
-			redirect_to @question
+			respond_to do |format|
+				format.html { redirect_to question_answers_path(@question) }
+				format.js
+			end
 		else
 			render :edit
 		end

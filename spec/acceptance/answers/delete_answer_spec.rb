@@ -1,7 +1,7 @@
 require 'acceptance_helper'
 
 feature 'Deleting an answer', %q{
-    In order to remove answer
+    In order to remove an answer
     As an author
     I want to be able to remove the answer
  } do
@@ -27,7 +27,7 @@ feature 'Deleting an answer', %q{
       end
     end
 
-    scenario 'tries to remove his answer, but change his mind', js: true do
+    scenario 'tries to remove his answer, but changes his mind', js: true do
       visit question_answers_path(question)
       within '.answers' do
         click_on 'x'

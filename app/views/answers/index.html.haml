@@ -1,4 +1,5 @@
 = provide(:title, 'Show question')
+= render 'shared/bootstrap_edit_form'
 .full-question
   .qtitle= @question.title
   .qbody= @question.body
@@ -12,7 +13,6 @@
 .comments
   = render 'comments_to_question'
 %hr
-= render 'shared/bootstrap_edit_form'
 .answers
   = render 'answers'
 %br
