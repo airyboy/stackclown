@@ -69,3 +69,4 @@ class AnswersController < ApplicationController
       @object = @answer
     end
 end
+
