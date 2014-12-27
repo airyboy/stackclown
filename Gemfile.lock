@@ -39,6 +39,11 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
     childprocess (0.5.5)
       ffi (~> 1.0, >= 1.0.11)
     coffee-rails (4.0.1)
@@ -127,6 +132,7 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    remotipart (1.2.1)
     rspec-core (3.1.7)
       rspec-support (~> 3.1.0)
     rspec-expectations (3.1.2)
@@ -200,6 +206,7 @@ PLATFORMS
 DEPENDENCIES
   bootstrap-sass
   capybara
+  carrierwave
   coffee-rails (~> 4.0.0)
   database_cleaner
   factory_girl_rails
@@ -210,6 +217,7 @@ DEPENDENCIES
   launchy
   pg
   rails (= 4.1.8)
+  remotipart
   rspec-rails
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

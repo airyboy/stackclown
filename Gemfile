@@ -30,6 +30,8 @@ gem 'spring',        group: :development
 gem 'haml-rails'
 gem 'sorcery'
 gem 'simple_form'
+gem 'carrierwave'
+gem 'remotipart'
 
 group :test, :development do
   gem 'rspec-rails'

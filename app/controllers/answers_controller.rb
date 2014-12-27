@@ -13,6 +13,7 @@ class AnswersController < ApplicationController
     @answers = @question.answers
     @new_answer = Answer.new
     @new_comment = Comment.new
+    @new_answer.attachments.build
   end
 
   def edit
@@ -56,7 +57,7 @@ class AnswersController < ApplicationController
   private
 
     def answer_params
-      params.require(:answer).permit(:body)
+      params.require(:answer).permit(:body, attachments_attributes: [:file])
     end
 
     def load_question

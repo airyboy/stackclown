@@ -39,6 +39,10 @@ RSpec.describe QuestionsController, :type => :controller do
 				expect(assigns(:question)).to be_a_new(Question)
 			end
 
+			it 'builds a new attachement for @question' do
+				expect(assigns(:question).attachments.first).to be_a_new(Attachment)
+			end
+
 			it 'renders new view' do
 				expect(response).to render_template :new
 			end
@@ -143,9 +147,9 @@ RSpec.describe QuestionsController, :type => :controller do
 				expect(question.body).to eq 'new body'
 			end
 
-			it 'should redirect to show view' do
+			it 'should redirect to answers index view' do
 				patch :update, id: question, question: {title: 'new title', body: 'new body'}
-				expect(response).to redirect_to question
+				expect(response).to redirect_to question_answers_path(question)
 			end
 
 			it_should_behave_like 'action requiring to own an object' do

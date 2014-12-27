@@ -3,6 +3,7 @@
 .full-question
   .qtitle= @question.title
   .qbody= @question.body
+  = render 'attachments', resource: @question
   .question-footer
     %span.user
       = link_to @question.user.email, user_path(@question.user)
@@ -20,4 +21,7 @@
     = simple_form_for @new_answer, url: question_answers_path(@question), remote: true do |a|
       = a.label :body, 'Your answer'
       = a.input :body, label: false, input_html: { rows: 6 }
+      = a.simple_fields_for :attachments do|a|
+        = a.label :file
+        = a.file_field :file
       = a.button :submit, 'Create'

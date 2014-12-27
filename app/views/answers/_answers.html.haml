@@ -2,6 +2,7 @@
   %p
     %small
       = answer.body
+      = render 'attachments', resource: answer
       .answer-footer
         %span.user
           = link_to answer.user.email, user_path(answer.user)
