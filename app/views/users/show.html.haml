@@ -4,6 +4,5 @@
   %b Email:
   = @user.email
 
-= link_to 'Edit', edit_user_path(@user)
-\|
-= link_to 'Back', users_path
+%h2 Questions: #{@user.questions.count}
+%h2 Answers: #{@user.answers.count}

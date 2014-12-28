@@ -92,3 +92,14 @@ span.user {
 textarea {
   height: 10em;
 }
+
+.question span.title {
+  font-size: 1.4em;
+  a {
+    color: #000000;
+    &:hover {
+      color: blue;
+      background-color: #ffffff;
+    }
+  }
+}

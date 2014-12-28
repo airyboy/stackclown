@@ -1,2 +1,6 @@
-$('.answers').html('<%= j render 'answers/answers' %>');
-$('#answer_body').val('');
+<% if @answer.errors.present? %>
+    $('.answer-errors').html('<%= @answer.errors.full_messages.join("/n") %>');
+<% else %>
+    $('.answers').html('<%= j render 'answers/answers' %>');
+    $('#answer_body').val('');
+<% end %>

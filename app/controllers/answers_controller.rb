@@ -43,9 +43,14 @@ class AnswersController < ApplicationController
         format.js
       end
     else
-      prepare_data(@question)
-      flash[:error] = 'Error'
-      render :index
+      respond_to do |format|
+        format.html do
+          prepare_data(@question)
+          flash[:error] = 'Error'
+          render :index
+        end
+        format.js
+      end
     end
   end
 

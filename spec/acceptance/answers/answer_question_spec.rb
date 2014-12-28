@@ -8,17 +8,29 @@ feature 'Answering a question', %q{
   given!(:user) { create(:foo_user) }
   given!(:question) { create(:question, user: user) }
 
-  scenario 'Registered user tries to answer a question', js: true do
-    sign_in(user)
-    visit question_answers_path(question)
+  describe 'Registered user' do
+    before do
+      sign_in(user)
+      visit question_answers_path(question)
+    end
 
-    expect(current_path).to eq question_answers_path(question)
-    fill_in 'Your answer', with: 'new answer'
-    click_on 'Create'
+    scenario ' tries to answer a question', js: true do
+      expect(current_path).to eq question_answers_path(question)
+      fill_in 'Your answer', with: 'new answer'
+      click_on 'Create'
 
 
-    within '.answers' do
-      expect(page).to have_content 'new answer'
+      within '.answers' do
+        expect(page).to have_content 'new answer'
+      end
+    end
+
+    scenario 'tries to answer a question with wrong data', js: true do
+      fill_in 'Your answer', with: ''
+      click_on 'Create'
+
+      expect(page).to have_content "can't be blank"
+
     end
   end
 
