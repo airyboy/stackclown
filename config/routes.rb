@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   root 'questions#index'
 
   concern :commentable do
-    resources :comments, only: [:create, :destroy]
+    resources :comments, only: [:create, :destroy], shallow: true
   end
 
   resources :questions, concerns: :commentable do

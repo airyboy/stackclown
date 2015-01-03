@@ -4,8 +4,10 @@
       = comm.body
       - if current_user == comm.user
         |
-        = link_to 'x', comm, method: :delete, question_id: @question
+        = link_to 'x', comm, method: :delete
   - if current_user
-    .comment
-      = simple_form_for :comments, remote: true do |c|
-        = c.input :body
+    .comment-form
+      -#= simple_form_for [@question, @new_comment], remote: true, data: { type: :json } do |c|
+      -#  = c.input :body
+      -#  = c.button :submit
+      = link_to 'add a comment', '#', id: 'add-comment', data: { resource: 'questions', id: @question.id }

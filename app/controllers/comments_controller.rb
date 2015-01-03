@@ -7,11 +7,19 @@ class CommentsController < ApplicationController
     comment.user = current_user
 
     if comment.save
-      redirect_to question_answers_path(@question)
+      respond_to do |format|
+        format.html { redirect_to question_answers_path(@question) }
+        format.json { render json: comment }
+      end
     else
-      prepare_data(@question)
-      flash[:error] = 'Error'
-      render 'answers/index'
+      respond_to do |format|
+        format.html do
+          prepare_data(@question)
+          flash[:error] = 'Error'
+          render 'answers/index'
+        end
+        format.json { render json: comment.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -20,7 +28,10 @@ class CommentsController < ApplicationController
     @commentable = comment.commentable
     load_question
     comment.destroy
-    redirect_to question_answers_path(@question)
+    respond_to do |format|
+      format.html { redirect_to question_answers_path(@question) }
+      format.json { render text: 'ok' }
+    end
   end
 
   private

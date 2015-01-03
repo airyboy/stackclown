@@ -32,7 +32,8 @@ gem 'sorcery'
 gem 'simple_form'
 gem 'carrierwave'
 gem 'remotipart'
-gem 'dust-rails'
+gem 'underscore-rails'
+
 
 group :test, :development do
   gem 'rspec-rails'

@@ -11,8 +11,7 @@
       |
       = link_to 'edit', edit_question_path(@question), remote: true
       = link_to 'x', @question, method: :delete, data: { confirm: 'You sure?' }
-.comments
-  = render 'comments_to_question'
+  = render 'comments', parent: @question
 %hr
 .answers
   = render 'answers'

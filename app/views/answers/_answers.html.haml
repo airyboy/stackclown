@@ -1,13 +1,13 @@
 - @question.answers.each do |answer|
   %p
-    %small
-      = answer.body
-      = render 'attachments', resource: answer
-      .answer-footer
-        %span.user
-          = link_to answer.user.email, user_path(answer.user)
-        - if current_user == answer.user
-          |
-          = link_to 'edit', edit_answer_path(answer), data: { question_id: @question.id }, remote: true
-          = link_to 'x', answer, data: {question_id: @question.id}, method: :delete, data: { confirm: 'You sure?' }
-        %hr
+    = answer.body
+    = render 'attachments', resource: answer
+    .answer-footer
+      %span.user
+        = link_to answer.user.email, user_path(answer.user)
+      - if current_user == answer.user
+        |
+        = link_to 'edit', edit_answer_path(answer), data: { question_id: @question.id }, remote: true
+        |
+        = link_to 'x', answer, data: {question_id: @question.id}, method: :delete, data: { confirm: 'You sure?' }
+    = render 'comments', parent: answer
