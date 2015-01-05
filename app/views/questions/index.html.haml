@@ -8,6 +8,9 @@
     %span.body
       = question.body
     .footer
+      .tags
+        - question.tags.each do |tag|
+          = tag.tag_name
       %span.user
         by
         = link_to question.user.email, user_path(question.user)

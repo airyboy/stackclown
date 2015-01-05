@@ -2,11 +2,13 @@ FactoryGirl.define do
   factory :question do
     title 'How patch KDE under FreeBSD?'
     body 'A long body.'*40
+    tags_comma_separated 'first-tag,second-tag'
     user
   end
 
   factory :invalid_question, class: 'Question' do
     title 'How patch KDE under FreeBSD?'
+    tags_comma_separated 'first-tag,second-tag'
     body nil	
   end
 

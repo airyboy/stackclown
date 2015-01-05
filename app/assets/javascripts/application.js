@@ -16,4 +16,5 @@
 //= require underscore
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require bootstrap-tagsinput
 //= require_tree .

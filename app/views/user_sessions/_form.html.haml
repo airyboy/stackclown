@@ -7,3 +7,8 @@
     = password_field_tag :password
   .actions
     = submit_tag 'Sign in'
+
+-#= simple_form_for :user, url: { controller: 'user_sessions', action: :create }, method: :post do |u|
+-#  = u.input :email
+-#  = u.input :password
+-#  = u.button :submit, 'Sign in'

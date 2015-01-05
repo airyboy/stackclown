@@ -11,13 +11,12 @@ RSpec.describe Question, :type => :model do
   it { should validate_presence_of :title }
   it { should validate_presence_of :body }
   it { should validate_presence_of :user_id }
+  it { should validate_presence_of :tags_comma_separated }
 
   it { should ensure_length_of(:title).is_at_most(GlobalConstants::QUESTION_TITLE_MAX_LENGTH) }
   it { should ensure_length_of(:body).is_at_most(GlobalConstants::QUESTION_BODY_MAX_LENGTH) }
   
   let!(:question) { FactoryGirl.create(:question) }
-
-
 
   describe 'tags association' do
 
@@ -54,8 +53,6 @@ RSpec.describe Question, :type => :model do
       it 'should remove this tag from the question' do
         expect{ question.remove_tag(tag) }.to change(question.tags, :count).by(-1)
       end
-
-
     end
   end
 end

@@ -1,5 +1,7 @@
 = provide(:title, 'New question')
 %h1 New question
+- if @question.errors.present?
+  = @question.errors.full_messages.join('/n')
 = simple_form_for(@question, html: { class: 'form-horizontal' }) do |q|
   = render 'question_fields', q: q
   = q.button :submit, 'Create'

@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 	before_filter :require_login, only: [:new, :create, :edit, :update, :destroy], :except => [:not_authenticated]
 	before_filter :require_owning_object, only: [:edit, :update, :destroy]
 
+
 	def index
 		@questions = Question.all
 	end
@@ -26,7 +27,9 @@ class QuestionsController < ApplicationController
 	def create 
 		@question = current_user.questions.build(question_params)
 
+
 		if @question.save
+			make_tags
 			flash[:notice] = 'Your question was created'
 			redirect_to @question
 		else
@@ -58,6 +61,12 @@ class QuestionsController < ApplicationController
 		end
 
 		def question_params
-			params.require(:question).permit(:title, :body, attachments_attributes: [:file])
+			params.require(:question).permit(:title, :body, :tags_comma_separated,  attachments_attributes: [:file])
+		end
+
+		def make_tags
+			@question.tags_comma_separated.split(',').each do |tag|
+				@question.assign_tag(tag)
+			end
 		end
 end

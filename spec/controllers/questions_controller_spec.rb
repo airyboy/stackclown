@@ -76,10 +76,9 @@ RSpec.describe QuestionsController, :type => :controller do
 	end
 
 	describe 'POST #create' do
+		before { login_user(user) }
+
 		context 'with valid attributes' do
-
-			before { login_user(user) }
-
 			it 'saves the new question to the DB' do
 				expect { post :create, question: attributes_for(:question) }.to change(user.questions, :count).by(1)
 			end
@@ -88,11 +87,14 @@ RSpec.describe QuestionsController, :type => :controller do
 				post :create, question: attributes_for(:question)
 				expect(response).to redirect_to question_path(assigns(:question))
 			end
+
+			it 'assigns right tags' do
+				expect(question.tags_comma_separated).to eq 'first-tag,second-tag'
+				expect { post :create, question: attributes_for(:question) }.to change(Tag, :count).by(2)
+			end
 		end
 
 		context 'with invalid attributes' do
-			before { login_user(user) }
-
 			it 'does not save the question' do
 				expect { post :create, question: attributes_for(:invalid_question) }.not_to change(Question, :count)
 			end		
