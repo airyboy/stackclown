@@ -14,12 +14,12 @@ $ ->
     e.preventDefault()
     res = $(this).data('resource')
     id = $(this).data('id')
-    commentDiv = $(".comments[data-resource=" + res + "]" + "[data-id=" + id + "]")
+    commentDiv = $(".comments[data-resource=#{res}][data-id=#{id}]")
     commentDiv.append(comment_form_tmpl({resource: res, id: id}))
     addLink = this
     $(this).hide()
 
-    sel = "form#" + res + "-comment-form-" + id;
+    sel = "form##{res}-comment-form-#{id}";
 
     console.log(sel)
 
@@ -35,6 +35,56 @@ $ ->
       errors = $.parseJSON(xhr.responseText)
       $.each errors, (index, value) ->
         commentDiv.find('.comment-errors').append(value)
+
+  $(document).on 'click', '.attach-link', (e) ->
+    e.preventDefault()
+    $('.attachment-fields').show()
+    $(this).hide()
+    append_file_field()
+
+#  $(document).on 'click', '#add-file-link', (e) ->
+#    e.preventDefault()
+#    id = Date.now()
+#    html = file_input_tmpl({id:id, resource: 'answer'})
+#    $(html).insertBefore($('.attachment-fields').find('#add-file-link'))
+#    $("#attachment-#{id}").css('opacity','0');
+#
+#    $("#sel-file-#{id}").click (e) ->
+#      e.preventDefault()
+#      $("#attachment-#{id}").trigger('click').change ->
+#        $('.attachment-fields').append($(this).val())
+#
+#    $(document).on 'click', "#file-input-#{id}", (e) ->
+#      e.preventDefault()
+#      alert('ok')
+
+@append_file_field = () ->
+  id = Date.now()
+  html = file_input_tmpl({id:id, resource: 'answer'})
+  $('.attachment-fields').append(html)
+# hide file input
+  $("#attachment-#{id}").hide()
+
+  $("#sel-file-#{id}").click (e) ->
+    e.preventDefault()
+    $("#attachment-#{id}").trigger('click')
+    .change ->
+#     add field for the new file
+      append_file_field()
+
+      sel_file = $("#sel-file-#{id}")
+#     set filename for adding link
+      sel_file.text($(this).val().split('/').pop().split('\\').pop())
+#     add delete button
+      sel_file.wrap ->
+        "<div class=\'input-group\'><div class=\'input-group-btn\'>#{$(this).html()}" +
+          "<a class=\'btn btn-xs btn-default\' id=\'del-file-#{id}\' href=\'#\'>x</a></div></div>"
+      sel_file.attr('disabled', 'disabled')
+
+#     handler for delete link
+      $("#del-file-#{id}").click (e) ->
+        e.preventDefault()
+        $(this).parent().parent().remove()
 
 
 @comment_form_tmpl = (data) ->
@@ -59,3 +109,10 @@ $ ->
       "</div>"
   comment_template = _.template(comment_html);
   comment_template(data)
+
+@file_input_tmpl = (data) ->
+  file_input_html = "<a class='btn btn-default btn-xs' href=\'#\' id='sel-file-<%= id %>'>Select file...</a><input id=\'attachment-<%= id %>\'" + "" +
+      "name=\'<%= resource %>[attachments_attributes][<%= id %>][file]\' type=\'file\' />"
+#      "<a href=\'#\' id=\'file-input-<%= id %>\'>remove file</a>"
+  file_input_template = _.template(file_input_html)
+  file_input_template(data)

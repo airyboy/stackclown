@@ -98,8 +98,44 @@ textarea {
   a {
     color: #000000;
     &:hover {
-      color: blue;
+      font-weight: bold;
       background-color: #ffffff;
     }
+  }
+}
+
+a#add-comment, a.attach-link {
+  color: #555555;
+  background-color: lightgray;
+  font-size: smaller;
+  &:hover {
+    background-color: grey;
+    color: #fff;
+  }
+}
+
+.attachment-fields {
+  display: none;
+  padding-bottom: 10px;
+//  background-color: lightgray;
+}
+
+span.tag {
+  background-color: darkgray;
+  color: #ffffff;
+  font-size: smaller;
+  border: 1px solid #000;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  display: inline-block;
+  padding: 4px 6px;
+  margin-bottom: 5px;
+  vertical-align: middle;
+  border-radius: 2px;
+  max-width: 100%;
+  line-height: 12px;
+  cursor: text;
+  a {
+    background-color: darkgray;
+    color: #ffffff;
   }
 }

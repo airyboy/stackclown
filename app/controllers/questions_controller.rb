@@ -18,6 +18,7 @@ class QuestionsController < ApplicationController
 	end
 
 	def edit
+		@question.tags_comma_separated = @question.tags.map(&:tag_name).join(',')
 		respond_to do |format|
 			format.html { render :edit }
 			format.js
@@ -39,6 +40,7 @@ class QuestionsController < ApplicationController
 
 	def update
 		if @question.update(question_params)
+			make_tags
 			respond_to do |format|
 				format.html { redirect_to question_answers_path(@question) }
 				format.js
@@ -65,7 +67,9 @@ class QuestionsController < ApplicationController
 		end
 
 		def make_tags
-			@question.tags_comma_separated.split(',').each do |tag|
+			logger.debug "Tags: #{question_params[:tags_comma_separated]}"
+			@question.tags.destroy_all
+			question_params[:tags_comma_separated].split(',').each do |tag|
 				@question.assign_tag(tag)
 			end
 		end

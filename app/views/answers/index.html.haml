@@ -5,6 +5,7 @@
   .qbody= @question.body
   = render 'attachments', resource: @question
   .question-footer
+    = render 'shared/tags', question: @question
     %span.user
       = link_to @question.user.email, user_path(@question.user)
     - if current_user == @question.user
@@ -21,7 +22,11 @@
       = a.label :body, 'Your answer'
       .answer-errors
       = a.input :body, label: false, input_html: { rows: 6 }
-      = a.simple_fields_for :attachments do|a|
-        = a.label :file
-        = a.file_field :file
+      %div= link_to 'attach files', '#', class: 'attach-link'
+      .attachment-fields
+        -#= a.simple_fields_for :attachments do|a|
+        -#  = a.label :file
+        -#  = a.file_field :file, class: 'btn btn-small'
+        -#= link_to 'add another', '#', id: 'add-file-link'
+
       = a.button :submit, 'Create'

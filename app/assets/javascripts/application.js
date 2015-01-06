@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require jquery.remotipart
 //= require underscore
-//= require turbolinks
 //= require bootstrap-sprockets
 //= require bootstrap-tagsinput
 //= require_tree .

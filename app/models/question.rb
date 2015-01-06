@@ -1,6 +1,10 @@
 class Question < ActiveRecord::Base
   attr_accessor :tags_comma_separated
 
+  def tags_comma_separated
+    self.tags.map {|t| t.tag_name}.join(',')
+  end
+
   belongs_to :user
   has_many :answers, dependent: :destroy
   has_many :comments, as: :commentable

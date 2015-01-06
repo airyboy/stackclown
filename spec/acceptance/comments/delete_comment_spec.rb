@@ -23,7 +23,7 @@ feature 'Removing a comment', %q{
     end
   end
 
-  scenario 'Non signed in user tries to comment' do
+  scenario 'Non signed in user tries to remove comment' do
     visit question_answers_path(question)
 
     within '.comments' do
