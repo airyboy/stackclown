@@ -12,5 +12,5 @@
         = link_to question.user.email, user_path(question.user)
       %span.answers-count
         |
-        = link_to "#{pluralize(question.answers.count,'answers')}", question
+        = link_to "#{pluralize(question.answers.size,'answers')}", question
     %hr

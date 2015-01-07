@@ -4,5 +4,7 @@
   %b Email:
   = @user.email
 
-%h2 Questions: #{@user.questions.count}
-%h2 Answers: #{@user.answers.count}
+%h2 Questions: #{@user.questions.size}
+%h2 Answers: #{@user.answers.size}
+
+= render 'questions/questions', questions: @user.questions
