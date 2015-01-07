@@ -1,18 +1,3 @@
-= provide(:title, 'Questions')
+= provide(:title, 'All questions')
 
-- @questions.each do |question|
-  .question
-    %span.title
-      = link_to(question.title, question)
-    %br
-    %span.body
-      = question.body
-    .footer
-      = render 'shared/tags', question: question
-      %span.user
-        by
-        = link_to question.user.email, user_path(question.user)
-      %span.answers-count
-        |
-        = link_to "#{pluralize(question.answers.count,'answers')}", question
-    %hr
+= render 'questions', questions: @questions

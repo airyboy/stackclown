@@ -23,7 +23,10 @@ FactoryGirl.define do
   end
 
   factory :tag do
-    tag_name "linux"
+    sequence :tag_name do |n|
+      "tag#{n}"
+    end
+
   end
 
   factory :comment do

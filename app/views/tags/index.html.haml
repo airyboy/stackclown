@@ -1,0 +1,5 @@
+%h1 Tags
+%ul
+- @tags.each do |tag|
+  %span.tag
+    = link_to tag.tag_name, tag_path(tag), class: 'tag'
