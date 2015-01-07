@@ -18,7 +18,7 @@ class Question < ActiveRecord::Base
   validates :title, presence: true, length: { maximum: GlobalConstants::QUESTION_TITLE_MAX_LENGTH }
   validates :body, presence: true, length: { maximum: GlobalConstants::QUESTION_BODY_MAX_LENGTH }
   validates :user_id, presence: true
-  validates :tags_comma_separated, presence: true
+  # validates :tags_comma_separated, presence: true
 
   def assign_tag(tag_name)
     tag = Tag.find_or_create_by(tag_name: tag_name)
