@@ -1,6 +1,4 @@
 = q.input :title, label: false, placeholder: 'Question title'
 = q.input :body, label: false, placeholder: 'Question text', input_html: { rows: 7 }
 = q.input :tags_comma_separated, label: false, placeholder: 'tags, separated by comma', input_html: { data: {role: 'tagsinput'} }
-= q.simple_fields_for :attachments do |a|
-  = a.label :file
-  = a.file_field :file
+= render 'shared/attachments_form', resource: 'question'

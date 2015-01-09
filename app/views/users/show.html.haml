@@ -4,7 +4,18 @@
   %b Email:
   = @user.email
 
-%h2 Questions: #{@user.questions.size}
-%h2 Answers: #{@user.answers.size}
+.row.stats
+  .col-md-3
+    .circle #{@user.questions.size}
+    questions
+  .col-md-3
+    .circle #{@user.answers.size}
+    answers
+  .col-md-3
+    .circle #{@user.comments.size}
+    comments
+  .col-md-3
+    .circle 0
+    reputation
 
 = render 'questions/questions', questions: @user.questions

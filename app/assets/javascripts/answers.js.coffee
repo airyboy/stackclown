@@ -40,7 +40,7 @@ $ ->
     e.preventDefault()
     $('.attachment-fields').show()
     $(this).hide()
-    append_file_field()
+    append_file_field($(this).data('resource'))
 
 #  $(document).on 'click', '#add-file-link', (e) ->
 #    e.preventDefault()
@@ -58,9 +58,9 @@ $ ->
 #      e.preventDefault()
 #      alert('ok')
 
-@append_file_field = () ->
+@append_file_field = (res) ->
   id = Date.now()
-  html = file_input_tmpl({id:id, resource: 'answer'})
+  html = file_input_tmpl({id:id, resource: res})
   $('.attachment-fields').append(html)
 # hide file input
   $("#attachment-#{id}").hide()
@@ -70,7 +70,7 @@ $ ->
     $("#attachment-#{id}").trigger('click')
     .change ->
 #     add field for the new file
-      append_file_field()
+      append_file_field(res)
 
       sel_file = $("#sel-file-#{id}")
 #     set filename for adding link
@@ -111,7 +111,9 @@ $ ->
   comment_template(data)
 
 @file_input_tmpl = (data) ->
-  file_input_html = "<a class='btn btn-default btn-xs' href=\'#\' id='sel-file-<%= id %>'>Select file...</a><input id=\'attachment-<%= id %>\'" + "" +
+  file_input_html = "<a class='btn btn-default btn-xs' href=\'#\'" +
+      "id='sel-file-<%= id %>'>Select file...</a>" +
+      "<input id=\'attachment-<%= id %>\'" +
       "name=\'<%= resource %>[attachments_attributes][<%= id %>][file]\' type=\'file\' />"
 #      "<a href=\'#\' id=\'file-input-<%= id %>\'>remove file</a>"
   file_input_template = _.template(file_input_html)

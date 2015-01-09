@@ -22,11 +22,5 @@
       = a.label :body, 'Your answer'
       .answer-errors
       = a.input :body, label: false, input_html: { rows: 6 }
-      %div= link_to 'attach files', '#', class: 'attach-link'
-      .attachment-fields
-        -#= a.simple_fields_for :attachments do|a|
-        -#  = a.label :file
-        -#  = a.file_field :file, class: 'btn btn-small'
-        -#= link_to 'add another', '#', id: 'add-file-link'
-
+      = render 'shared/attachments_form', resource: 'answer'
       = a.button :submit, 'Create'
