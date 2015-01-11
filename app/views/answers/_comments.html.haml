@@ -5,7 +5,7 @@
         = comm.body
         - if current_user == comm.user
           |
-          = link_to 'edit', '#', class: 'edit-comment', data: { resource: parent.class.to_s.downcase + 's', id: parent.id }
+          = link_to 'edit', '#', class: 'edit-comment'
           |
           = link_to 'x', comment_path(comm), method: :delete, remote: true, class: 'remove-comment', data: { type: :json }
 - if current_user

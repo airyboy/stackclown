@@ -8,10 +8,23 @@ $ ->
       $('.answer-errors').append(value)
 
   $(document).on 'click', '.edit-comment', (e) ->
-    id = $(this).data('id')
-    res = $(this).data('resource')
+    id = $(this).parent().data('id')
     $.getJSON "/comments/#{id}", (data) ->
-      edit_comment(res, id, e, data.body)
+      $('.modal-body').empty()
+      $('.modal-body').append(edit_comment_form_tmpl({id: data.id, resource: ''}))
+      $('.modal-body').find('#comment_body').val(data.body)
+      $('#myModal').modal();
+      $("#edit-form").bind 'ajax:success', (e, data, status, xhr) ->
+        comment = $.parseJSON(xhr.responseText)
+        old = $(".comment[data-id=#{comment.id}]")
+        $(".comment[data-id=#{comment.id}]").after(comment_tmpl(comment))
+        old.detach()
+        $('.modal-body').find('.comment-errors').empty()
+        $('#myModal').hide()
+      $("#edit-form").bind 'ajax:error', (e, xhr, status, error) ->
+        errors = $.parseJSON(xhr.responseText)
+        $.each errors, (index, value) ->
+          $('.modal-body').find('.comment-errors').append(value)
 
   $(document).on 'click', '.remove-comment', (e) ->
     $(this).parent().hide()
@@ -21,7 +34,7 @@ $ ->
     res = $(this).data('resource')
     id = $(this).data('id')
     commentDiv = $(".comments[data-resource=#{res}][data-id=#{id}]")
-    commentDiv.append(comment_form_tmpl({resource: res, id: id}))
+    commentDiv.append(new_comment_form_tmpl({resource: res, id: id}))
     addLink = this
     $(this).hide()
     sel = "form##{res}-comment-form-#{id}";
@@ -42,45 +55,9 @@ $ ->
     $(this).hide()
     append_file_field($(this).data('resource'))
 
-#  $(document).on 'click', '#add-file-link', (e) ->
-#    e.preventDefault()
-#    id = Date.now()
-#    html = file_input_tmpl({id:id, resource: 'answer'})
-#    $(html).insertBefore($('.attachment-fields').find('#add-file-link'))
-#    $("#attachment-#{id}").css('opacity','0');
-#
-#    $("#sel-file-#{id}").click (e) ->
-#      e.preventDefault()
-#      $("#attachment-#{id}").trigger('click').change ->
-#        $('.attachment-fields').append($(this).val())
-#
-#    $(document).on 'click', "#file-input-#{id}", (e) ->
-#      e.preventDefault()
-#      alert('ok')
-
-@edit_comment = (res, id, e, text) ->
-  e.preventDefault()
-  console.log(res)
-  console.log(id)
-  commentDiv = $(".comments[data-resource=#{res}][data-id=#{id}]")
-  commentDiv.append(comment_form_tmpl({resource: res, id: id}))
-  commentDiv.find('#comment_body').val(text)
-  addLink = commentDiv.find('#add-comment')
-  addLink.hide()
-  sel = "form##{res}-comment-form-#{id}";
-  $(sel).bind 'ajax:success', (e, data, status, xhr) ->
-    comment = $.parseJSON(xhr.responseText)
-    commentDiv.append(comment_tmpl(comment))
-    commentDiv.find('.comment-errors').empty()
-    $(sel).hide()
-    $(addLink).show()
-  $(sel).bind 'ajax:error', (e, xhr, status, error) ->
-    errors = $.parseJSON(xhr.responseText)
-    $.each errors, (index, value) ->
-      commentDiv.find('.comment-errors').append(value)
 
 @append_file_field = (res) ->
-  id = Date.now()
+  id = _.uniqueId()
   html = file_input_tmpl({id:id, resource: res})
   $('.attachment-fields').append(html)
 # hide file input
@@ -108,26 +85,52 @@ $ ->
         $(this).parent().parent().remove()
 
 
-@comment_form_tmpl = (data, isNew) ->
+@comment_form_html = (isNew) ->
+  if isNew
+    url = "/<%= resource %>/<%= id %>/comments"
+  else
+    url = "/comments/<%= id %>"
+
+  patch_field = "<input name=\'_method\' type=\'hidden\' value=\'patch\'>" unless isNew
+
+  id = if isNew then "<%= resource %>-comment-form-<%= id %>" else "edit-form"
 
   comment_form_html = "<div class=\'comment-errors\'></div>" +
-      "<form accept-charset=\'UTF-8\' action=\'/<%= resource %>/<%= id %>/comments\' class=\'simple_form comment\' " +
+      "<form accept-charset=\'UTF-8\' action=\'#{url}\' class=\'simple_form comment\' " +
 #     create form id using format: questions-comment-form-2 or answers-comment-form-3
-      "id=\'<%= resource %>-comment-form-<%= id %>\'" +
+      "id=\'#{id}\'" +
       "data-remote=\'true\' data-type=\'json\' method=\'post\' novalidate=\'novalidate\'>" +
-      "<div style=\'display:none\'><input name=\'utf8\' type=\'hidden\' value=\'&#x2713;\' /></div>" +
+      "<div style=\'display:none\'><input name=\'utf8\' type=\'hidden\' value=\'&#x2713;\' />#{patch_field}</div>" +
       "<div class=\'form-group string required comments_body\'>" +
       "<textarea class=\'text required form-control\' id=\'comment_body\' rows=\'2\' name=\'comment[body]\'" +
       "placeholder='Your comment' type=\'text\' />" +
-      "<input class=\'btn btn-default\' name=\'commit\' type=\'submit\' value=\'Post\' />"
-      "</form>";
-  comment_form_template = _.template(comment_form_html);
-  comment_form_template(data)
+      "<input class=\'btn btn-default\' name=\'commit\' type=\'submit\' value=\'Post\' />" +
+      "</form>"
+
+@edit_comment_form_tmpl = (data) ->
+  html = "<div class=\'comment-errors\'></div>" +
+      "<form accept-charset=\'UTF-8\' action=\'/comments/<%= id %>\' class=\'simple_form comment\' " +
+      "id=\'edit-form\'" +
+      "data-remote=\'true\' data-type=\'json\' method=\'post\' novalidate=\'novalidate\'>" +
+      "<div style=\'display:none\'><input name=\'utf8\' type=\'hidden\' value=\'&#x2713;\' />" +
+      "<input name=\'_method\' type=\'hidden\' value=\'patch\'></div>" +
+      "<div class=\'form-group string required comments_body\'>" +
+      "<textarea class=\'text required form-control\' id=\'comment_body\' rows=\'2\' name=\'comment[body]\'" +
+      "placeholder='Your comment' type=\'text\' />" +
+      "</form>"
+
+  tmpl = _.template(html)
+  tmpl(data)
+
+@new_comment_form_tmpl = (data) ->
+  tmpl = _.template(comment_form_html(true))
+  tmpl(data)
 
 @comment_tmpl = (data) ->
-  comment_html = "<div class=\'comment\'>" +
+  comment_html = "<div class=\'comment\' data-id=\'<%= id %>\'>" +
       "<%= body %> |  " +
-      "<a data-method=\'delete\' href=\'comments/<%= id %>\' rel=\'nofollow\'>x</a>" +
+      "<a class=\'edit-comment\' href=\'#\'>edit</a> | " +
+      "<a data-method=\'delete\' href=\'/comments/<%= id %>\' rel=\'nofollow\'>x</a>" +
       "</div>"
   comment_template = _.template(comment_html);
   comment_template(data)

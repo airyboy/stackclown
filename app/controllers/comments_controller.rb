@@ -7,6 +7,18 @@ class CommentsController < ApplicationController
     render json: comment
   end
 
+  def update
+    comment = Comment.find(params[:id])
+    if comment.update(comment_params)
+      respond_to do |format|
+        format.html { redirect_to question_answers_path(@question) }
+        format.json { render json: comment }
+      end
+    else
+      render json: comment.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
   def create
     comment = @commentable.comments.build(comment_params)
     comment.user = current_user
