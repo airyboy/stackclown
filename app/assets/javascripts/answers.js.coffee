@@ -7,6 +7,12 @@ $ ->
     $.each errors, (index, value) ->
       $('.answer-errors').append(value)
 
+  $(document).on 'click', '.edit-comment', (e) ->
+    id = $(this).data('id')
+    res = $(this).data('resource')
+    $.getJSON "/comments/#{id}", (data) ->
+      edit_comment(res, id, e, data.body)
+
   $(document).on 'click', '.remove-comment', (e) ->
     $(this).parent().hide()
 
@@ -18,19 +24,13 @@ $ ->
     commentDiv.append(comment_form_tmpl({resource: res, id: id}))
     addLink = this
     $(this).hide()
-
     sel = "form##{res}-comment-form-#{id}";
-
-    console.log(sel)
-
     $(sel).bind 'ajax:success', (e, data, status, xhr) ->
       comment = $.parseJSON(xhr.responseText)
       commentDiv.append(comment_tmpl(comment))
       commentDiv.find('.comment-errors').empty()
       $(sel).hide()
       $(addLink).show()
-
-
     $(sel).bind 'ajax:error', (e, xhr, status, error) ->
       errors = $.parseJSON(xhr.responseText)
       $.each errors, (index, value) ->
@@ -57,6 +57,27 @@ $ ->
 #    $(document).on 'click', "#file-input-#{id}", (e) ->
 #      e.preventDefault()
 #      alert('ok')
+
+@edit_comment = (res, id, e, text) ->
+  e.preventDefault()
+  console.log(res)
+  console.log(id)
+  commentDiv = $(".comments[data-resource=#{res}][data-id=#{id}]")
+  commentDiv.append(comment_form_tmpl({resource: res, id: id}))
+  commentDiv.find('#comment_body').val(text)
+  addLink = commentDiv.find('#add-comment')
+  addLink.hide()
+  sel = "form##{res}-comment-form-#{id}";
+  $(sel).bind 'ajax:success', (e, data, status, xhr) ->
+    comment = $.parseJSON(xhr.responseText)
+    commentDiv.append(comment_tmpl(comment))
+    commentDiv.find('.comment-errors').empty()
+    $(sel).hide()
+    $(addLink).show()
+  $(sel).bind 'ajax:error', (e, xhr, status, error) ->
+    errors = $.parseJSON(xhr.responseText)
+    $.each errors, (index, value) ->
+      commentDiv.find('.comment-errors').append(value)
 
 @append_file_field = (res) ->
   id = Date.now()
@@ -87,7 +108,8 @@ $ ->
         $(this).parent().parent().remove()
 
 
-@comment_form_tmpl = (data) ->
+@comment_form_tmpl = (data, isNew) ->
+
   comment_form_html = "<div class=\'comment-errors\'></div>" +
       "<form accept-charset=\'UTF-8\' action=\'/<%= resource %>/<%= id %>/comments\' class=\'simple_form comment\' " +
 #     create form id using format: questions-comment-form-2 or answers-comment-form-3

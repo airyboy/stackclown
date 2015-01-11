@@ -1,6 +1,11 @@
 class CommentsController < ApplicationController
   before_action :find_commentable, only: [:create]
-  before_filter :require_login
+  before_filter :require_login, except: [:show]
+
+  def show
+    comment = Comment.find(params[:id])
+    render json: comment
+  end
 
   def create
     comment = @commentable.comments.build(comment_params)
@@ -30,7 +35,7 @@ class CommentsController < ApplicationController
     comment.destroy
     respond_to do |format|
       format.html { redirect_to question_answers_path(@question) }
-      format.json { render text: 'ok' }
+      format.json { render text: 'ok', status: 200 }
     end
   end
 
