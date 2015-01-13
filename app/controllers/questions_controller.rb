@@ -28,7 +28,6 @@ class QuestionsController < ApplicationController
 	def create 
 		@question = current_user.questions.build(question_params)
 
-
 		if @question.save
 			make_tags
 			flash[:notice] = 'Your question was created'
