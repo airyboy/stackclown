@@ -8,23 +8,10 @@ $ ->
       $('.answer-errors').append(value)
 
   $(document).on 'click', '.edit-comment', (e) ->
+    e.preventDefault()
     id = $(this).parent().data('id')
-    $.getJSON "/comments/#{id}", (data) ->
-      $('.modal-body').empty()
-      $('.modal-body').append(edit_comment_form_tmpl({id: data.id, resource: ''}))
-      $('.modal-body').find('#comment_body').val(data.body)
-      $('#myModal').modal();
-      $("#edit-form").bind 'ajax:success', (e, data, status, xhr) ->
-        comment = $.parseJSON(xhr.responseText)
-        old = $(".comment[data-id=#{comment.id}]")
-        $(".comment[data-id=#{comment.id}]").after(comment_tmpl(comment))
-        old.detach()
-        $('.modal-body').find('.comment-errors').empty()
-        $('#myModal').hide()
-      $("#edit-form").bind 'ajax:error', (e, xhr, status, error) ->
-        errors = $.parseJSON(xhr.responseText)
-        $.each errors, (index, value) ->
-          $('.modal-body').find('.comment-errors').append(value)
+    $(this).parent().slideUp()
+    edit_comment(id)
 
   $(document).on 'click', '.remove-comment', (e) ->
     $(this).parent().hide()
@@ -84,6 +71,31 @@ $ ->
         e.preventDefault()
         $(this).parent().parent().remove()
 
+bind_comment_events = (sel) ->
+  $(document).on 'click', sel, (e) ->
+    $(this).parent().hide()
+  $(document).on 'click', sel, (e) ->
+    e.preventDefault()
+    id = $(this).parent().data('id')
+    edit_comment(id)
+
+edit_comment = (id) ->
+  $.getJSON "/comments/#{id}", (data) ->
+    $('.modal-body').empty()
+    $('.modal-body').append(edit_comment_form_tmpl({id: data.id, resource: ''}))
+    $('.modal-body').find('#comment_body').val(data.body)
+    $('#myModal').modal('show');
+    $("#edit-form").bind 'ajax:success', (e, data, status, xhr) ->
+      comment = $.parseJSON(xhr.responseText)
+      $(".comment[data-id=#{comment.id}]").before(comment_tmpl(comment)).detach()
+      #$(".comment[data-id=#{comment.id}]").find('.comment-body').text(comment.body)
+      $('.modal-body').find('.comment-errors').empty()
+      $('#myModal').modal('hide')
+      $(".comment[data-id=#{comment.id}]").slideDown(1800)
+    $("#edit-form").bind 'ajax:error', (e, xhr, status, error) ->
+      errors = $.parseJSON(xhr.responseText)
+      $.each errors, (index, value) ->
+        $('.modal-body').find('.comment-errors').append(value)
 
 @comment_form_html = (isNew) ->
   if isNew
@@ -127,8 +139,8 @@ $ ->
   tmpl(data)
 
 @comment_tmpl = (data) ->
-  comment_html = "<div class=\'comment\' data-id=\'<%= id %>\'>" +
-      "<%= body %> |  " +
+  comment_html = "<div class=\'comment\' data-id=\'<%= id %>\'><span class=\'comment-body\'>" +
+      "<%= body %></span> |  " +
       "<a class=\'edit-comment\' href=\'#\'>edit</a> | " +
       "<a data-method=\'delete\' href=\'/comments/<%= id %>\' rel=\'nofollow\'>x</a>" +
       "</div>"
