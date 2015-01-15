@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require jquery.remotipart
 //= require underscore
+//= require handlebars.runtime
 //= require bootstrap-sprockets
 //= require bootstrap-tagsinput
 //= require_tree .

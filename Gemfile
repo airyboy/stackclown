@@ -33,7 +33,8 @@ gem 'simple_form'
 gem 'carrierwave'
 gem 'remotipart'
 gem 'underscore-rails'
-
+gem 'handlebars_assets'
+gem 'hamlbars', '~> 2.0'
 
 group :test, :development do
   gem 'rspec-rails'
