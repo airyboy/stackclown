@@ -1,0 +1,22 @@
+<div class="answer">
+  {{ body }}
+  <div class="answer-footer">
+    <span class='user'>
+        <a href="/users/{{ user.id }}">{{ user.email }}</a>
+    </span>
+      {{#isCurrentUser user.id}}
+      |
+      <a data-remote="true" href="/answers/{{ id }}/edit">edit</a>
+      |
+      <a data-confirm="You sure?" data-method="delete" href="/answers/{{ id }}" rel="nofollow">x</a>
+      {{/isCurrentUser}}
+    </div>
+    <div class='comments' data-id='{{ id }}' data-resource='answers'>
+      {{#each comments }}
+        {{> comments/_comment this}}
+      {{/each}}
+    </div>
+    <div class='comment-form'>
+      <a data-id="{{ id }}" data-resource="answers" href="#" id="add-comment">add a comment</a>
+    </div>
+</div>

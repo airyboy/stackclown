@@ -1,4 +1,9 @@
 $ ->
+  question_id = $('.full-question').data('id')
+  $.getJSON "/questions/#{question_id}/answers", (json) ->
+    $('.answers').html(HandlebarsTemplates['answers/answers'](json))
+
+
   $(document).on 'click', '#save-button', (e) ->
     $('#edit-form').submit()
 
@@ -27,7 +32,8 @@ $ ->
     sel = "form##{res}-comment-form-#{id}";
     $(sel).bind 'ajax:success', (e, data, status, xhr) ->
       comment = $.parseJSON(xhr.responseText)
-      commentDiv.append(comment_tmpl(comment))
+#      commentDiv.append(comment_tmpl(comment))
+      commentDiv.append(Handlebars.partials['comments/_comment'](comment))
       commentDiv.find('.comment-errors').empty()
       $(sel).hide()
       $(addLink).show()

@@ -14,6 +14,11 @@ class AnswersController < ApplicationController
     @new_answer = Answer.new
     @new_comment = Comment.new
     @new_answer.attachments.build
+
+    respond_to do |format|
+      format.html { render :index }
+      format.json
+    end
   end
 
   def edit

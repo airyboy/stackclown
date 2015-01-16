@@ -9,6 +9,7 @@
 <body>
 
 <%= render 'layouts/header' %>
+<div id="user-info" style="display: none" data-user-signed="<%= current_user.nil? %>" data-user-id="<%= current_user.id %>"></div>
 <div>
   <p id='notice'><%= flash[:notice] %></p>
   <p id='alert'><%= flash[:alert] %></p>

@@ -1,0 +1,11 @@
+<div class="comment-errors"></div>
+<form accept-charset="UTF-8" action="#{url}" class="simple_form comment" data-remote="true" data-type="json"
+      method="post" novalidate="novalidate" id="{{ resource }}-comment-form-{{ id }}" >
+  <div style="display:none">
+    <input name="utf8" type="hidden" value="&#x2713;" />
+  </div>
+  <div class="form-group string required comments_body">
+    <textarea class="text required form-control" id="comment_body" rows="2" name="comment[body]" placeholder="Your comment" type="text" />
+  </div>
+  <input class="btn btn-default" name="commit" type="submit" value="Post" />
+</form>

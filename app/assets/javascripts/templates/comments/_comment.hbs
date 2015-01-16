@@ -1,0 +1,11 @@
+<div class="comment" data-id="{{ id }}">
+  <span class="comment-body">
+    {{ body }}
+  </span>
+  by <span class="user">{{user.email}}</span>
+  {{#isCurrentUser user.id}}
+    |
+    <a class="edit-comment" href="#">edit</a> |
+    <a data-method="delete" href="/comments/{{ id }}" rel="nofollow">x</a>
+  {{/isCurrentUser}}
+</div>

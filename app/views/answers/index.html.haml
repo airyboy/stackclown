@@ -1,6 +1,6 @@
 = provide(:title, 'Show question')
 = render 'shared/bootstrap_edit_form'
-.full-question
+.full-question{data: {id: @question.id}}
   .qtitle= @question.title
   .qbody= @question.body
   = render 'attachments', resource: @question
@@ -15,7 +15,7 @@
   = render 'comments', parent: @question
 %hr
 .answers
-  = render 'answers'
+  -#= render 'answers'
 %br
   - if logged_in?
     = simple_form_for @new_answer, url: question_answers_path(@question), remote: true do |a|
