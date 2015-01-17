@@ -35,6 +35,8 @@ gem 'remotipart'
 gem 'underscore-rails'
 gem 'handlebars_assets'
 gem 'hamlbars', '~> 2.0'
+gem 'private_pub'
+gem 'thin'
 
 group :test, :development do
   gem 'rspec-rails'
