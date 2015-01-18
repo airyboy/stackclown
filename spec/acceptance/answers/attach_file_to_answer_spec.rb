@@ -13,7 +13,10 @@ feature 'Attaching file to an answer', %q{
     visit question_answers_path(question)
 
     fill_in 'Your answer', with: 'answer body'
-    attach_file 'File', "#{Rails.root}/spec/factories.rb"
+    click_on 'attach files'
+    sleep 2
+    page.execute_script("$('#attachment-1').show()")
+    attach_file 'attachment-1', "#{Rails.root}/spec/factories.rb"
     click_on 'Create'
 
     expect(page).to have_link 'factories.rb', href: '/uploads/attachment/file/1/factories.rb'

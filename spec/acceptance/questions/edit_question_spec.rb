@@ -19,8 +19,8 @@ feature 'Editing a question', %q{
     end
 
     scenario 'tries to edit a question', js: true do
-      fill_in 'Title', with: 'modified title'
-      fill_in 'Body', with: 'modified body'
+      fill_in 'question_title', with: 'modified title'
+      fill_in 'question_body', with: 'modified body'
       click_on 'Save'
 
       expect(page).to have_content 'modified title'
@@ -28,8 +28,8 @@ feature 'Editing a question', %q{
     end
 
     scenario 'tries to submit an updated question with wrong data', js: true do
-      fill_in 'Title', with: ''
-      fill_in 'Body', with: ''
+      fill_in 'question_title', with: ''
+      fill_in 'question_body', with: ''
       click_on 'Save'
 
       expect(page).to have_content "can't be blank"

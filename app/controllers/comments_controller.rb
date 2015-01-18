@@ -17,7 +17,7 @@ class CommentsController < ApplicationController
         format.json { render :show }
       end
     else
-      render json: comment.errors.full_messages, status: :unprocessable_entity
+      render json: @comment.errors.full_messages, status: :unprocessable_entity
     end
   end
 

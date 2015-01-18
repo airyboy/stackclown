@@ -11,9 +11,9 @@ feature 'Asking a question', %q{
     visit root_path
     click_on 'Ask question'
 
-    fill_in 'Title', with: 'new question'
-    fill_in 'Body', with: 'new question body'
-    fill_in 'Tags', with: 'couple,tags'
+    fill_in 'question_title', with: 'new question'
+    fill_in 'question_body', with: 'new question body'
+    fill_in 'question_tags_comma_separated', with: 'couple,tags'
     click_on 'Create'
 
     expect(page).to have_content 'Your question was created'

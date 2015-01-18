@@ -27,5 +27,5 @@
       = render 'shared/attachments_form', resource: 'answer'
       = a.button :submit, 'Create'
 
-= subscribe_to "/questions/#{@question.id}/answers"
-= subscribe_to "/questions/#{@question.id}/comments"
+= subscribe_to "/questions/#{@question.id}/answers" unless Rails.env.test?
+= subscribe_to "/questions/#{@question.id}/comments" unless Rails.env.test?

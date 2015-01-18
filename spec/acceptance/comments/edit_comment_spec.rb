@@ -20,19 +20,19 @@ feature 'Editing a comment', %q{
     scenario 'tries to edit a comment of a question', js: true do
       within ".comments[data-resource='questions']" do
         click_on 'edit'
-        fill_in 'body', with: 'altered comment'
-        click_on 'Save'
-        expect(page).to have_content 'altered comment'
       end
+      fill_in 'comment_body', with: 'altered comment'
+      click_on 'Save'
+      expect(page).to have_content 'altered comment'
     end
 
     scenario 'tries to save the comment with wrong data', js: true do
       within ".comments[data-resource='questions']" do
         click_on 'edit'
-        fill_in 'body', with: ''
-        click_on 'Save'
-        expect(page).to have_content "can't be blank"
       end
+      fill_in 'comment_body', with: ''
+      click_on 'Save'
+      expect(page).to have_content "can't be blank"
     end
   end
 

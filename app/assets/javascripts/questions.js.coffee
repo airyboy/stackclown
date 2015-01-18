@@ -4,9 +4,9 @@
 
 $ ->
   $.getJSON '/questions', (data) ->
-    $('.questions').html(HandlebarsTemplates['questions'](data))
+    $('.questions').html(HandlebarsTemplates['questions/questions'](data))
 
   PrivatePub.subscribe "/questions", (data, channel) ->
     console.log(data)
     json = $.parseJSON(data['question'])
-    $('.questions').prepend(Handlebars.partials['_question'](json))
+    $('.questions').prepend(Handlebars.partials['questions/_question'](json))

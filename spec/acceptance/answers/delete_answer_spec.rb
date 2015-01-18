@@ -21,8 +21,9 @@ feature 'Deleting an answer', %q{
     scenario 'tries to remove his answer', js: true do
       visit question_answers_path(question)
       within '.answers' do
-        click_on 'x'
-        page.driver.browser.switch_to.alert.accept
+        handle_js_confirm do
+          click_on 'x'
+        end
         expect(page).not_to have_content answer.body
       end
     end
@@ -30,8 +31,9 @@ feature 'Deleting an answer', %q{
     scenario 'tries to remove his answer, but changes his mind', js: true do
       visit question_answers_path(question)
       within '.answers' do
-        click_on 'x'
-        page.driver.browser.switch_to.alert.dismiss
+        handle_js_confirm(false) do
+          click_on 'x'
+        end
         expect(page).to have_content answer.body
       end
     end
@@ -43,7 +45,6 @@ feature 'Deleting an answer', %q{
       end
     end
   end
-
 
   scenario 'Non-registered user tries to remove an answer' do
     visit question_answers_path(other_question)

@@ -2,7 +2,7 @@
   <span class="comment-body">
     {{ body }}
   </span>
-  by <span class="user">{{user.email}}</span>
+  by <span class="user"><a href="/users/{{ user.id }}">{{user.email}}</a></span>
   {{#isCurrentUser user.id}}
     |
     <a class="edit-comment" href="#">edit</a> |

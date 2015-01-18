@@ -5,4 +5,4 @@
 .questions
 -#= render 'questions', questions: @questions
 
-= subscribe_to '/questions'
+= subscribe_to '/questions' unless Rails.env.test?

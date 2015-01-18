@@ -1,3 +1,13 @@
+$ ->
+  $(document).on 'click', '.attach-link', (e) ->
+    e.preventDefault()
+    $('.attachment-fields').show()
+    $(this).hide()
+    append_file_field($(this).data('resource'))
+
+  #for acceptance tests
+  $(".bootstrap-tagsinput").find('input').attr("id", "tags_comma_separated")
+
 @append_file_field = (res) ->
   id = _.uniqueId()
   html = file_input_tmpl({id:id, resource: res})
