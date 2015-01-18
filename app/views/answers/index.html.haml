@@ -1,3 +1,5 @@
+= javascript_include_tag 'answers'
+
 = provide(:title, 'Show question')
 = render 'shared/bootstrap_edit_form'
 .full-question{data: {id: @question.id}}
@@ -26,3 +28,4 @@
       = a.button :submit, 'Create'
 
 = subscribe_to "/questions/#{@question.id}/answers"
+= subscribe_to "/questions/#{@question.id}/comments"

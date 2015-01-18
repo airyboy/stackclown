@@ -10,11 +10,11 @@ class CommentsController < ApplicationController
   end
 
   def update
-    comment = Comment.find(params[:id])
-    if comment.update(comment_params)
+    @comment = Comment.find(params[:id])
+    if @comment.update(comment_params)
       respond_to do |format|
         format.html { redirect_to question_answers_path(@question) }
-        format.json { render json: comment }
+        format.json { render :show }
       end
     else
       render json: comment.errors.full_messages, status: :unprocessable_entity
@@ -30,6 +30,8 @@ class CommentsController < ApplicationController
         format.html { redirect_to question_answers_path(@question) }
         format.json { render :show }
       end
+      pub_json = render_to_string(template: 'comments/show.json.jbuilder', locals: {comment: @comment} )
+      PrivatePub.publish_to "/questions/#{@question.id}/comments", comment: pub_json
     else
       respond_to do |format|
         format.html do

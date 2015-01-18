@@ -36,11 +36,16 @@ $ ->
     res = $(this).data('resource')
     id = $(this).data('id')
     commentDiv = $(".comments[data-resource=#{res}][data-id=#{id}]")
-    commentDiv.append(new_comment_form_tmpl({resource: res, id: id}))
+    commentDiv.append(HandlebarsTemplates['comments/new_comment_form']({resource: res, id: id}))
     addLink = this
     $(this).hide()
     sel = "form##{res}-comment-form-#{id}";
+    $(sel).bind 'ajax:beforeSend', () ->
+      PrivatePub.subscribe comments_channel(), (data, channel) ->
+        console.log('do nothing')
+        return 0;
     $(sel).bind 'ajax:success', (e, data, status, xhr) ->
+      subscribe_comet()
       comment = $.parseJSON(xhr.responseText)
       console.log(comment)
 #      commentDiv.append(comment_tmpl(comment))
@@ -67,11 +72,21 @@ $ ->
   id = question_id()
   return "/questions/#{id}/answers"
 
+@comments_channel = () ->
+  id = question_id()
+  return "/questions/#{id}/comments"
+
 @subscribe_comet = () ->
   PrivatePub.subscribe answers_channel(), (data, channel) ->
     console.log(data)
     json = $.parseJSON(data['answer'])
     $('.answers').append(Handlebars.partials['answers/_answer'](json))
+  PrivatePub.subscribe comments_channel(), (data, channel) ->
+    console.log(data)
+    json = $.parseJSON(data['comment'])
+    commentDiv = $(".comments[data-resource=#{json.commentable.resource}][data-id=#{json.commentable.id}]")
+    console.log(commentDiv)
+    commentDiv.append(Handlebars.partials['comments/_comment'](json))
 
 @append_file_field = (res) ->
   id = _.uniqueId()
@@ -101,23 +116,17 @@ $ ->
         e.preventDefault()
         $(this).parent().parent().remove()
 
-bind_comment_events = (sel) ->
-  $(document).on 'click', sel, (e) ->
-    $(this).parent().hide()
-  $(document).on 'click', sel, (e) ->
-    e.preventDefault()
-    id = $(this).parent().data('id')
-    edit_comment(id)
-
 edit_comment = (id) ->
   $.getJSON "/comments/#{id}", (data) ->
     $('.modal-body').empty()
-    $('.modal-body').append(edit_comment_form_tmpl({id: data.id, resource: ''}))
+    $('.modal-body').append(HandlebarsTemplates['comments/edit_comment_form']({id: data.id}));
+#    $('.modal-body').append(edit_comment_form_tmpl({id: data.id, resource: ''}))
     $('.modal-body').find('#comment_body').val(data.body)
     $('#myModal').modal('show');
     $("#edit-form").bind 'ajax:success', (e, data, status, xhr) ->
       comment = $.parseJSON(xhr.responseText)
-      $(".comment[data-id=#{comment.id}]").before(comment_tmpl(comment)).detach()
+      console.log(comment)
+      $(".comment[data-id=#{comment.id}]").before(Handlebars.partials['comments/_comment'](comment)).detach()
       #$(".comment[data-id=#{comment.id}]").find('.comment-body').text(comment.body)
       $('.modal-body').find('.comment-errors').empty()
       $('#myModal').modal('hide')
@@ -127,61 +136,61 @@ edit_comment = (id) ->
       $.each errors, (index, value) ->
         $('.modal-body').find('.comment-errors').append(value)
 
-@comment_form_html = (isNew) ->
-  if isNew
-    url = "/<%= resource %>/<%= id %>/comments"
-  else
-    url = "/comments/<%= id %>"
+#@comment_form_html = (isNew) ->
+#  if isNew
+#    url = "/<%= resource %>/<%= id %>/comments"
+#  else
+#    url = "/comments/<%= id %>"
+#
+#  patch_field = "<input name=\'_method\' type=\'hidden\' value=\'patch\'>" unless isNew
+#
+#  id = if isNew then "<%= resource %>-comment-form-<%= id %>" else "edit-form"
+#
+#  comment_form_html = "<div class=\'comment-errors\'></div>" +
+#      "<form accept-charset=\'UTF-8\' action=\'#{url}\' class=\'simple_form comment\' " +
+##     create form id using format: questions-comment-form-2 or answers-comment-form-3
+#      "id=\'#{id}\'" +
+#      "data-remote=\'true\' data-type=\'json\' method=\'post\' novalidate=\'novalidate\'>" +
+#      "<div style=\'display:none\'><input name=\'utf8\' type=\'hidden\' value=\'&#x2713;\' />#{patch_field}</div>" +
+#      "<div class=\'form-group string required comments_body\'>" +
+#      "<textarea class=\'text required form-control\' id=\'comment_body\' rows=\'2\' name=\'comment[body]\'" +
+#      "placeholder='Your comment' type=\'text\' />" +
+#      "<input class=\'btn btn-default\' name=\'commit\' type=\'submit\' value=\'Post\' />" +
+#      "</form>"
 
-  patch_field = "<input name=\'_method\' type=\'hidden\' value=\'patch\'>" unless isNew
+#@edit_comment_form_tmpl = (data) ->
+#  html = "<div class=\'comment-errors\'></div>" +
+#      "<form accept-charset=\'UTF-8\' action=\'/comments/<%= id %>\' class=\'simple_form comment\' " +
+#      "id=\'edit-form\'" +
+#      "data-remote=\'true\' data-type=\'json\' method=\'post\' novalidate=\'novalidate\'>" +
+#      "<div style=\'display:none\'><input name=\'utf8\' type=\'hidden\' value=\'&#x2713;\' />" +
+#      "<input name=\'_method\' type=\'hidden\' value=\'patch\'></div>" +
+#      "<div class=\'form-group string required comments_body\'>" +
+#      "<textarea class=\'text required form-control\' id=\'comment_body\' rows=\'2\' name=\'comment[body]\'" +
+#      "placeholder='Your comment' type=\'text\' />" +
+#      "</form>"
+#
+#  tmpl = _.template(html)
+#  tmpl(data)
 
-  id = if isNew then "<%= resource %>-comment-form-<%= id %>" else "edit-form"
+#@new_comment_form_tmpl = (data) ->
+#  tmpl = _.template(comment_form_html(true))
+#  tmpl(data)
 
-  comment_form_html = "<div class=\'comment-errors\'></div>" +
-      "<form accept-charset=\'UTF-8\' action=\'#{url}\' class=\'simple_form comment\' " +
-#     create form id using format: questions-comment-form-2 or answers-comment-form-3
-      "id=\'#{id}\'" +
-      "data-remote=\'true\' data-type=\'json\' method=\'post\' novalidate=\'novalidate\'>" +
-      "<div style=\'display:none\'><input name=\'utf8\' type=\'hidden\' value=\'&#x2713;\' />#{patch_field}</div>" +
-      "<div class=\'form-group string required comments_body\'>" +
-      "<textarea class=\'text required form-control\' id=\'comment_body\' rows=\'2\' name=\'comment[body]\'" +
-      "placeholder='Your comment' type=\'text\' />" +
-      "<input class=\'btn btn-default\' name=\'commit\' type=\'submit\' value=\'Post\' />" +
-      "</form>"
+#@comment_tmpl = (data) ->
+#  comment_html = "<div class=\'comment\' data-id=\'<%= id %>\'><span class=\'comment-body\'>" +
+#      "<%= body %></span> |  " +
+#      "<a class=\'edit-comment\' href=\'#\'>edit</a> | " +
+#      "<a data-method=\'delete\' href=\'/comments/<%= id %>\' rel=\'nofollow\'>x</a>" +
+#      "</div>"
+#  comment_template = _.template(comment_html);
+#  comment_template(data)
 
-@edit_comment_form_tmpl = (data) ->
-  html = "<div class=\'comment-errors\'></div>" +
-      "<form accept-charset=\'UTF-8\' action=\'/comments/<%= id %>\' class=\'simple_form comment\' " +
-      "id=\'edit-form\'" +
-      "data-remote=\'true\' data-type=\'json\' method=\'post\' novalidate=\'novalidate\'>" +
-      "<div style=\'display:none\'><input name=\'utf8\' type=\'hidden\' value=\'&#x2713;\' />" +
-      "<input name=\'_method\' type=\'hidden\' value=\'patch\'></div>" +
-      "<div class=\'form-group string required comments_body\'>" +
-      "<textarea class=\'text required form-control\' id=\'comment_body\' rows=\'2\' name=\'comment[body]\'" +
-      "placeholder='Your comment' type=\'text\' />" +
-      "</form>"
-
-  tmpl = _.template(html)
-  tmpl(data)
-
-@new_comment_form_tmpl = (data) ->
-  tmpl = _.template(comment_form_html(true))
-  tmpl(data)
-
-@comment_tmpl = (data) ->
-  comment_html = "<div class=\'comment\' data-id=\'<%= id %>\'><span class=\'comment-body\'>" +
-      "<%= body %></span> |  " +
-      "<a class=\'edit-comment\' href=\'#\'>edit</a> | " +
-      "<a data-method=\'delete\' href=\'/comments/<%= id %>\' rel=\'nofollow\'>x</a>" +
-      "</div>"
-  comment_template = _.template(comment_html);
-  comment_template(data)
-
-@file_input_tmpl = (data) ->
-  file_input_html = "<a class='btn btn-default btn-xs' href=\'#\'" +
-      "id='sel-file-<%= id %>'>Select file...</a>" +
-      "<input id=\'attachment-<%= id %>\'" +
-      "name=\'<%= resource %>[attachments_attributes][<%= id %>][file]\' type=\'file\' />"
-#      "<a href=\'#\' id=\'file-input-<%= id %>\'>remove file</a>"
-  file_input_template = _.template(file_input_html)
-  file_input_template(data)
+#@file_input_tmpl = (data) ->
+#  file_input_html = "<a class='btn btn-default btn-xs' href=\'#\'" +
+#      "id='sel-file-<%= id %>'>Select file...</a>" +
+#      "<input id=\'attachment-<%= id %>\'" +
+#      "name=\'<%= resource %>[attachments_attributes][<%= id %>][file]\' type=\'file\' />"
+##      "<a href=\'#\' id=\'file-input-<%= id %>\'>remove file</a>"
+#  file_input_template = _.template(file_input_html)
+#  file_input_template(data)
