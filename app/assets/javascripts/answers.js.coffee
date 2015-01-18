@@ -1,11 +1,21 @@
 $ ->
-  question_id = $('.full-question').data('id')
-  $.getJSON "/questions/#{question_id}/answers", (json) ->
-    $('.answers').html(HandlebarsTemplates['answers/answers'](json))
-
+  id = question_id()
+  if id
+    $.getJSON "/questions/#{id}/answers", (json) ->
+      $('.answers').html(HandlebarsTemplates['answers/answers'](json))
+    subscribe_comet()
 
   $(document).on 'click', '#save-button', (e) ->
     $('#edit-form').submit()
+
+  $('form.new_answer').bind 'ajax:beforeSend', () ->
+    PrivatePub.subscribe answers_channel(), (data, channel) ->
+      console.log('do nothing')
+      return 0;
+
+  $('form.new_answer').bind 'ajax:success', () ->
+    console.log('Restore subscriptions')
+    subscribe_comet()
 
   $('form.new_answer').bind 'ajax:error', (e, xhr, status, error) ->
     errors = $.parseJSON(xhr.responseText)
@@ -32,6 +42,7 @@ $ ->
     sel = "form##{res}-comment-form-#{id}";
     $(sel).bind 'ajax:success', (e, data, status, xhr) ->
       comment = $.parseJSON(xhr.responseText)
+      console.log(comment)
 #      commentDiv.append(comment_tmpl(comment))
       commentDiv.append(Handlebars.partials['comments/_comment'](comment))
       commentDiv.find('.comment-errors').empty()
@@ -48,6 +59,19 @@ $ ->
     $(this).hide()
     append_file_field($(this).data('resource'))
 
+@question_id = () ->
+  question_id = $('.full-question').data('id')
+  return question_id
+
+@answers_channel = () ->
+  id = question_id()
+  return "/questions/#{id}/answers"
+
+@subscribe_comet = () ->
+  PrivatePub.subscribe answers_channel(), (data, channel) ->
+    console.log(data)
+    json = $.parseJSON(data['answer'])
+    $('.answers').append(Handlebars.partials['answers/_answer'](json))
 
 @append_file_field = (res) ->
   id = _.uniqueId()

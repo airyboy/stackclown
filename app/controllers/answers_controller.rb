@@ -47,6 +47,8 @@ class AnswersController < ApplicationController
         format.html { redirect_to question_answers_path(@question) }
         format.js
       end
+      pub_json = render_to_string(template: 'answers/show.json.jbuilder', locals: {answer: @answer} )
+      PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: pub_json
     else
       respond_to do |format|
         format.html do

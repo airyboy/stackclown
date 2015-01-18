@@ -34,6 +34,8 @@ class QuestionsController < ApplicationController
 
 		if @question.save
 			make_tags
+			pub_json = render_to_string(template: 'questions/show.json.jbuilder', locals: {question: @question} )
+			PrivatePub.publish_to '/questions', question: pub_json
 			flash[:notice] = 'Your question was created'
 			redirect_to @question
 		else

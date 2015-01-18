@@ -35,7 +35,7 @@ gem 'remotipart'
 gem 'underscore-rails'
 gem 'handlebars_assets'
 gem 'hamlbars', '~> 2.0'
-gem 'private_pub'
+gem 'private_pub', :git => 'git://github.com/ryanb/private_pub.git'
 gem 'thin'
 
 group :test, :development do

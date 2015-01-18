@@ -1,5 +1,12 @@
 <div class="answer">
   {{ body }}
+  {{#if attachments}}
+    <div class="attachments">
+      {{#each attachments}}
+        <a class='btn btn-xs btn-default' href="{{ url }}">{{ filename }}</a>
+      {{/each}}
+    </div>
+  {{/if}}
   <div class="answer-footer">
     <span class='user'>
         <a href="/users/{{ user.id }}">{{ user.email }}</a>

@@ -3,8 +3,10 @@ class CommentsController < ApplicationController
   before_filter :require_login, except: [:show]
 
   def show
-    comment = Comment.find(params[:id])
-    render json: comment
+    @comment = Comment.find(params[:id])
+    respond_to do |format|
+      format.json
+    end
   end
 
   def update
@@ -20,13 +22,13 @@ class CommentsController < ApplicationController
   end
 
   def create
-    comment = @commentable.comments.build(comment_params)
-    comment.user = current_user
+    @comment = @commentable.comments.build(comment_params)
+    @comment.user = current_user
 
-    if comment.save
+    if @comment.save
       respond_to do |format|
         format.html { redirect_to question_answers_path(@question) }
-        format.json { render json: comment }
+        format.json { render :show }
       end
     else
       respond_to do |format|
@@ -35,7 +37,7 @@ class CommentsController < ApplicationController
           flash[:error] = 'Error'
           render 'answers/index'
         end
-        format.json { render json: comment.errors.full_messages, status: :unprocessable_entity }
+        format.json { render json: @comment.errors.full_messages, status: :unprocessable_entity }
       end
     end
   end

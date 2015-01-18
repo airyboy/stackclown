@@ -1,6 +1,3 @@
-
-json.current_user (current_user ? current_user.id : 0)
-
 json.answers_count @question.answers.size
 
 json.answers @answers do |answer|
@@ -10,6 +7,11 @@ json.answers @answers do |answer|
   json.user do
     json.id answer.user.id
     json.email answer.user.email
+  end
+
+  json.attachments answer.attachments  do |attachment|
+    json.filename attachment.file.identifier
+    json.url attachment.file.url
   end
 
   json.comments answer.comments do |comment|
