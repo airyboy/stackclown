@@ -4,15 +4,15 @@ RSpec.describe CommentsController, :type => :controller do
   let!(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, question: question, user: user) }
-  let(:comment) { create(:comment, commentable: question) }
+  let!(:comment) { create(:comment, commentable: question) }
 
   describe 'GET #show' do
+    render_views
     before { get :show, id: comment, format: :json }
 
     it 'renders question answers view' do
       parsed_body = JSON.parse(response.body)
       expect(parsed_body['body']).to eq comment.body
-      expect(response.header['Content-Type']).to include 'application/json'
     end
   end
 

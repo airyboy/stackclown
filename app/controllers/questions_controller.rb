@@ -22,7 +22,7 @@ class QuestionsController < ApplicationController
 	end
 
 	def edit
-		@question.tags_comma_separated = @question.tags.map(&:tag_name).join(',')
+		@question.tags_comma_separated = @question.tag_list
 		respond_to do |format|
 			format.html { render :edit }
 			format.js
@@ -31,9 +31,8 @@ class QuestionsController < ApplicationController
 
 	def create 
 		@question = current_user.questions.build(question_params)
-
 		if @question.save
-			make_tags
+			@question.make_tags
 			pub_json = render_to_string(template: 'questions/show.json.jbuilder', locals: {question: @question} )
 			PrivatePub.publish_to '/questions', question: pub_json
 			flash[:notice] = 'Your question was created'
@@ -45,7 +44,7 @@ class QuestionsController < ApplicationController
 
 	def update
 		if @question.update(question_params)
-			make_tags
+			@question.make_tags
 			respond_to do |format|
 				format.html { redirect_to question_answers_path(@question) }
 				format.js
@@ -69,13 +68,5 @@ class QuestionsController < ApplicationController
 
 		def question_params
 			params.require(:question).permit(:title, :body, :tags_comma_separated,  attachments_attributes: [:file])
-		end
-
-		def make_tags
-			logger.debug "Tags: #{question_params[:tags_comma_separated]}"
-			@question.tags.destroy_all
-			question_params[:tags_comma_separated].split(',').each do |tag|
-				@question.assign_tag(tag)
-			end
 		end
 end

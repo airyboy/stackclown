@@ -143,14 +143,14 @@ RSpec.describe QuestionsController, :type => :controller do
 			end
 
 			it 'should update the question attributes' do
-				patch :update, id: question, question: {title: 'new title', body: 'new body'}
+				patch :update, id: question, question: {title: 'new title', body: 'new body', tags_comma_separated: 'first-tag,second-tag'}
 				question.reload
 				expect(question.title).to eq 'new title'
 				expect(question.body).to eq 'new body'
 			end
 
 			it 'should redirect to answers index view' do
-				patch :update, id: question, question: {title: 'new title', body: 'new body'}
+				patch :update, id: question, question: {title: 'new title', body: 'new body', tags_comma_separated: 'first-tag,second-tag'}
 				expect(response).to redirect_to question_answers_path(question)
 			end
 
