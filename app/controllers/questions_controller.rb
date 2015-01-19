@@ -3,11 +3,13 @@ class QuestionsController < ApplicationController
 	before_filter :require_login, only: [:new, :create, :edit, :update, :destroy], :except => [:not_authenticated]
 	before_filter :require_owning_object, only: [:edit, :update, :destroy]
 
+	respond_to :html
+	respond_to :js, only: [:index, :edit, :update]
 
 	def index
 		@questions = Question.all
 		respond_to do |format|
-			format.html { render :index }
+			format.html
 			format.json
 		end
 	end
@@ -24,7 +26,7 @@ class QuestionsController < ApplicationController
 	def edit
 		@question.tags_comma_separated = @question.tag_list
 		respond_to do |format|
-			format.html { render :edit }
+			format.html
 			format.js
 		end
 	end

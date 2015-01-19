@@ -19,9 +19,12 @@ feature 'Editing a question', %q{
     end
 
     scenario 'tries to edit a question', js: true do
-      fill_in 'question_title', with: 'modified title'
-      fill_in 'question_body', with: 'modified body'
-      click_on 'Save'
+      within '#myModal' do
+        fill_in 'question_title', with: 'modified title'
+        fill_in 'question_body', with: 'modified body'
+        click_on 'Save'
+      end
+      save_and_open_page
 
       expect(page).to have_content 'modified title'
       expect(page).to have_content 'modified body'

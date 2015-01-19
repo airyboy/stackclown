@@ -66,6 +66,17 @@ RSpec.describe CommentsController, :type => :controller do
           expect(response).to render_template 'answers/index'
         end
       end
+
+      context 'when format is json' do
+        render_views
+        let(:comm) { create(:comment_to_answer) }
+        it 'should render the custom json' do
+          post :create, answer_id: answer, comment: attributes_for(:comment_to_answer), format: :json
+          parsed_body = JSON.parse(response.body)
+          expect(parsed_body['body']).to eq comm.body
+          expect(parsed_body['commentable']['resource']).to eq "#{comment.commentable_type.downcase}s"
+        end
+      end
     end
 
   end

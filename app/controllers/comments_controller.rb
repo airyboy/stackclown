@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   before_action :find_commentable, only: [:create]
+  before_action :load_question
   before_filter :require_login, except: [:show]
 
   def show
@@ -30,8 +31,7 @@ class CommentsController < ApplicationController
         format.html { redirect_to question_answers_path(@question) }
         format.json { render :show }
       end
-      pub_json = render_to_string(template: 'comments/show.json.jbuilder', locals: {comment: @comment} )
-      PrivatePub.publish_to "/questions/#{@question.id}/comments", comment: pub_json
+      publish_comment
     else
       respond_to do |format|
         format.html do
@@ -75,5 +75,10 @@ class CommentsController < ApplicationController
 
     def comment_params
       params.require(:comment).permit(:body)
+    end
+
+    def publish_comment
+      pub_json = render_to_string(template: 'comments/show.json.jbuilder', locals: {comment: @comment} )
+      PrivatePub.publish_to "/questions/#{@question.id}/comments", comment: pub_json
     end
 end

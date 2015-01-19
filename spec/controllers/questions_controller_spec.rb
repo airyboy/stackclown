@@ -18,6 +18,15 @@ RSpec.describe QuestionsController, :type => :controller do
 		it 'renders index view' do
 			expect(response).to render_template :index
 		end
+
+		context 'when json' do
+			render_views
+			it 'should render json' do
+				get :index, format: :json
+				parsed_body = JSON(response.body)
+				expect(parsed_body).not_to be_nil
+			end
+		end
 	end
 
 	describe 'GET #show' do
