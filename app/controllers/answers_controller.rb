@@ -12,20 +12,11 @@ class AnswersController < ApplicationController
   def index
     @answers = @question.answers
     @new_answer = Answer.new
-    @new_comment = Comment.new
-    @new_answer.attachments.build
-
-    respond_to do |format|
-      format.html { render :index }
-      format.json
-    end
+    respond_to :html, :json
   end
 
   def edit
-    respond_to do |format|
-      format.html { render :edit }
-      format.js
-    end
+    respond_to :html, :js
   end
 
   def update
@@ -47,8 +38,7 @@ class AnswersController < ApplicationController
         format.html { redirect_to question_answers_path(@question) }
         format.js
       end
-      pub_json = render_to_string(template: 'answers/show.json.jbuilder', locals: {answer: @answer} )
-      PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: pub_json
+      publish_answer
     else
       respond_to do |format|
         format.html do
@@ -80,6 +70,11 @@ class AnswersController < ApplicationController
       @answer = Answer.includes(:question).find(params[:id])
       @question = @answer.question
       @object = @answer
+    end
+
+    def publish_answer
+      pub_json = render_to_string(template: 'answers/show.json.jbuilder', locals: {answer: @answer} )
+      PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: pub_json
     end
 end
 

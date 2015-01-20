@@ -98,7 +98,6 @@ RSpec.describe QuestionsController, :type => :controller do
 			end
 
 			it 'assigns right tags' do
-				expect(question.tags_comma_separated).to eq 'first-tag,second-tag'
 				expect { post :create, question: attributes_for(:question) }.to change(Tag, :count).by(2)
 			end
 		end

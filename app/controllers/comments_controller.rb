@@ -5,9 +5,7 @@ class CommentsController < ApplicationController
 
   def show
     @comment = Comment.find(params[:id])
-    respond_to do |format|
-      format.json
-    end
+    respond_to :json
   end
 
   def update
@@ -51,7 +49,7 @@ class CommentsController < ApplicationController
     comment.destroy
     respond_to do |format|
       format.html { redirect_to question_answers_path(@question) }
-      format.json { render text: 'ok', status: 200 }
+      format.json { render head :no_content }
     end
   end
 

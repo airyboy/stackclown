@@ -25,14 +25,6 @@ RSpec.describe AnswersController, :type => :controller do
     it 'assigns a new answer to @new_answer' do
       expect(assigns(:new_answer)).to be_a_new(Answer)
     end
-
-    it 'assigns a new comment to @new_comment' do
-      expect(assigns(:new_comment)).to be_a_new(Comment)
-    end
-
-    it 'builds a new attachement for @answer' do
-      expect(assigns(:new_answer).attachments.first).to be_a_new(Attachment)
-    end
   end
 
   describe 'GET #edit' do

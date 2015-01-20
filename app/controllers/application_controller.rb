@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  before_action :vary_accept
+
   protected
 
     def not_authenticated
@@ -16,6 +18,10 @@ class ApplicationController < ActionController::Base
     end
 
     def require_owning_object
-      return head(:unauthorized) unless @object.user == current_user
+      return head :unauthorized unless @object.user == current_user
+    end
+
+    def vary_accept
+      response.headers['Vary'] = 'Accept'
     end
 end
