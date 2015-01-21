@@ -1,2 +1,7 @@
-$('.answers').html("<%= j render 'answers/answers' %>");
-$('#myModal').modal('hide');
+<% if @answer.errors.present? %>
+    $('.answer-errors').html('<%= @answer.errors.to_a.join(',') %>')
+<% else %>
+    $('.answers').html("<%= j render 'answers/answers' %>");
+    $('#myModal').modal('hide');
+<% end %>
+

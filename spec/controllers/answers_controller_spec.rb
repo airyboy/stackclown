@@ -21,10 +21,6 @@ RSpec.describe AnswersController, :type => :controller do
     it 'renders index view' do
       expect(response).to render_template :index
     end
-
-    it 'assigns a new answer to @new_answer' do
-      expect(assigns(:new_answer)).to be_a_new(Answer)
-    end
   end
 
   describe 'GET #edit' do
@@ -57,20 +53,15 @@ RSpec.describe AnswersController, :type => :controller do
   describe 'POST #create' do
     let!(:answer) { create(:answer, question: question) }
     it_should_behave_like 'action requiring signed in user' do
-      let(:action) {  post :create, question_id: question, answer: attributes_for(:answer) }
+      let(:action) {  post :create, question_id: question, answer: attributes_for(:answer), format: :js }
     end
 
     context 'when attributes are valid' do
       before { login_user(user) }
       it 'should save the new answer to the DB' do
         expect do
-          post :create, question_id: question, answer: attributes_for(:answer)
+          post :create, question_id: question, answer: attributes_for(:answer), format: :js
         end.to change(question.answers, :count).by(1)
-      end
-
-      it 'should redirect to question' do
-        post :create, question_id: question, answer: attributes_for(:answer)
-        expect(response).to redirect_to question_answers_path(question)
       end
     end
 
@@ -78,14 +69,8 @@ RSpec.describe AnswersController, :type => :controller do
       before { login_user(user) }
       it 'should not save the answer to the DB' do
         expect do
-          post :create, question_id: question, answer: attributes_for(:invalid_answer)
+          post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
         end.not_to change(question.answers, :count)
-      end
-
-      it 'should redirect to the question with error message' do
-        post :create, question_id: question, answer: attributes_for(:invalid_answer)
-        expect(response).to render_template(:index)
-        expect(flash[:error]).to be_present
       end
     end
   end
@@ -116,23 +101,12 @@ RSpec.describe AnswersController, :type => :controller do
       end
     end
 
-    context 'when html format' do
-      before do
-        login_user(user)
-        patch :update, id: answer, answer: {body: 'NewBody'}, format: :html
-      end
-
-      it 'should redirect to question' do
-        expect(response).to redirect_to question_answers_path(question)
-      end
-    end
-
     context 'when attributes are invalid' do
       let(:answer) { create(:answer, question: question, user: user) }
       let(:old_body) { answer.body }
       before do
         login_user(user)
-        patch :update, id: answer, answer: {body: nil}
+        patch :update, id: answer, answer: {body: nil}, format: :js
       end
 
       it 'should not update the answer attributes' do
@@ -141,7 +115,7 @@ RSpec.describe AnswersController, :type => :controller do
       end
 
       it 'should re render answer edit page' do
-        expect(response).to render_template :edit
+        expect(response).to render_template :update
       end
     end
 

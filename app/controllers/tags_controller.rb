@@ -1,9 +1,11 @@
 class TagsController < ApplicationController
+  respond_to :html
+
   def index
-    @tags = Tag.all
+    respond_with(@tags = Tag.all)
   end
 
   def show
-    @tag = Tag.find(params[:id])
+    respond_with(@tag = Tag.find(params[:id]))
   end
 end

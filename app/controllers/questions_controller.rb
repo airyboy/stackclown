@@ -4,9 +4,13 @@ class QuestionsController < ApplicationController
 	before_filter :require_owning_object, only: [:edit, :update, :destroy]
 	after_action :publish_question, only: [:create]
 
+	respond_to :json, only: [:index]
+	respond_to :html
+	respond_to :js, only: [:edit, :update]
+
 	def index
 		@questions = Question.all
-		respond_to :html, :json
+		respond_with(@questions)
 	end
 
 	def show
@@ -15,38 +19,27 @@ class QuestionsController < ApplicationController
 
 	def new
 		@question = Question.new
-		@question.attachments.build
+		respond_with(@question)
 	end
 
 	def edit
-		# @question.tags_comma_separated = @question.tag_list
-		respond_to :html, :js
 	end
 
 	def create 
-		@question = current_user.questions.build(question_params)
-		if @question.save
-			flash[:notice] = 'Your question was created'
-			redirect_to @question
-		else
-			render :new 
-		end
+		@question = current_user.questions.create(question_params)
+		flash[:notice] = 'Your question was created' if @question.persisted?
+		respond_with(@question)
 	end
 
 	def update
 		if @question.update(question_params)
-			respond_to do |format|
-				format.html { redirect_to question_answers_path(@question) }
-				format.js
-			end
-		else
-			render :edit
+			respond_with(@question)
 		end
 	end
 
 	def destroy
 		@question.destroy
-		redirect_to questions_path
+		respond_with(@question)
 	end
 
 	private

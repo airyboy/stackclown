@@ -2,6 +2,6 @@
 %h1 New question
 - if @question.errors.present?
   = @question.errors.full_messages.join('/n')
-= simple_form_for(@question, html: { class: 'form-horizontal', multipart: true }) do |q|
+= simple_form_for @question, html: { class: 'form-horizontal', multipart: true } do |q|
   = render 'question_fields', q: q
   = q.button :submit, 'Create'

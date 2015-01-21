@@ -1,3 +1,8 @@
-$('.qtitle').html("<%= @question.title %>");
-$('.qbody').html("<%= @question.body %>");
-$('#myModal').modal('hide');
+<% if @question.errors.present? %>
+    $('.question-errors').html('<%= @question.errors.to_a.join(',') %>')
+<% else %>
+    $('.qtitle').html("<%= @question.title %>");
+    $('.qbody').html("<%= @question.body %>");
+    $('#myModal').modal('hide');
+<% end %>
+

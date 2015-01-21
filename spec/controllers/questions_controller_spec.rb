@@ -48,10 +48,6 @@ RSpec.describe QuestionsController, :type => :controller do
 				expect(assigns(:question)).to be_a_new(Question)
 			end
 
-			it 'builds a new attachement for @question' do
-				expect(assigns(:question).attachments.first).to be_a_new(Attachment)
-			end
-
 			it 'renders new view' do
 				expect(response).to render_template :new
 			end
@@ -157,11 +153,6 @@ RSpec.describe QuestionsController, :type => :controller do
 				expect(question.body).to eq 'new body'
 			end
 
-			it 'should redirect to answers index view' do
-				patch :update, id: question, question: {title: 'new title', body: 'new body', tags_comma_separated: 'first-tag,second-tag'}
-				expect(response).to redirect_to question_answers_path(question)
-			end
-
 			it_should_behave_like 'action requiring to own an object' do
 				let(:action) { patch :update, id: other_question, question: {title: 'new title', body: 'new body'} }
 			end
@@ -172,7 +163,7 @@ RSpec.describe QuestionsController, :type => :controller do
 				login_user(user)
 				@old_title = question.title
 				@old_body = question.body
-				patch :update, id: question, question: {title: 'new title', body: nil}
+				patch :update, id: question, question: {title: 'new title', body: nil}, format: :js
 			end
 
 			it 'should not save the question attributes' do
@@ -182,7 +173,7 @@ RSpec.describe QuestionsController, :type => :controller do
 			end
 
 			it 'should render edit view' do
-				expect(response).to render_template :edit
+				expect(response).to render_template :update
 			end
 		end
 	end

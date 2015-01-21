@@ -6,6 +6,6 @@
   {{#isCurrentUser user.id}}
     |
     <a class="edit-comment" href="#">edit</a> |
-    <a data-method="delete" href="/comments/{{ id }}" rel="nofollow">x</a>
+    <a class="remove-comment" data-method="delete" data-remote="true" data-type="json" href="/comments/{{ id }}" rel="nofollow">x</a>
   {{/isCurrentUser}}
 </div>

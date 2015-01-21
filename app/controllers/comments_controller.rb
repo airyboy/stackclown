@@ -2,19 +2,17 @@ class CommentsController < ApplicationController
   before_action :find_commentable, only: [:create]
   before_action :load_question
   before_filter :require_login, except: [:show]
+  before_action :load_comment, only: [:show, :update, :destroy]
+
+  respond_to :json
 
   def show
-    @comment = Comment.find(params[:id])
-    respond_to :json
+    respond_with(@comment)
   end
 
   def update
-    @comment = Comment.find(params[:id])
     if @comment.update(comment_params)
-      respond_to do |format|
-        format.html { redirect_to question_answers_path(@question) }
-        format.json { render :show }
-      end
+      render :show
     else
       render json: @comment.errors.full_messages, status: :unprocessable_entity
     end
@@ -22,35 +20,17 @@ class CommentsController < ApplicationController
 
   def create
     @comment = @commentable.comments.build(comment_params)
-    @comment.user = current_user
 
     if @comment.save
-      respond_to do |format|
-        format.html { redirect_to question_answers_path(@question) }
-        format.json { render :show }
-      end
+      render :show
       publish_comment
     else
-      respond_to do |format|
-        format.html do
-          prepare_data(@question)
-          flash[:error] = 'Error'
-          render 'answers/index'
-        end
-        format.json { render json: @comment.errors.full_messages, status: :unprocessable_entity }
-      end
+      render json: @comment.errors.full_messages, status: :unprocessable_entity
     end
   end
 
   def destroy
-    comment = Comment.find(params[:id])
-    @commentable = comment.commentable
-    load_question
-    comment.destroy
-    respond_to do |format|
-      format.html { redirect_to question_answers_path(@question) }
-      format.json { render head :no_content }
-    end
+    respond_with(@comment.destroy)
   end
 
   private
@@ -71,8 +51,12 @@ class CommentsController < ApplicationController
       end
     end
 
+    def load_comment
+      @comment = Comment.find(params[:id])
+    end
+
     def comment_params
-      params.require(:comment).permit(:body)
+      params.require(:comment).permit(:body).merge(user: current_user)
     end
 
     def publish_comment

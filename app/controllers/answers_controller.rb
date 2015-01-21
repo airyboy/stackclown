@@ -4,6 +4,9 @@ class AnswersController < ApplicationController
   prepend_before_action :load_answer, only: [:edit, :update, :destroy]
   before_filter :require_owning_object, only: [:edit, :update, :destroy]
 
+  respond_to :json, only: [:index]
+  respond_to :js, only: [:create, :edit, :update]
+  respond_to :html, only: [:index, :destroy]
 
   def new
     @answer = @question.build
@@ -11,8 +14,7 @@ class AnswersController < ApplicationController
 
   def index
     @answers = @question.answers
-    @new_answer = Answer.new
-    respond_to :html, :json
+    respond_with(@answers)
   end
 
   def edit
@@ -20,46 +22,25 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.update(answer_params)
-      respond_to do |format|
-        format.html { redirect_to question_answers_path(@question) }
-        format.js
-      end
-    else
-      render :edit, status: 400
-    end
+    @answer.update(answer_params)
+    respond_with @answer
   end
 
   def create
-    @answer = @question.answers.build(answer_params)
-    @answer.user = current_user
-    if @answer.save
-      respond_to do |format|
-        format.html { redirect_to question_answers_path(@question) }
-        format.js
-      end
-      publish_answer
-    else
-      respond_to do |format|
-        format.html do
-          prepare_data(@question)
-          flash[:error] = 'Error'
-          render :index
-        end
-        format.js
-      end
-    end
+    @answer = @question.answers.create(answer_params)
+    publish_answer if @answer.persisted?
+    respond_with @answer
   end
 
   def destroy
     @answer.destroy
-    redirect_to question_answers_path(@question)
+    respond_with(@question, location: question_answers_url(@question))
   end
 
   private
 
     def answer_params
-      params.require(:answer).permit(:body, attachments_attributes: [:file])
+      params.require(:answer).permit(:body, attachments_attributes: [:file]).merge(user: current_user)
     end
 
     def load_question

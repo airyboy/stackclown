@@ -29,6 +29,8 @@ $ ->
     edit_comment(id)
 
   $(document).on 'click', '.remove-comment', (e) ->
+    e.preventDefault()
+    console.log($(this).parent())
     $(this).parent().hide()
 
   $(document).on 'click', '#add-comment', (e) ->

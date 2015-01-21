@@ -18,6 +18,7 @@ feature 'Removing a comment', %q{
     scenario 'tries to remove the comment', js: true do
       within '.comment' do
         click_on 'x'
+        sleep 2
         expect(page).not_to have_content 'some comment'
       end
     end
