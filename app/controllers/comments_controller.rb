@@ -11,21 +11,17 @@ class CommentsController < ApplicationController
   end
 
   def update
-    if @comment.update(comment_params)
-      render :show
-    else
-      render json: @comment.errors.full_messages, status: :unprocessable_entity
+    @comment.update(comment_params)
+    respond_with @comment do |format|
+      format.json { render :show }
     end
   end
 
   def create
-    @comment = @commentable.comments.build(comment_params)
-
-    if @comment.save
-      render :show
-      publish_comment
-    else
-      render json: @comment.errors.full_messages, status: :unprocessable_entity
+    @comment = @commentable.comments.create(comment_params)
+    publish_comment if @comment.persisted?
+    respond_with @comment do |format|
+      format.json { render :show }
     end
   end
 
