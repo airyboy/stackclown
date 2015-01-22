@@ -17,4 +17,5 @@
 /public/uploads
 
 /config/database.yml
+/config/secrets.yml
 .idea

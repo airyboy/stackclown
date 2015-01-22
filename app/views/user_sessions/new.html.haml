@@ -1,2 +1,6 @@
 %h1 Sign in
 = render 'form'
+
+= link_to 'Login with Twitter', auth_at_provider_path(:provider => :twitter)
+%br
+= link_to 'Login with Facebook', auth_at_provider_path(:provider => :facebook)
