@@ -1,0 +1,3 @@
+= simple_form_for @user, url: {controller: 'users', action: 'submit_email'} do |user|
+  = user.input :email
+  = user.button :submit, 'Submit'

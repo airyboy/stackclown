@@ -3,7 +3,7 @@ json.body answer.body
 
 json.user do
   json.id answer.user.id
-  json.email answer.user.email
+  json.screen_name answer.user.screen_name
 end
 
 json.comments answer.comments do |comment|
@@ -12,7 +12,7 @@ json.comments answer.comments do |comment|
 
   json.user do
     json.id comment.user.id
-    json.email comment.user.email
+    json.screen_name comment.user.screen_name
   end
 
   json.attachments answer.attachments  do |attachment|

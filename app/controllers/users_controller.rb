@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_filter :require_login, only: [:email, :submit_email]
 
   # GET /users
   # GET /users.json
@@ -61,10 +62,24 @@ class UsersController < ApplicationController
     end
   end
 
+  def email
+    @user = current_user
+    @user.email = ''
+  end
+
+  def submit_email
+    current_user.update_attribute(:email, user_email_params[:email])
+    redirect_to root_path, :notice => 'Email was successfuly updated'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
+    end
+
+    def user_email_params
+      params.require(:user).permit(:email)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

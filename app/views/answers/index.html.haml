@@ -9,7 +9,7 @@
   .question-footer
     = render 'shared/tags', question: @question
     %span.user
-      = link_to @question.user.email, user_path(@question.user)
+      = link_to @question.user.screen_name, user_path(@question.user)
     - if current_user == @question.user
       |
       = link_to 'edit', edit_question_path(@question), remote: true

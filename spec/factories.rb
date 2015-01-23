@@ -51,6 +51,10 @@ FactoryGirl.define do
       "foo#{n}@bar.com"
     end
 
+    sequence :screen_name do |n|
+      "Ivan_#{n}"
+    end
+
     password 'qwerty123'
     password_confirmation 'qwerty123'
     salt  'asdasdastr4325234324sdfds'

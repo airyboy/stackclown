@@ -9,5 +9,5 @@ end
 
 json.user do
   json.id question.user.id
-  json.email question.user.email
+  json.screen_name question.user.screen_name
 end

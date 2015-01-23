@@ -6,7 +6,7 @@ json.answers @answers do |answer|
 
   json.user do
     json.id answer.user.id
-    json.email answer.user.email
+    json.screen_name answer.user.screen_name
   end
 
   json.attachments answer.attachments  do |attachment|
@@ -20,7 +20,7 @@ json.answers @answers do |answer|
 
     json.user do
       json.id comment.user.id
-      json.email comment.user.email
+      json.screen_name comment.user.screen_name
     end
   end
 end

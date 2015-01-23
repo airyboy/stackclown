@@ -3,7 +3,7 @@ json.body @comment.body
 
 json.user do
   json.id @comment.user.id
-  json.email @comment.user.email
+  json.screen_name @comment.user.screen_name
 end
 
 json.commentable do
