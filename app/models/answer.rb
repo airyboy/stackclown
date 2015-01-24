@@ -1,3 +1,13 @@
+# create_table :answers, force: true do |t|
+#   t.text     :body
+#   t.datetime :created_at
+#   t.datetime :updated_at
+#   t.integer  :question_id
+#   t.integer  :user_id
+# end
+#
+# add_index :answers, [:user_id], name: :index_answers_on_user_id, using: :btree
+
 class Answer < ActiveRecord::Base
   belongs_to :question, counter_cache: true
   belongs_to :user, counter_cache: true

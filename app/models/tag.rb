@@ -1,3 +1,11 @@
+# create_table :tags, force: true do |t|
+#   t.string   :tag_name
+#   t.datetime :created_at
+#   t.datetime :updated_at
+# end
+#
+# add_index :tags, [:tag_name], name: :index_tags_on_tag_name, using: :btree
+
 class Tag < ActiveRecord::Base
   has_many :tag_relationships
   has_many :questions, through: :tag_relationships

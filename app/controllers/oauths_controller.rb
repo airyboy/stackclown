@@ -7,9 +7,11 @@ class OauthsController < ApplicationController
 
   def callback
     provider = auth_params[:provider]
+    # logger.debug sorcery_fetch_user_hash(provider)
 
     if @user = login_from(provider)
-      redirect_to root_path, :notice => "Logged in from #{provider.titleize}!"
+      flash[:success] = "Logged in from #{provider.titleize}!"
+      redirect_to root_path
     else
       begin
         @user = create_from(provider) do |user|

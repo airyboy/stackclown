@@ -1,4 +1,4 @@
-<div class='row'>
+<div class='row question'>
   <div class='question'>
     <div class='col-md-1'>
       <div class='circle'>
@@ -19,16 +19,8 @@
             {{> shared/_tag }}
           {{/each}}
         </div>
-        <span class='user'>
-          by
-          <a href="/users/{{ user.id }}">{{ user.screen_name }}</a>
-        </span>
-        <span class='answers-count'>
-          |
-          <a href="/questions/{{ id }}/answers">{{ answers_count }} answers</a>
-        </span>
+        {{> shared/_user}}
       </div>
-      <hr />
     </div>
   </div>
 </div>

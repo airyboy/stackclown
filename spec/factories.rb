@@ -70,4 +70,9 @@ FactoryGirl.define do
     crypted_password  Sorcery::CryptoProviders::BCrypt.encrypt('secret',
                                                                'asdasdastr4325234324sdfds')
   end
+
+  factory :authentication do
+    uid '123456'
+    provider 'twitter'
+  end
 end

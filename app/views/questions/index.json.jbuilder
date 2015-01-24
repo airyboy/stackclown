@@ -11,5 +11,6 @@ json.questions @questions do |question|
   json.user do
     json.id question.user.id
     json.screen_name question.user.screen_name
+    json.avatar_thumb question.user.avatar.thumb.url
   end
 end

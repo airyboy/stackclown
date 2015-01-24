@@ -95,13 +95,18 @@ textarea {
   height: 10em;
 }
 
-.question span.title {
-  font-size: 1.4em;
-  a {
-    color: #000000;
-    &:hover {
-      font-weight: bold;
-      background-color: #ffffff;
+.question.row {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  span.title {
+    font-size: 1.4em;
+    a {
+      color: #000000;
+      &:hover {
+        font-weight: bold;
+        background-color: #ffffff;
+      }
     }
   }
 }
@@ -182,4 +187,8 @@ span.tag {
 .answer {
   padding-bottom: 10px;
   border-bottom: 1px dotted #333;
+}
+
+.user-info {
+  padding: 2px;
 }

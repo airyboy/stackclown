@@ -37,6 +37,7 @@ gem 'handlebars_assets'
 gem 'hamlbars', '~> 2.0'
 gem 'private_pub', :git => 'git://github.com/ryanb/private_pub.git'
 gem 'thin'
+gem 'mini_magick'
 
 group :test, :development do
   gem 'rspec-rails'
@@ -46,6 +47,7 @@ group :test, :development do
   gem 'database_cleaner'
   gem 'faker'
   gem 'capybara-webkit'
+  gem 'active_record-annotate'
 end
 
 group :test do

@@ -1,3 +1,5 @@
+= image_tag @user.avatar.url
+
 = simple_form_for @user do |f|
   - if @user.errors.any?
     #error_explanation
@@ -7,10 +9,14 @@
           %li= msg
 
   .field
+    = f.input :screen_name
+  .field
     = f.input :email
   .field
     = f.input :password
   .field
     = f.input :password_confirmation
+  .field
+    = f.input :avatar
   .actions
     = f.button :submit, 'Save'

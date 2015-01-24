@@ -8,9 +8,7 @@
     </div>
   {{/if}}
   <div class="answer-footer">
-    <span class='user'>
-        <a href="/users/{{ user.id }}">{{ user.screen_name }}</a>
-    </span>
+      {{> shared/_user this}}
       {{#isCurrentUser user.id}}
       |
       <a data-remote="true" href="/answers/{{ id }}/edit">edit</a>
