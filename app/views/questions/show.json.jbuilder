@@ -7,8 +7,4 @@ json.tags question.tags do |tag|
   json.tag_name tag.tag_name
 end
 
-json.user do
-  json.id question.user.id
-  json.screen_name question.user.screen_name
-  json.avatar_thumb question.user.avatar.thumb.url
-end
+json.partial! 'shared/user', user: question.user

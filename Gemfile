@@ -38,6 +38,7 @@ gem 'hamlbars', '~> 2.0'
 gem 'private_pub', :git => 'git://github.com/ryanb/private_pub.git'
 gem 'thin'
 gem 'mini_magick'
+gem 'momentjs-rails'
 
 group :test, :development do
   gem 'rspec-rails'
@@ -48,6 +49,7 @@ group :test, :development do
   gem 'faker'
   gem 'capybara-webkit'
   gem 'active_record-annotate'
+  gem 'quiet_assets'
 end
 
 group :test do

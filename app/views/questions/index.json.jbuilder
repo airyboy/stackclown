@@ -2,15 +2,12 @@ json.questions @questions do |question|
   json.id question.id
   json.title question.title
   json.answers_count question.answers_count
+  json.created_at question.created_at
 
   json.tags question.tags do |tag|
     json.id tag.id
     json.tag_name tag.tag_name
   end
 
-  json.user do
-    json.id question.user.id
-    json.screen_name question.user.screen_name
-    json.avatar_thumb question.user.avatar.thumb.url
-  end
+  json.partial! 'shared/user', user: question.user
 end

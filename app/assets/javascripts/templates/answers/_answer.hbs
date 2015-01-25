@@ -8,6 +8,9 @@
     </div>
   {{/if}}
   <div class="answer-footer">
+      <span class="time">
+        {{relativeTime created_at}}
+      </span>
       {{> shared/_user this}}
       {{#isCurrentUser user.id}}
       |

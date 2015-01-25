@@ -12,7 +12,11 @@ Rails.application.routes.draw do
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   resources :tags, only: [:index, :show]
-  resources :users
+  resources :users do
+    member do
+      get :activate
+    end
+  end
   resources :user_sessions, only: [:new, :create, :destroy]
 
   root 'questions#index'

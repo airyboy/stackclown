@@ -18,5 +18,6 @@
 //= require handlebars.runtime
 //= require bootstrap-sprockets
 //= require bootstrap-tagsinput
+//= require moment
 //= require_tree ./global
 //= require_tree ./templates

@@ -9,3 +9,7 @@ Handlebars.registerHelper('isCurrentUser', function(id, options){
         return options.fn(this);
     }
 });
+
+Handlebars.registerHelper('relativeTime', function(date){
+    return moment(date).fromNow();
+    });

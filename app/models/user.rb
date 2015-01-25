@@ -1,19 +1,24 @@
 # create_table :users, force: true do |t|
-#   t.string   :email,                        null: false
-#   t.string   :crypted_password,             null: false
-#   t.string   :salt,                         null: false
+#   t.string   :email,                                   null: false
+#   t.string   :crypted_password,                        null: false
+#   t.string   :salt,                                    null: false
 #   t.datetime :created_at
 #   t.datetime :updated_at
-#   t.integer  :questions_count,  default: 0
-#   t.integer  :answers_count,    default: 0
-#   t.integer  :comments_count,   default: 0
+#   t.integer  :questions_count,             default: 0
+#   t.integer  :answers_count,               default: 0
+#   t.integer  :comments_count,              default: 0
 #   t.string   :screen_name
 #   t.string   :avatar
+#   t.string   :activation_state
+#   t.string   :activation_token
+#   t.datetime :activation_token_expires_at
 # end
 #
+# add_index :users, [:activation_token], name: :index_users_on_activation_token, using: :btree
 # add_index :users, [:email], name: :index_users_on_email, unique: true, using: :btree
 
 class User < ActiveRecord::Base
+  authenticates_with_sorcery!
   has_many :questions
   has_many :answers
   has_many :comments

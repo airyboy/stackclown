@@ -62,6 +62,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def activate
+    if (@user = User.load_from_activation_token(params[:id]))
+      @user.activate!
+      redirect_to login_path, :notice => 'User was successfully activated.'
+    else
+      not_authenticated
+    end
+  end
+
   def email
     @user = current_user
     @user.email = ''
@@ -69,6 +78,7 @@ class UsersController < ApplicationController
 
   def submit_email
     current_user.update_attribute(:email, user_email_params[:email])
+    UserMailer.activation_needed_email(current_user).deliver
     redirect_to root_path, :notice => 'Email was successfuly updated'
   end
 

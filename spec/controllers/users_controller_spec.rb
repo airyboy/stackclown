@@ -34,6 +34,11 @@ RSpec.describe UsersController, :type => :controller do
         patch :submit_email, user: {email: 'some@new.com'}
       end
 
+      it 'sends an email confirmation letter' do
+        UserMailer.should_receive(:activation_needed_email)
+        # expect(UserMailer).to receive(:activation_needed_email).with(user)
+      end
+
       it 'updates email to the new one' do
         user.reload
         expect(user.email).to eq 'some@new.com'
