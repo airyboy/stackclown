@@ -1,8 +1,10 @@
 class CommentsController < ApplicationController
   before_action :find_commentable, only: [:create]
   before_action :load_question
-  before_filter :require_login, except: [:show]
+  # before_filter :require_login, except: [:show]
   before_action :load_comment, only: [:show, :update, :destroy]
+
+  authorize_resource
 
   respond_to :json
 
@@ -11,9 +13,12 @@ class CommentsController < ApplicationController
   end
 
   def update
-    @comment.update(comment_params)
     respond_with @comment do |format|
-      format.json { render :show }
+      if @comment.update(comment_params)
+        format.json { render :show }
+      else
+        format.json { render json: @comment.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -21,7 +26,11 @@ class CommentsController < ApplicationController
     @comment = @commentable.comments.create(comment_params)
     publish_comment if @comment.persisted?
     respond_with @comment do |format|
-      format.json { render :show }
+      if @comment.valid?
+        format.json { render :show }
+      else
+        format.json { render json: @comment.errors, status: :unprocessable_entity }
+      end
     end
   end
 

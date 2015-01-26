@@ -10,6 +10,12 @@ Handlebars.registerHelper('isCurrentUser', function(id, options){
     }
 });
 
+Handlebars.registerHelper('isSignedIn', function(options){
+    if ($('#user-info').data('user-signed')) {
+        return options.fn(this);
+    }
+});
+
 Handlebars.registerHelper('relativeTime', function(date){
     return moment(date).fromNow();
     });

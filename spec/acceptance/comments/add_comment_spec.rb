@@ -13,6 +13,7 @@ feature 'Commenting on a question or an answer', %q{
     background do
       sign_in(user)
       visit question_answers_path(question)
+      sleep 1
     end
 
     scenario 'tries to comment on an answer', js: true do
@@ -46,6 +47,6 @@ feature 'Commenting on a question or an answer', %q{
   scenario 'Non signed in user tries to comment' do
     visit question_answers_path(question)
 
-    expect(page).not_to have_link 'add a comment'
+    expect(page).not_to have_link 'add-comment'
   end
 end

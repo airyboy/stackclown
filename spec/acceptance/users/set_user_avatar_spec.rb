@@ -9,7 +9,7 @@ feature 'Set user avatar', %q{
 
   scenario 'Signed in user tries to upload his avatar' do
     sign_in(user)
-    visit edit_user_path
+    visit edit_user_path(user)
     attach_file 'avatar', "#{Rails.root}/public/images/foo.png"
     click_on 'Save'
 

@@ -18,7 +18,7 @@ RSpec.configure do |config|
 
   config.extend  ControllerMacros, type: :controller
 
-  Capybara.javascript_driver = :webkit
+  Capybara.javascript_driver = :selenium
 
   config.use_transactional_fixtures = false
 

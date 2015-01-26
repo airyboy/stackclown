@@ -24,7 +24,9 @@
         {{> comments/_comment this}}
       {{/each}}
     </div>
-    <div class='comment-form'>
-      <a data-id="{{ id }}" data-resource="answers" href="#" id="add-comment">add a comment</a>
-    </div>
+    {{#isSignedIn}}
+      <div class='comment-form'>
+        <a data-id="{{ id }}" data-resource="answers" href="#" id="add-comment">add a comment</a>
+      </div>
+    {{/isSignedIn}}
 </div>

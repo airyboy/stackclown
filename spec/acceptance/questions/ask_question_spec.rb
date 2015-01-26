@@ -27,7 +27,7 @@ feature 'Asking a question', %q{
     visit root_path
     click_on 'Ask question'
 
-    expect(current_path).to eq new_user_session_path
+    expect(current_path).to eq login_path
     expect(page).to have_content('Please login first.')
     expect(page).to have_field :email
     expect(page).to have_field :password

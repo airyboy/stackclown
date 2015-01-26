@@ -24,7 +24,6 @@ feature 'Editing a question', %q{
         fill_in 'question_body', with: 'modified body'
         click_on 'Save'
       end
-      save_and_open_page
 
       expect(page).to have_content 'modified title'
       expect(page).to have_content 'modified body'

@@ -39,6 +39,7 @@ gem 'private_pub', :git => 'git://github.com/ryanb/private_pub.git'
 gem 'thin'
 gem 'mini_magick'
 gem 'momentjs-rails'
+gem 'cancancan'
 
 group :test, :development do
   gem 'rspec-rails'
@@ -47,6 +48,7 @@ group :test, :development do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'faker'
+  gem 'selenium-webdriver'
   gem 'capybara-webkit'
   gem 'active_record-annotate'
   gem 'quiet_assets'
