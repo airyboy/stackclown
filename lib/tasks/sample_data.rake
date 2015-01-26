@@ -1,10 +1,15 @@
 namespace :db do
   desc 'Fill database with sample data'
   task populate: :environment do
+    puts 'Making users'
     make_user
+    puts 'Making tags'
     make_tags
+    puts 'Making questions'
     make_questions
+    puts 'Making answers'
     make_answers
+    puts 'Making comments'
     make_comments
   end
 end
@@ -47,7 +52,6 @@ def make_questions
     tags_count.times do |n1|
       tags << Tag.find(1 + rand(9)).tag_name
     end
-    puts tags.join(',')
     q = Question.create(title: title, body: body, user: user, tags_comma_separated: tags.join(','))
     puts q.errors.full_messages unless q.save
   end

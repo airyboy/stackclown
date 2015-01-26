@@ -8,12 +8,20 @@ class ApplicationController < ActionController::Base
   protected
 
   rescue_from CanCan::AccessDenied do |exception|
-    if exception.action == :new && exception.subject.to_s == 'Question'
-      redirect_to login_path, alert: 'Please login first.'
+    if current_user
+      signedin_user_error(exception.message)
     else
-      redirect_to root_url, alert: exception.message
+      guest_user_error
     end
   end
+
+    def guest_user_error
+      redirect_to login_path, alert: 'Please login first.'
+    end
+
+    def signedin_user_error(message)
+      redirect_to root_url, alert: message, status: :forbidden
+    end
 
     def not_authenticated
       redirect_to new_user_session_path, :alert => 'Please login first.'

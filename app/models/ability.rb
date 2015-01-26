@@ -23,11 +23,8 @@ class Ability
 
   def common_user
     guest_user
-    can :edit, User, email: user.email
-    can :update, User, email: user.email
+    can [:edit, :update, :email, :submit_email], User, email: user.email
     can :create, [Question, Answer, Comment]
-    can :update, [Question, Answer, Comment], user: user
-    can :edit, [Question, Answer, Comment], user: user
-    can :destroy, [Question, Answer, Comment], user: user
+    can [:edit, :update, :destroy], [Question, Answer, Comment], user: user
   end
 end

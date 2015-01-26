@@ -34,7 +34,7 @@ describe Ability do
         it { should_not be_able_to action, create(resource, user: other_user) }
     end
 
-    [:edit, :update].each do |action|
+    [:edit, :update, :email, :submit_email].each do |action|
       it { should be_able_to action, user }
     end
 
