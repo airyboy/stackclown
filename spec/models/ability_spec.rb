@@ -11,6 +11,7 @@ describe Ability do
       it { should_not be_able_to :new, klass }
     end
 
+    it { should be_able_to :activate, User }
 
     it { should_not be_able_to :manage, :all }
   end

@@ -17,13 +17,13 @@ class OauthsController < ApplicationController
         @user = create_from(provider) do |user|
           user = User.setup_oauth_user(provider, user)
         end
-        # NOTE: this is the place to add '@user.activate!' if you are using user_activation submodule
 
         reset_session # protect from session fixation attack
         auto_login(@user)
         if provider.to_s == 'twitter'
           redirect_to '/users/email'
         else
+          @user.activate!
           redirect_to root_path, :notice => "Logged in from #{provider.titleize}!"
         end
 

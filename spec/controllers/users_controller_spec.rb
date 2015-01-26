@@ -48,4 +48,15 @@ RSpec.describe UsersController, :type => :controller do
       end
     end
   end
+
+  describe 'GET#activate' do
+    it 'should activate user' do
+      get :activate, id: user.activation_token
+      user.reload
+      expect(user.activation_state).to eq 'active'
+      expect(response).to redirect_to login_path
+    end
+  end
+
+
 end
