@@ -6,11 +6,13 @@ describe Ability do
   describe 'guest user' do
     let(:user) { nil }
 
-    [Question, Answer, Comment, User].each do |klass|
+    [Question, Answer, Comment].each do |klass|
       it { should be_able_to :read, klass }
       it { should_not be_able_to :new, klass }
     end
 
+    it { should be_able_to :new, User }
+    it { should be_able_to :create, User }
     it { should be_able_to :activate, User }
 
     it { should_not be_able_to :manage, :all }
@@ -39,6 +41,8 @@ describe Ability do
       it { should be_able_to action, user }
     end
 
+    it { should_not be_able_to :create, User }
+    it { should_not be_able_to :new, User }
     it { should_not be_able_to :manage, :all }
 
   end

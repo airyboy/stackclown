@@ -2,6 +2,26 @@ require 'rails_helper'
 
 RSpec.describe UsersController, :type => :controller do
   let(:user) { create(:user) }
+
+  describe 'GET#new' do
+    it 'redirects to sign up path' do
+      get :new
+      expect(response).to render_template 'users/new'
+    end
+  end
+
+  describe 'POST#create' do
+    it 'saves new user to the DB' do
+      expect { post :create, user: attributes_for(:user) }.to change(User, :count).by(1)
+    end
+
+    it 'redirects to root path' do
+      post :create, user: attributes_for(:user)
+      expect(response).to redirect_to root_path
+    end
+
+  end
+
   describe 'GET#email' do
     it_should_behave_like 'action requiring signed in user' do
       let(:action) { get :email }

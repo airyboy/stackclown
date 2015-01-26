@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get '/users/email', to: 'users#email'
   patch '/users/submit_email', to: 'users#submit_email'
 
+  get 'signup' => 'users#new', :as => :signup
   get 'signin' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
 

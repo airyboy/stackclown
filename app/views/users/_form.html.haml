@@ -1,5 +1,3 @@
-= image_tag @user.avatar.url
-
 = simple_form_for @user do |f|
   - if @user.errors.any?
     #error_explanation
@@ -19,4 +17,4 @@
   .field
     = f.input :avatar
   .actions
-    = f.button :submit, 'Save'
+    = f.button :submit, 'Sign Up'
