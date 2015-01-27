@@ -13,21 +13,22 @@ class Ability
     end
   end
 
-  def guest_user
-    can :read, :all
-    can :activate, User
-    can :create, User
-  end
+  private
+    def guest_user
+      can :read, :all
+      can :activate, User
+      can :create, User
+    end
 
-  def admin_user
-    can :manage, :all
-  end
+    def admin_user
+      can :manage, :all
+    end
 
-  def common_user
-    guest_user
-    cannot :create, User
-    can [:edit, :update, :email, :submit_email], User, email: user.email
-    can :create, [Question, Answer, Comment]
-    can [:edit, :update, :destroy], [Question, Answer, Comment], user: user
-  end
+    def common_user
+      cannot :create, User
+      guest_user
+      can [:edit, :update, :email, :submit_email], User, email: user.email
+      can :create, [Question, Answer, Comment]
+      can [:edit, :update, :destroy], [Question, Answer, Comment], user: user
+    end
 end

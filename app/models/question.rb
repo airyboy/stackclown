@@ -12,12 +12,6 @@
 class Question < ActiveRecord::Base
   attr_accessor :tags_comma_separated
 
-  after_validation :make_tags
-
-  def tags_comma_separated
-     @tags_comma_separated ||= tags.map(&:tag_name).join(',')
-  end
-
   belongs_to :user, :counter_cache => true
   has_many :answers, dependent: :destroy
   has_many :comments, as: :commentable
@@ -33,10 +27,17 @@ class Question < ActiveRecord::Base
   validates :user_id, presence: true
   validates :tags_comma_separated, presence: true
 
-  def make_tags
-    tag_relationships.destroy_all
-    tags_comma_separated.split(',').each do |tag|
-      tags << Tag.find_or_initialize_by(tag_name: tag)
-    end
+  after_validation :make_tags
+
+  def tags_comma_separated
+    @tags_comma_separated ||= tags.map(&:tag_name).join(',')
   end
+
+  private
+    def make_tags
+      tag_relationships.destroy_all
+      tags_comma_separated.split(',').each do |tag|
+        tags << Tag.find_or_initialize_by(tag_name: tag)
+      end
+    end
 end

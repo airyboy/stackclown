@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :load_question, only: [:index, :create]
   # before_filter :require_login, only: [:create, :destroy, :update, :edit]
-  prepend_before_action :load_answer, only: [:edit, :update, :destroy]
+  before_action :load_answer, only: [:edit, :update, :destroy]
   # before_filter :require_owning_object, only: [:edit, :update, :destroy]
 
   authorize_resource

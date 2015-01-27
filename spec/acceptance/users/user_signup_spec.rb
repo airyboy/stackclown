@@ -27,5 +27,4 @@ feature 'Sign up a new user', %q{
       expect(page).to have_content 'Email has already been taken'
     end
   end
-
 end
