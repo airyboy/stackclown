@@ -4,7 +4,7 @@
 #   t.datetime :updated_at
 #   t.integer  :question_id
 #   t.integer  :user_id
-#   t.boolean  :best
+#   t.boolean  :best,        default: false
 # end
 #
 # add_index :answers, [:user_id], name: :index_answers_on_user_id, using: :btree
@@ -23,7 +23,7 @@ class Answer < ActiveRecord::Base
   default_scope -> { order('created_at ASC') }
 
   def mark_best
-    Answer.where(question_id: self.question.id).update_all(best: false)
+    Answer.where(question: self.question).update_all(best: false)
     self.update_column(:best, true)
   end
 end

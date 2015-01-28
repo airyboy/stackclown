@@ -36,12 +36,10 @@ RSpec.describe Answer, :type => :model do
     end
 
     it 'should be the only best answer of a question' do
-      expect(@answer1.question).to eq @answer2.question
-      expect(@answer1.id).not_to eq @answer2.id
       @answer1.mark_best
-      @answer1.reload
       @answer2.mark_best
       @answer2.reload
+      @answer1.reload
       expect(@answer2.best).to eq true
       expect(@answer1.best).to eq false
     end
