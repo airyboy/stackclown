@@ -75,4 +75,17 @@ FactoryGirl.define do
     uid '123456'
     provider 'twitter'
   end
+
+  factory :oauth_application,  class: Doorkeeper::Application do
+    name 'test'
+    redirect_uri 'urn:ietf:wg:oauth:2.0:oob'
+    uid '9494949'
+    secret '9399x2u93nxe'
+  end
+
+  factory :access_token,  class: Doorkeeper::AccessToken do
+    application { create(:oauth_application) }
+    resource_owner_id { create(:user).id }
+  end
+
 end

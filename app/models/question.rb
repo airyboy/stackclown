@@ -27,6 +27,8 @@ class Question < ActiveRecord::Base
   validates :user_id, presence: true
   validates :tags_comma_separated, presence: true
 
+  default_scope -> { order('created_at ASC') }
+
   after_validation :make_tags
 
   def tags_comma_separated

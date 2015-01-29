@@ -40,6 +40,10 @@ gem 'thin'
 gem 'mini_magick'
 gem 'momentjs-rails'
 gem 'cancancan'
+gem 'doorkeeper'
+gem 'active_model_serializers'
+gem 'oj'
+gem 'oj_mimic_json'
 
 group :test, :development do
   gem 'rspec-rails'
@@ -56,6 +60,7 @@ end
 
 group :test do
   gem 'shoulda-matchers', require: false
+  gem 'json_spec'
 end
 
 # Use ActiveModel has_secure_password

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   get 'oauths/oauth'
   get 'oauths/callback'
   post 'oauth/callback' => 'oauths#callback'
@@ -30,7 +31,14 @@ Rails.application.routes.draw do
     resources :answers, only: [:index, :edit, :update, :create, :destroy], concerns: :commentable, shallow: true
   end
 
-
+  namespace :api do
+    namespace :v1 do
+      resource :profiles do
+        get :me, on: :collection
+      end
+      resources :questions
+    end
+  end
 
 
   # The priority is based upon order of creation: first created -> highest priority.
