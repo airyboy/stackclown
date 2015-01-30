@@ -4,12 +4,22 @@ FactoryGirl.define do
     body 'A long body.'*40
     tags_comma_separated 'first-tag,second-tag'
     user
+
+    factory :question_w_comments do
+      after(:create) do |question|
+        question.comments << create(:comment, commentable: question)
+      end
+    end
   end
 
   factory :invalid_question, class: 'Question' do
     title 'How patch KDE under FreeBSD?'
     tags_comma_separated 'first-tag,second-tag'
     body nil	
+  end
+
+  factory :attachment do
+    file Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, '/public/images/foo.png')))
   end
 
   factory :answer do

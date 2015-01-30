@@ -22,7 +22,7 @@ def make_user
     password_confirmation = 'qwerty123'
     User.create(email: email, screen_name: screen_name, password: password, password_confirmation: password_confirmation)
   end
-  User.create(screen_name: 'Foo Bar', email: 'foo@bar.com', password: 'qwerty123', password_confirmation: 'qwerty123')
+  User.create(screen_name: 'Foo Bar', email: 'foo@bar.com', password: 'qwerty123', password_confirmation: 'qwerty123', admin: true)
 end
 
 def users
