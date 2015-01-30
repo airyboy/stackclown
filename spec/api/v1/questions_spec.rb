@@ -99,12 +99,39 @@ describe 'Questions API' do
   end
 
   describe 'POST /create' do
-    # let(:post) {  }
-    # before { post }
+    let(:post_request) { post 'api/v1/questions', question: attributes_for(:question), format: :json, access_token: access_token.token }
+
+    it 'should return 201' do
+      post_request
+      expect(response.status).to eq 201
+    end
 
     it 'should create a new question' do
-      expect{post 'api/v1/questions', question: attributes_for(:question), access_token: access_token.token}.to
-        change(Question, :count).by(1)
+      expect{ post_request }.to change(Question, :count).by(1)
+    end
+
+    it 'should save to the DB the correct question' do
+      post_request
+      expect(Question.first.title).to eq create(:question).title
+      expect(Question.first.body).to eq create(:question).body
+    end
+
+    context 'with invalid attributes' do
+      let(:post_request_invalid) { post 'api/v1/questions', question: attributes_for(:invalid_question), format: :json, access_token: access_token.token }
+
+      it 'should return 422' do
+        post_request_invalid
+        expect(response.status).to eq 422
+      end
+
+      it "shouldn't save the question to the DB" do
+        expect{ post_request_invalid }.not_to change(Question, :count)
+      end
+
+      it 'should return errors' do
+        post_request_invalid
+        expect(response.body).to have_json_path('errors')
+      end
     end
   end
 end
