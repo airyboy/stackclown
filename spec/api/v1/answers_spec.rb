@@ -5,7 +5,7 @@ describe 'Answers API' do
   let(:access_token) { create(:access_token, resource_owner_id: user.id) }
   let!(:question) { create(:question) }
 
-  describe 'GET /index' do
+  describe 'GET #index' do
     context 'authorized' do
       let!(:answers) { create_list(:answer, 2, question: question) }
 
@@ -28,7 +28,7 @@ describe 'Answers API' do
     end
   end
 
-  describe 'GET /show' do
+  describe 'GET #show' do
     let!(:answer) { create(:answer, question: question) }
     let!(:attachments) { create_list(:attachment, 2, attachable: answer) }
     let!(:comments) { create_list(:comment, 2, commentable: answer) }
@@ -68,7 +68,49 @@ describe 'Answers API' do
         end
       end
     end
+  end
 
+  describe 'POST #create' do
+    let(:post_request) do
+      post "api/v1/questions/#{question.id}/answers",\
+       question_id: question.id, answer: attributes_for(:answer), format: :json, access_token: access_token.token
+    end
 
+    it 'should return 201' do
+      post_request
+      expect(response.status).to eq 201
+    end
+
+    it 'should create a new answer' do
+      expect{ post_request }.to change(Answer, :count).by(1)
+    end
+
+    it 'should create a correct answer' do
+      post_request
+      answer = Answer.first
+      expect(answer.body).to eq create(:answer).body
+      expect(question.answers.to_a).to include answer
+    end
+
+    context 'with invalid attributes' do
+      let(:post_request_invalid) do
+        post "api/v1/questions/#{question.id}/answers",\
+       question_id: question.id, answer: attributes_for(:invalid_answer), format: :json, access_token: access_token.token
+      end
+
+      it 'should return 422' do
+        post_request_invalid
+        expect(response.status).to eq 422
+      end
+
+      it "shouldn't save the answer to the DB" do
+        expect{ post_request_invalid }.not_to change(Answer, :count)
+      end
+
+      it 'should return errors' do
+        post_request_invalid
+        expect(response.body).to have_json_path('errors')
+      end
+    end
   end
 end

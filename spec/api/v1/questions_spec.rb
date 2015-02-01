@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'Questions API' do
   let(:access_token) { create(:access_token) }
 
-  describe 'GET /index' do
+  describe 'GET #index' do
     context 'unauthorized' do
       it 'returns 401 when there is no access_token' do
         get 'api/v1/questions', format: :json
@@ -52,7 +52,7 @@ describe 'Questions API' do
     end
   end
 
-  describe 'GET /show' do
+  describe 'GET #show' do
     let!(:question) { create(:question) }
     let!(:comments) { create_list(:comment, 2, commentable: question) }
     let!(:attachments) { create_list(:attachment, 2, attachable: question) }
@@ -98,7 +98,7 @@ describe 'Questions API' do
     end
   end
 
-  describe 'POST /create' do
+  describe 'POST #create' do
     let(:post_request) { post 'api/v1/questions', question: attributes_for(:question), format: :json, access_token: access_token.token }
 
     it 'should return 201' do
@@ -112,8 +112,10 @@ describe 'Questions API' do
 
     it 'should save to the DB the correct question' do
       post_request
-      expect(Question.first.title).to eq create(:question).title
-      expect(Question.first.body).to eq create(:question).body
+      q = Question.first
+      expect(q.title).to eq create(:question).title
+      expect(q.body).to eq create(:question).body
+      expect(q.tags_comma_separated).to eq create(:question).tags_comma_separated
     end
 
     context 'with invalid attributes' do
