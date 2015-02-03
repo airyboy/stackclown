@@ -86,7 +86,12 @@ RSpec.describe QuestionsController, :type => :controller do
 		context 'with valid attributes' do
 			it 'saves the new question to the DB' do
 				expect { post :create, question: attributes_for(:question) }.to change(user.questions, :count).by(1)
-			end
+      end
+
+      it 'publishes question to subscribers' do
+        expect(PrivatePub).to receive(:publish_to).with('/questions', anything())
+        post :create, question: attributes_for(:question)
+      end
 			
 			it 'redirects to show view' do 
 				post :create, question: attributes_for(:question)

@@ -47,6 +47,7 @@ gem 'oj_mimic_json'
 
 group :test, :development do
   gem 'rspec-rails'
+  gem 'rspec-mocks'
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'launchy'

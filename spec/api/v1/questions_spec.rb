@@ -4,17 +4,7 @@ describe 'Questions API' do
   let(:access_token) { create(:access_token) }
 
   describe 'GET #index' do
-    context 'unauthorized' do
-      it 'returns 401 when there is no access_token' do
-        get 'api/v1/questions', format: :json
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 when access_token is invalid' do
-        get 'api/v1/questions', format: :json, access_token: '8374789'
-        expect(response.status).to eq 401
-      end
-    end
+    it_should_behave_like 'action that forbids unauthorized access', :get, 'api/v1/questions', {}
 
     context 'authorized' do
       let!(:questions) { create_list(:question, 2) }
@@ -56,6 +46,8 @@ describe 'Questions API' do
     let!(:question) { create(:question) }
     let!(:comments) { create_list(:comment, 2, commentable: question) }
     let!(:attachments) { create_list(:attachment, 2, attachable: question) }
+
+    it_behaves_like 'action that forbids unauthorized access', :get, "api/v1/questions/1", question: 1
 
     before { get "api/v1/questions/#{question.id}", question: question, format: :json, access_token: access_token.token }
 
@@ -100,6 +92,8 @@ describe 'Questions API' do
 
   describe 'POST #create' do
     let(:post_request) { post 'api/v1/questions', question: attributes_for(:question), format: :json, access_token: access_token.token }
+
+    it_behaves_like 'action that forbids unauthorized access', :post, 'api/v1/questions', question: {}
 
     it 'should return 201' do
       post_request

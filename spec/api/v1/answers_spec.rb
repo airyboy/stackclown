@@ -6,6 +6,8 @@ describe 'Answers API' do
   let!(:question) { create(:question) }
 
   describe 'GET #index' do
+    it_behaves_like 'action that forbids unauthorized access', :get, "api/v1/questions/1/answers", {}
+
     context 'authorized' do
       let!(:answers) { create_list(:answer, 2, question: question) }
 
@@ -32,6 +34,8 @@ describe 'Answers API' do
     let!(:answer) { create(:answer, question: question) }
     let!(:attachments) { create_list(:attachment, 2, attachable: answer) }
     let!(:comments) { create_list(:comment, 2, commentable: answer) }
+
+    it_behaves_like 'action that forbids unauthorized access', :get, "api/v1/answers/1", {}
 
     before { get "api/v1/answers/#{answer.id}", format: :json, access_token: access_token.token }
 
@@ -75,6 +79,8 @@ describe 'Answers API' do
       post "api/v1/questions/#{question.id}/answers",\
        question_id: question.id, answer: attributes_for(:answer), format: :json, access_token: access_token.token
     end
+
+    it_behaves_like 'action that forbids unauthorized access', :post, "api/v1/questions/1/answers", {question_id:1, answer: {}}
 
     it 'should return 201' do
       post_request

@@ -15,3 +15,17 @@ shared_examples 'action requiring to own an object' do
     expect(response.status).to eq 403
   end
 end
+
+shared_examples 'action that forbids unauthorized access' do |verb, path, options|
+  context 'unauthorized' do
+    it 'returns 401 when there is no access_token' do
+      send(verb, path, {format: :json}.merge(options))
+      expect(response.status).to eq 401
+    end
+
+    it 'returns 401 when access_token is invalid' do
+      send(verb, path, {format: :json, access_token: '8374789'}.merge(options))
+      expect(response.status).to eq 401
+    end
+  end
+end

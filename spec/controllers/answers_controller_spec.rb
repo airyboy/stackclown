@@ -63,6 +63,11 @@ RSpec.describe AnswersController, :type => :controller do
           post :create, question_id: question, answer: attributes_for(:answer), format: :js
         end.to change(question.answers, :count).by(1)
       end
+
+      it 'publishes an answer to subscribers' do
+        expect(PrivatePub).to receive(:publish_to).with("/questions/#{question.id}/answers", anything())
+        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+      end
     end
 
     context 'when attributes are invalid' do

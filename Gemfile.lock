@@ -302,6 +302,7 @@ DEPENDENCIES
   quiet_assets
   rails (= 4.1.8)
   remotipart
+  rspec-mocks
   rspec-rails
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

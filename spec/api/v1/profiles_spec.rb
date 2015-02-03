@@ -5,18 +5,7 @@ describe 'Profile API' do
   let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
   describe 'GET /me' do
-    context 'unauthorized' do
-      it 'returns 401 when there is no access_token' do
-        get 'api/v1/profiles/me', format: :json
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 when access_token is invalid' do
-        get 'api/v1/profiles/me', format: :json, access_token: '8374789'
-        expect(response.status).to eq 401
-      end
-    end
-  end
+  it_behaves_like 'action that forbids unauthorized access', :get, 'api/v1/profiles/me', {}
 
   context 'authorized' do
     before { get 'api/v1/profiles/me', format: :json, access_token: access_token.token }
@@ -39,6 +28,8 @@ describe 'Profile API' do
   describe 'GET /users' do
     let!(:users) { create_list(:user, 2) }
 
+    it_behaves_like 'action that forbids unauthorized access', :get, 'api/v1/profiles', {}
+
     before { get 'api/v1/profiles', format: :json, access_token: access_token.token }
 
     it 'should return list of users' do
@@ -52,5 +43,5 @@ describe 'Profile API' do
       expect(json['profiles'].select {|email| email['email'] == user.email}).to be_empty
     end
   end
-
+  end
 end

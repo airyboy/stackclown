@@ -36,6 +36,13 @@ RSpec.describe CommentsController, :type => :controller do
             post :create, question_id: question, comment: attributes_for(:comment_to_answer), format: :json
           end.to change(question.comments, :count).by(1)
         end
+
+        it 'publishes an answer to subscribers' do
+          expect(PrivatePub).to receive(:publish_to).with("/questions/#{question.id}/comments", anything())
+          post :create, question_id: question, comment: attributes_for(:comment_to_answer), format: :json
+        end
+
+
       end
 
       context 'when attributes are invalid' do
