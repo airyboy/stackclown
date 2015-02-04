@@ -19,6 +19,7 @@ class Question < ActiveRecord::Base
 
   has_many :tag_relationships, dependent: :destroy
   has_many :tags, through: :tag_relationships
+  has_many :subscriptions, dependent: :destroy
 
   accepts_nested_attributes_for :attachments, reject_if: proc {|attributes| attributes['file'].blank? }
 
@@ -30,6 +31,7 @@ class Question < ActiveRecord::Base
   default_scope -> { order('created_at ASC') }
 
   after_validation :make_tags
+  after_create :add_author_subscription
 
   def tags_comma_separated
     @tags_comma_separated ||= tags.map(&:tag_name).join(',')
@@ -41,5 +43,9 @@ class Question < ActiveRecord::Base
       tags_comma_separated.split(',').each do |tag|
         tags << Tag.find_or_initialize_by(tag_name: tag)
       end
+    end
+
+    def add_author_subscription
+      self.subscriptions.create(user: self.user)
     end
 end

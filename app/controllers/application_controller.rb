@@ -40,4 +40,8 @@ class ApplicationController < ActionController::Base
     def vary_accept
       response.headers['Vary'] = 'Accept'
     end
+
+    def load_question
+      @question = Question.find(params[:question_id])
+    end
 end

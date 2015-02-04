@@ -29,6 +29,7 @@ class Ability
       cannot :create, User
       can [:edit, :update, :email, :submit_email], User, email: user.email
       can :create, [Question, Answer, Comment]
+      can [:create, :destroy], Subscription, user: user
       can [:edit, :update, :destroy], [Question, Answer, Comment], user: user
     end
 end

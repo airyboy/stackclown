@@ -36,6 +36,8 @@ class Answer < ActiveRecord::Base
   end
 
   def send_notification
-    UserMailer.delay.new_question_answer(question.user, question, self)
+    question.subscriptions.each do |subscription|
+      UserMailer.delay.new_question_answer(subscription.user, question, self)
+    end
   end
 end

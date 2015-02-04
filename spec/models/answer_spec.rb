@@ -51,9 +51,13 @@ RSpec.describe Answer, :type => :model do
   describe '.send_notification' do
     let(:question) { create(:question) }
     let(:answer) { build(:answer, question: question) }
+    let(:subscriptions) { create_list(:subscription, 2, question: question)}
 
     it 'should send notification to question author after creation' do
-      expect(UserMailer).to receive(:new_question_answer).with(question.user, question, answer).and_call_original
+      question.subscriptions.each do |subscription|
+        expect(UserMailer).to receive(:new_question_answer).with(subscription.user, question, answer).and_call_original
+      end
+
       answer.save!
     end
 

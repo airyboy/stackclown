@@ -28,7 +28,7 @@ describe Ability do
     let(:user) { create(:user) }
     let(:other_user) { create(:user) }
 
-    [Question, Answer, Comment].each do |klass|
+    [Question, Answer, Comment, Subscription].each do |klass|
       it { should be_able_to :create, klass }
     end
 
@@ -36,6 +36,9 @@ describe Ability do
         it { should be_able_to action, create(resource, user: user) }
         it { should_not be_able_to action, create(resource, user: other_user) }
     end
+
+    it { should be_able_to :destroy, create(:subscription, user: user) }
+    it { should_not be_able_to :destroy, create(:subscription, user: other_user) }
 
     [:edit, :update, :email, :submit_email].each do |action|
       it { should be_able_to action, user }

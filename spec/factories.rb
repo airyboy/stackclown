@@ -98,4 +98,9 @@ FactoryGirl.define do
     resource_owner_id { create(:user).id }
   end
 
+  factory :subscription do
+    user
+    question
+  end
+
 end

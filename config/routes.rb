@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
   resources :questions, concerns: :commentable do
     resources :answers, only: [:index, :edit, :update, :create, :destroy], concerns: :commentable, shallow: true
+    resources :subscriptions, only: [:create, :destroy], shallow: true
   end
 
   namespace :api do
