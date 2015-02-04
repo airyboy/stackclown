@@ -48,4 +48,21 @@ RSpec.describe Answer, :type => :model do
     end
   end
 
+  describe '.send_notification' do
+    let(:question) { create(:question) }
+    let(:answer) { build(:answer, question: question) }
+
+    it 'should send notification to question author after creation' do
+      expect(UserMailer).to receive(:new_question_answer).with(question.user, question, answer).and_call_original
+      answer.save!
+    end
+
+    it 'should not send notification to question author after update' do
+      answer.save!
+      answer.body = 'new body'
+      expect(UserMailer).not_to receive(:new_question_answer).with(question.user, question, answer).and_call_original
+      answer.save!
+    end
+  end
+
 end

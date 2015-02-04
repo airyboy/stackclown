@@ -44,6 +44,10 @@ gem 'doorkeeper'
 gem 'active_model_serializers'
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'redis-throttle', git: 'git://github.com/andreareginato/redis-throttle.git'
+gem 'sidekiq'
+gem 'sidetiq'
+gem 'sinatra', '>= 1.3.0', require: nil
 
 group :test, :development do
   gem 'rspec-rails'
@@ -58,6 +62,8 @@ group :test, :development do
   gem 'active_record-annotate'
   gem 'quiet_assets'
 end
+
+gem 'letter_opener', group: :development
 
 group :test do
   gem 'shoulda-matchers', require: false

@@ -24,4 +24,13 @@ class UserMailer < ActionMailer::Base
     mail(:to => user.email,
          :subject => "Your account at Stackclown is now activated")
   end
+
+  def new_question_answer(user, question, answer)
+    @user = user
+    @question = question
+    @answer = answer
+
+    mail(:to => user.email,
+         :subject => "You've got the new answer")
+  end
 end

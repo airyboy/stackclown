@@ -1,4 +1,15 @@
+require 'sidekiq/web'
+
+class AdminConstraint
+  def matches?(request)
+    current_user = User.find_by_id(request.session[:user_id])
+    current_user.present? && current_user.admin?
+  end
+end
+
 Rails.application.routes.draw do
+  mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint.new
+
   use_doorkeeper
   get 'oauths/oauth'
   get 'oauths/callback'
@@ -98,3 +109,4 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 end
+

@@ -1,0 +1,11 @@
+%h2
+  Hi, "#{@user.screen_name}"
+
+At "#{@question.created_at}" you asked the next question:
+
+%strong
+  = @question.title
+
+You have got the new answer:
+
+= @answer.body
