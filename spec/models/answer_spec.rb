@@ -35,13 +35,11 @@ RSpec.describe Answer, :type => :model do
       expect(@answer1.best).to eq true
     end
 
-    it 'should be the only best answer of a question' do
+    it 'should be the only one best answer of a question' do
       @answer1.mark_best
       @answer2.mark_best
-      @answer2.reload
-      @answer1.reload
-      expect(@answer2.best).to eq true
-      expect(@answer1.best).to eq false
+      expect(@answer2.reload.best).to eq true
+      expect(@answer1.reload.best).to eq false
     end
 
     it 'should be initialized with not-best value' do

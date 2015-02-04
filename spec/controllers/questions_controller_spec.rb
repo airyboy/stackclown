@@ -23,7 +23,7 @@ RSpec.describe QuestionsController, :type => :controller do
 			render_views
 			it 'should render json' do
 				get :index, format: :json
-				parsed_body = JSON(response.body)
+				parsed_body = JSON.parse(response.body)
 				expect(parsed_body).not_to be_nil
 			end
 		end
