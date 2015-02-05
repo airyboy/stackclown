@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   before_action :load_question, only: [:index, :create]
   # before_filter :require_login, only: [:create, :destroy, :update, :edit]
   before_action :load_answer, only: [:edit, :update, :destroy]
+  before_action :load_subscription, only: [:index]
   # before_filter :require_owning_object, only: [:edit, :update, :destroy]
 
   authorize_resource
@@ -54,6 +55,10 @@ class AnswersController < ApplicationController
     def publish_answer
       pub_json = render_to_string(template: 'answers/show.json.jbuilder', locals: {answer: @answer} )
       PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: pub_json
+    end
+
+    def load_subscription
+      @subscription = @question.subscriptions.find_by(user: current_user, question: @question)
     end
 end
 

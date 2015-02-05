@@ -14,6 +14,10 @@
       |
       = link_to 'edit', edit_question_path(@question), remote: true
       = link_to 'x', @question, method: :delete, data: { confirm: 'You sure?' }
+    - if logged_in? && !@subscription
+      = link_to 'Subscribe', question_subscriptions_path(@question), method: :post, remote: true
+    - else
+      = link_to 'Unsubscribe', subscription_path(@subscription), method: :delete, remote: true
   = render 'comments', parent: @question
 %hr
 .answers
