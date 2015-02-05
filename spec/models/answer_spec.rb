@@ -53,18 +53,29 @@ RSpec.describe Answer, :type => :model do
     let(:answer) { build(:answer, question: question) }
     let(:subscriptions) { create_list(:subscription, 2, question: question)}
 
-    it 'should send notification to question author after creation' do
+    it 'should send notification to subscribers after creation except answer creator' do
       question.subscriptions.each do |subscription|
-        expect(UserMailer).to receive(:new_question_answer).with(subscription.user, question, answer).and_call_original
+        if subscription.user != answer.user
+          expect(UserMailer).to receive(:new_question_answer).with(subscription.user, question, answer).and_call_original
+        end
       end
 
       answer.save!
     end
 
+    it 'should not send notification to answer creator' do
+      my_answer = build(:answer, question: question, user: user)
+      expect(UserMailer).not_to receive(:new_question_answer).with(user, question, my_answer).and_call_original
+      my_answer.save!
+    end
+
     it 'should not send notification to question author after update' do
       answer.save!
       answer.body = 'new body'
-      expect(UserMailer).not_to receive(:new_question_answer).with(question.user, question, answer).and_call_original
+      question.subscriptions.each do |subscription|
+        expect(UserMailer).not_to receive(:new_question_answer).with(question.user, question, answer).and_call_original
+      end
+
       answer.save!
     end
   end

@@ -24,20 +24,21 @@ class Answer < ActiveRecord::Base
 
   default_scope -> { order('created_at ASC') }
 
-  def mark_best
-    Answer.transaction do
-      begin
-        Answer.where(question: self.question).update_all(best: false)
-        self.update_column(:best, true)
-      rescue Exception
-        raise ActiveRecord::Rollback
+  protected
+    def mark_best
+      Answer.transaction do
+        begin
+          Answer.where(question: self.question).update_all(best: false)
+          self.update_column(:best, true)
+        rescue Exception
+          raise ActiveRecord::Rollback
+        end
       end
     end
-  end
 
-  def send_notification
-    question.subscriptions.each do |subscription|
-      UserMailer.delay.new_question_answer(subscription.user, question, self)
+    def send_notification
+      question.subscriptions.each do |subscription|
+        UserMailer.delay.new_question_answer(subscription.user, question, self) unless self.user == subscription.user
+      end
     end
-  end
 end
