@@ -33,9 +33,8 @@ class QuestionsController < ApplicationController
 	end
 
 	def update
-		if @question.update(question_params)
-			respond_with(@question)
-		end
+		@question.update(question_params)
+    respond_with(@question)
 	end
 
 	def destroy
