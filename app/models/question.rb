@@ -28,7 +28,10 @@ class Question < ActiveRecord::Base
   validates :user_id, presence: true
   validates :tags_comma_separated, presence: true
 
-  default_scope -> { order('created_at ASC') }
+  self.per_page = 10
+
+  default_scope -> { order('created_at DESC') }
+  scope :yesterday, -> { where(created_at: 1.day.ago.beginning_of_day..1.day.ago.end_of_day) }
 
   after_validation :make_tags
   after_create :add_author_subscription

@@ -1,3 +1,13 @@
+= simple_form_for :search, { url: '/search', method: :get} do |f|
+  .form-group.form-inline
+    = f.input :q, placeholder: 'search', input_html: {name: 'q', value: @form_state[:q]}, label: false
+    = f.button :submit, 'Go'
+  .form-group.form-inline
+    = f.input :question, as: :boolean, label: 'questions', input_html: {name: 'question', checked: @form_state[:question] == '1'}
+    = f.input :answer, as: :boolean, label: 'answers', input_html: {name: 'answer', checked: @form_state[:answer] == '1'}
+    = f.input :comment, as: :boolean, label: 'comments', input_html: {name: 'comment', checked: @form_state[:comment] == '1'}
+    = f.input :user, as: :boolean, label: 'users', input_html: {name: 'user', checked: @form_state[:user] == '1'}
+%hr
 - if @result.has_key?(Question)
   %h4 Questions
   %ul
@@ -31,5 +41,6 @@
   - @result[User].each do |user|
     %li
       = link_to user.screen_name, user_path(user)
+= will_paginate @search_result, renderer: BootstrapPagination::Rails
 - if @result.empty?
   %h4 Your search returned no matches.

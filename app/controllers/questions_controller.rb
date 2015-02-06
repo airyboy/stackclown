@@ -10,7 +10,8 @@ class QuestionsController < ApplicationController
 	respond_to :js, only: [:edit, :update]
 
 	def index
-		@questions = Question.all
+		@questions = Question.paginate(page: params[:page])
+    gon.total_pages = @questions.total_pages
 		respond_with(@questions)
 	end
 

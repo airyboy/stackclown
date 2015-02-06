@@ -30,4 +30,14 @@ RSpec.describe Question, :type => :model do
       expect(Subscription.first.question).to eq question
     end
   end
+
+  describe 'scope :yesterday' do
+    let!(:yesterday_questions) { create_list(:question, 2, created_at: 1.day.ago) }
+    let!(:past_yesterday_questions) { create_list(:question, 2, created_at: 2.day.ago) }
+    let!(:old_questions) { create_list(:question, 2, created_at: 1.month.ago) }
+
+    it 'should return only yesterday questions' do
+      expect(Question.yesterday).to match_array(yesterday_questions)
+    end
+  end
 end

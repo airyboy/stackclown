@@ -19,5 +19,6 @@
 //= require bootstrap-sprockets
 //= require bootstrap-tagsinput
 //= require moment
+//= require jquery.bootpag.min
 //= require_tree ./global
 //= require_tree ./templates

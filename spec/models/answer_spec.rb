@@ -49,6 +49,7 @@ RSpec.describe Answer, :type => :model do
   end
 
   describe '.send_notification' do
+    let(:user) { create(:user) }
     let(:question) { create(:question) }
     let(:answer) { build(:answer, question: question) }
     let(:subscriptions) { create_list(:subscription, 2, question: question)}
@@ -65,7 +66,8 @@ RSpec.describe Answer, :type => :model do
 
     it 'should not send notification to answer creator' do
       my_answer = build(:answer, question: question, user: user)
-      expect(UserMailer).not_to receive(:new_question_answer).with(user, question, my_answer).and_call_original
+      allow(UserMailer).to receive(:new_question_answer).and_call_original
+      expect(UserMailer).not_to receive(:new_question_answer).with(user, question, my_answer)
       my_answer.save!
     end
 
