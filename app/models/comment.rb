@@ -18,4 +18,12 @@ class Comment < ActiveRecord::Base
   validates :commentable_id, :user_id, presence: true
 
   default_scope -> { order('created_at ASC') }
+
+  def question
+    if commentable_type == 'Question'
+      self.commentable
+    else
+      self.commentable.question
+    end
+  end
 end

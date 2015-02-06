@@ -17,4 +17,24 @@ RSpec.describe Comment, :type => :model do
       expect(Comment.all.to_a).to eq [old_comment, new_comment]
     end
   end
+
+  describe '.question' do
+    let(:question) { create(:question) }
+    let(:answer) { create(:answer, question: question) }
+
+    context 'when belongs to a question' do
+      it 'should return the correct parent question' do
+        comment = create(:comment, commentable: question)
+        expect(comment.question).to eq question
+      end
+    end
+
+    context 'when belongs to and answer' do
+      it 'should return the correct parent question' do
+        comment = create(:comment, commentable: answer)
+        expect(comment.question).to eq question
+      end
+    end
+
+  end
 end

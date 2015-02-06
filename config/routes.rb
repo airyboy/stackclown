@@ -8,6 +8,8 @@ class AdminConstraint
 end
 
 Rails.application.routes.draw do
+  get 'search/find'
+
   mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint.new
 
   use_doorkeeper
@@ -23,6 +25,8 @@ Rails.application.routes.draw do
   get 'signup' => 'users#new', :as => :signup
   get 'signin' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
+
+  get 'search' => 'search#find', :as => :search
 
   resources :tags, only: [:index, :show]
   resources :users do

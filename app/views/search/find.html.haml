@@ -1,0 +1,35 @@
+- if @result.has_key?(Question)
+  %h4 Questions
+  %ul
+  - @result[Question].each do |question|
+    %li
+      %strong
+        = link_to question.title, question
+      %br
+      = question.body
+- if @result.has_key?(Answer)
+  %h4 Answers
+  %ul
+  - @result[Answer].each do |answer|
+    %li
+      %strong
+        = link_to answer.question.title, question_answers_path(answer.question)
+      %br
+      = answer.body
+- if @result.has_key?(Comment)
+  %h4 Comments
+  %ul
+  - @result[Comment].each do |comment|
+    %li
+      %strong
+        = link_to comment.question.title, question_answers_path(comment.question)
+      %br
+      = comment.body
+- if @result.has_key?(User)
+  %h4 Users
+  %ul
+  - @result[User].each do |user|
+    %li
+      = link_to user.screen_name, user_path(user)
+- if @result.empty?
+  %h4 Your search returned no matches.
