@@ -16,7 +16,7 @@
       %strong
         = link_to question.title, question
       %br
-      = question.body
+      != highlight(question.body, @words, highlighter: '<span class=\'highlight\'>\1</span>')
 - if @result.has_key?(Answer)
   %h4 Answers
   %ul
@@ -25,7 +25,7 @@
       %strong
         = link_to answer.question.title, question_answers_path(answer.question)
       %br
-      = answer.body
+      != highlight(answer.body, @words, highlighter: '<span class=\'highlight\'>\1</span>')
 - if @result.has_key?(Comment)
   %h4 Comments
   %ul
@@ -34,13 +34,13 @@
       %strong
         = link_to comment.question.title, question_answers_path(comment.question)
       %br
-      = comment.body
+      != highlight(comment.body, @words, highlighter: '<span class=\'highlight\'>\1</span>')
 - if @result.has_key?(User)
   %h4 Users
   %ul
   - @result[User].each do |user|
     %li
       = link_to user.screen_name, user_path(user)
-= will_paginate @search_result, renderer: BootstrapPagination::Rails
-- if @result.empty?
+= will_paginate @search_result, renderer: BootstrapPagination::Rails unless @search_result
+- if @result.blank?
   %h4 Your search returned no matches.

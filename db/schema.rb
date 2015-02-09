@@ -124,12 +124,6 @@ ActiveRecord::Schema.define(version: 20150204231312) do
 
   add_index "subscriptions", ["user_id", "question_id"], name: "index_subscriptions_on_user_id_and_question_id", unique: true, using: :btree
 
-  create_table "table_comments", force: true do |t|
-    t.text    "body"
-    t.integer "commentable_id"
-    t.string  "commentable_type"
-  end
-
   create_table "tag_relationships", force: true do |t|
     t.integer  "question_id"
     t.integer  "tag_id"
