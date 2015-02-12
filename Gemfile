@@ -57,6 +57,7 @@ gem 'gon'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'therubyracer'
+gem 'whenever'
 
 group :test, :development do
   gem 'rspec-rails'
