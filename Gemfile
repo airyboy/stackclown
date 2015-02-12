@@ -52,6 +52,8 @@ gem 'mysql2'
 gem 'thinking-sphinx'
 gem 'will_paginate-bootstrap'
 gem 'gon'
+gem 'dotenv'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
 
 group :test, :development do
   gem 'rspec-rails'
