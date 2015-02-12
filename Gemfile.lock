@@ -406,6 +406,7 @@ DEPENDENCIES
   private_pub!
   quiet_assets
   rails (= 4.1.8)
+  rake
   redis-throttle!
   remotipart
   rspec-mocks

@@ -6,4 +6,3 @@ namespace :spec do
     t.exclude_pattern = "spec/acceptance/**/*_spec.rb"
   end
 end
-
