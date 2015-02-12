@@ -58,6 +58,7 @@ gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'therubyracer'
 gem 'whenever'
+gem 'faker'
 
 group :test, :development do
   gem 'rspec-rails'
@@ -66,7 +67,6 @@ group :test, :development do
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
-  gem 'faker'
   gem 'selenium-webdriver'
   gem 'capybara-webkit'
   gem 'active_record-annotate'
