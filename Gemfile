@@ -67,7 +67,13 @@ group :test, :development do
   gem 'quiet_assets'
 end
 
-gem 'letter_opener', group: :development
+group :development do
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'letter_opener'
+end
 
 group :test do
   gem 'shoulda-matchers', require: false
