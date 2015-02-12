@@ -28,6 +28,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 gem 'rake'
+gem 'rspec-core'
 gem 'haml-rails'
 gem 'sorcery'
 gem 'simple_form'

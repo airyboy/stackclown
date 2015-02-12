@@ -409,6 +409,7 @@ DEPENDENCIES
   rake
   redis-throttle!
   remotipart
+  rspec-core
   rspec-mocks
   rspec-rails
   sass-rails (~> 4.0.3)
