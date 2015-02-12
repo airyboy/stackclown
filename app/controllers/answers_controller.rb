@@ -1,13 +1,13 @@
 class AnswersController < ApplicationController
   before_action :load_question, only: [:index, :create]
   # before_filter :require_login, only: [:create, :destroy, :update, :edit]
-  before_action :load_answer, only: [:edit, :update, :destroy]
+  before_action :load_answer, only: [:edit, :update, :destroy, :mark]
   before_action :load_subscription, only: [:index]
   # before_filter :require_owning_object, only: [:edit, :update, :destroy]
 
   authorize_resource
 
-  respond_to :json, only: [:index]
+  respond_to :json, only: [:index, :mark]
   respond_to :js, only: [:create, :edit, :update]
   respond_to :html, only: [:index, :destroy]
 
@@ -38,6 +38,11 @@ class AnswersController < ApplicationController
   def destroy
     @answer.destroy
     respond_with(@question, location: question_answers_url(@question))
+  end
+
+  def mark
+    @answer.mark_best
+    respond_with(@answer)
   end
 
   private

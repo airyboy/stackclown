@@ -31,5 +31,6 @@ class Ability
       can :create, [Question, Answer, Comment]
       can [:create, :destroy], Subscription, user: user
       can [:edit, :update, :destroy], [Question, Answer, Comment], user: user
+      can :mark, Answer
     end
 end

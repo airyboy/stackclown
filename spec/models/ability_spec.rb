@@ -47,6 +47,7 @@ describe Ability do
     it { should_not be_able_to :create, User }
     it { should_not be_able_to :new, User }
     it { should_not be_able_to :manage, :all }
+    it { should_not be_able_to :mark, Answer }
 
   end
 end

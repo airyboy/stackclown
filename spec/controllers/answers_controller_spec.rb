@@ -154,4 +154,19 @@ RSpec.describe AnswersController, :type => :controller do
       end
     end
   end
+
+  describe 'PATCH #mark' do
+    let!(:answers) { create_list(:answer, 2, question: question) }
+
+    context 'when user is signed in' do
+      before { login_user(user) }
+
+      it 'should mark off the answer' do
+        answer = answers.first
+        patch :mark, id: answer.id, format: :json
+        expect(answers.first.reload).to be_best
+      end
+    end
+  end
+
 end

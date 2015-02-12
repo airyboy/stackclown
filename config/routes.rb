@@ -43,7 +43,9 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :commentable do
-    resources :answers, only: [:index, :edit, :update, :create, :destroy], concerns: :commentable, shallow: true
+    resources :answers, only: [:index, :edit, :update, :create, :destroy], concerns: :commentable, shallow: true do
+      patch 'mark', on: :member
+    end
     resources :subscriptions, only: [:create, :destroy], shallow: true
   end
 

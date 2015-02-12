@@ -18,6 +18,7 @@
 
 /config/database.yml
 /config/secrets.yml
+/config/private_pub.yml
 .idea
 config/*.sphinx.conf
 db/sphinx
