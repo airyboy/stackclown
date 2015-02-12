@@ -90,3 +90,5 @@ namespace :private_pub do
     end
   end
 end
+
+after 'deploy:restart', 'private_pub:restart'
