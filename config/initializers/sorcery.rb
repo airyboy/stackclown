@@ -112,7 +112,7 @@ Rails.application.config.sorcery.configure do |config|
   config.facebook.key = "#{Rails.application.secrets.sorcery_facebook_key}"
   config.facebook.secret = "#{Rails.application.secrets.sorcery_facebook_secret}"
   config.facebook.callback_url = "#{Rails.application.secrets.sorcery_facebook_callback}"
-  config.facebook.user_info_mapping = {:email => 'email'}
+  config.facebook.user_info_mapping = {:email => 'email', :screen_name => 'public_profile/name'}
   config.facebook.access_permissions = ['email']
   #
   # config.github.key = ""
