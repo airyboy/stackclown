@@ -106,12 +106,12 @@ Rails.application.config.sorcery.configure do |config|
   #
   config.twitter.key = "#{Rails.application.secrets.sorcery_twitter_key}"
   config.twitter.secret = "#{Rails.application.secrets.sorcery_twitter_secret}"
-  config.twitter.callback_url = 'http://lvh.me:3000/oauth/callback?provider=twitter'
+  config.twitter.callback_url = "#{Rails.application.secrets.sorcery_twitter_callback}"
   config.twitter.user_info_mapping = {:screen_name => 'screen_name'}
   #
   config.facebook.key = "#{Rails.application.secrets.sorcery_facebook_key}"
   config.facebook.secret = "#{Rails.application.secrets.sorcery_facebook_secret}"
-  config.facebook.callback_url = 'http://lvh.me:3000/oauth/callback?provider=facebook'
+  config.twitter.callback_url = "#{Rails.application.secrets.sorcery_facebook_callback}"
   config.facebook.user_info_mapping = {:email => 'email'}
   config.facebook.access_permissions = ['email']
   #
