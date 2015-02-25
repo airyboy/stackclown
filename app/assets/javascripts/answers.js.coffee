@@ -17,6 +17,10 @@ $ ->
     console.log('Restore subscriptions')
     subscribe_comet()
 
+  $(document).on 'ajax:success', 'a.vote', (e, data, status, xhr) ->
+    response = $.parseJSON(xhr.responseText)
+    $("span.vote[data-resource=#{response.resource}][data-id=#{response.id}]").html(response.total)
+
   $('form.new_answer').bind 'ajax:error', (e, xhr, status, error) ->
     errors = $.parseJSON(xhr.responseText)
     $.each errors, (index, value) ->
@@ -60,11 +64,11 @@ $ ->
       $.each errors, (index, value) ->
         commentDiv.find('.comment-errors').append(value)
 
-  $(document).on 'click', '.attach-link', (e) ->
-    e.preventDefault()
-    $('.attachment-fields').show()
-    $(this).hide()
-    append_file_field($(this).data('resource'))
+#  $(document).on 'click', '.attach-link', (e) ->
+#    e.preventDefault()
+#    $('.attachment-fields').show()
+#    $(this).hide()
+#    append_file_field($(this).data('resource'))
 
 @question_id = () ->
   question_id = $('.full-question').data('id')
@@ -90,33 +94,33 @@ $ ->
     console.log(commentDiv)
     commentDiv.append(Handlebars.partials['comments/_comment'](json))
 
-@append_file_field = (res) ->
-  id = _.uniqueId()
-  html = file_input_tmpl({id:id, resource: res})
-  $('.attachment-fields').append(html)
-# hide file input
-  $("#attachment-#{id}").hide()
-
-  $("#sel-file-#{id}").click (e) ->
-    e.preventDefault()
-    $("#attachment-#{id}").trigger('click')
-    .change ->
-#     add field for the new file
-      append_file_field(res)
-
-      sel_file = $("#sel-file-#{id}")
-#     set filename for adding link
-      sel_file.text($(this).val().split('/').pop().split('\\').pop())
-#     add delete button
-      sel_file.wrap ->
-        "<div class=\'input-group\'><div class=\'input-group-btn\'>#{$(this).html()}" +
-          "<a class=\'btn btn-xs btn-default\' id=\'del-file-#{id}\' href=\'#\'>x</a></div></div>"
-      sel_file.attr('disabled', 'disabled')
-
-#     handler for delete link
-      $("#del-file-#{id}").click (e) ->
-        e.preventDefault()
-        $(this).parent().parent().remove()
+#@append_file_field = (res) ->
+#  id = _.uniqueId()
+#  html = file_input_tmpl({id:id, resource: res})
+#  $('.attachment-fields').append(html)
+## hide file input
+#  $("#attachment-#{id}").hide()
+#
+#  $("#sel-file-#{id}").click (e) ->
+#    e.preventDefault()
+#    $("#attachment-#{id}").trigger('click')
+#    .change ->
+##     add field for the new file
+#      append_file_field(res)
+#
+#      sel_file = $("#sel-file-#{id}")
+##     set filename for adding link
+#      sel_file.text($(this).val().split('/').pop().split('\\').pop())
+##     add delete button
+#      sel_file.wrap ->
+#        "<div class=\'input-group\'><div class=\'input-group-btn\'>#{$(this).html()}" +
+#          "<a class=\'btn btn-xs btn-default\' id=\'del-file-#{id}\' href=\'#\'>x</a></div></div>"
+#      sel_file.attr('disabled', 'disabled')
+#
+##     handler for delete link
+#      $("#del-file-#{id}").click (e) ->
+#        e.preventDefault()
+#        $(this).parent().parent().remove()
 
 edit_comment = (id) ->
   $.getJSON "/comments/#{id}", (data) ->

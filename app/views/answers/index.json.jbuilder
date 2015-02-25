@@ -4,6 +4,7 @@ json.answers @answers do |answer|
   json.id answer.id
   json.body answer.body
   json.created_at answer.created_at
+  json.points answer.total_points
 
   json.partial! 'shared/user', user: answer.user
 

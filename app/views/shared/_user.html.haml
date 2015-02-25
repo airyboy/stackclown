@@ -1,0 +1,7 @@
+%div.user-info
+  %span.time
+    = resource.created_at
+  by
+  = image_tag resource.user.avatar.thumb.url, height: 15
+  %span.user
+    = link_to resource.user.screen_name, user_path(resource.user)

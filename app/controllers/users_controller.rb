@@ -71,6 +71,10 @@ class UsersController < ApplicationController
   end
 
   private
+    def set_resource
+      @resource = set_user
+    end
+
     def set_user
       @user = User.find(params[:id])
     end

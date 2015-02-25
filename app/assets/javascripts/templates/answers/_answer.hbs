@@ -8,6 +8,11 @@
     </div>
   {{/if}}
   <div class="answer-footer">
+      <span class="votes">
+        <a class="vote btn btn-default btn-xs" data-method="patch" data-remote="true" href="/answers/{{ id }}/upvote" rel="nofollow">+</a>
+        <span class="vote" data-id="{{ id }}" data-resource="answer">{{ points }}</span>
+        <a class="vote btn btn-default btn-xs" data-method="patch" data-remote="true" href="/answers/{{ id }}/downvote" rel="nofollow">-</a>
+      </span>
       <span class="time">
         {{relativeTime created_at}}
       </span>
@@ -17,8 +22,8 @@
       <a data-remote="true" href="/answers/{{ id }}/edit">edit</a>
       |
       <a data-confirm="You sure?" data-method="delete" href="/answers/{{ id }}" rel="nofollow">x</a>
-      {{/isCurrentUser}}
       <span class="glyphicon glyphicon-star-empty" style="float: left;font-size: medium; padding-right: 4px;" aria-hidden="true"></span>
+      {{/isCurrentUser}}
     </div>
     <div class='comments' data-id='{{ id }}' data-resource='answers'>
       {{#each comments }}

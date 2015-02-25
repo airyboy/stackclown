@@ -29,7 +29,13 @@ Rails.application.routes.draw do
   get 'search' => 'search#find', :as => :search
 
   resources :tags, only: [:index, :show]
-  resources :users do
+
+  concern :votable do
+    patch :upvote, on: :member
+    patch :downvote, on: :member
+  end
+
+  resources :users, concerns: :votable do
     member do
       get :activate
     end
@@ -39,11 +45,11 @@ Rails.application.routes.draw do
   root 'questions#index'
 
   concern :commentable do
-    resources :comments, only: [:show, :create, :update, :destroy], shallow: true
+    resources :comments, only: [:show, :create, :update, :destroy], concerns: :votable, shallow: true
   end
 
-  resources :questions, concerns: :commentable do
-    resources :answers, only: [:index, :edit, :update, :create, :destroy], concerns: :commentable, shallow: true do
+  resources :questions, concerns: [:commentable, :votable] do
+    resources :answers, only: [:index, :edit, :update, :create, :destroy], concerns: [:commentable, :votable], shallow: true do
       patch 'mark', on: :member
     end
     resources :subscriptions, only: [:create, :destroy], shallow: true

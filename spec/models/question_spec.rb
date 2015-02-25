@@ -6,6 +6,7 @@ RSpec.describe Question, :type => :model do
   it { should have_many(:comments) }
   it { should have_many(:tags) }
   it { should have_many :subscriptions }
+  it { should have_many :votes }
   it { should belong_to(:user) }
   it { should accept_nested_attributes_for :attachments }
 
@@ -38,6 +39,18 @@ RSpec.describe Question, :type => :model do
 
     it 'should return only yesterday questions' do
       expect(Question.yesterday).to match_array(yesterday_questions)
+    end
+  end
+
+  describe 'Question.upvote' do
+    it_behaves_like 'voting up' do
+      let!(:resource) { create(:question) }
+    end
+  end
+
+  describe 'Question.downvote' do
+    it_behaves_like 'voting down' do
+      let!(:resource) { create(:question) }
     end
   end
 end

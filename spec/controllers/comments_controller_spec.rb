@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe CommentsController, :type => :controller do
   let!(:user) { create(:user) }
+  let!(:other_user){ create(:user) }
   let(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, question: question, user: user) }
   let!(:comment) { create(:comment, commentable: question) }
@@ -99,6 +100,24 @@ RSpec.describe CommentsController, :type => :controller do
           end.to change(answer.comments, :count).by(-1)
         end
       end
+    end
+  end
+
+  describe 'PATCH #upvote' do
+    it_behaves_like 'voting action' do
+      let!(:comment) { create(:comment_to_answer, user: other_user) }
+      let!(:my_comment) { create(:comment_to_answer, user: user) }
+      let(:action) { patch :upvote, id: comment.id, format: :json }
+      let(:my_action) { patch :upvote, id: my_comment.id, format: :json }
+    end
+  end
+
+  describe 'PATCH #downvote' do
+    it_behaves_like 'voting action' do
+      let!(:comment) { create(:comment_to_answer, user: other_user) }
+      let!(:my_comment) { create(:comment_to_answer, user: user) }
+      let(:action) { patch :downvote, id: comment.id, format: :json }
+      let(:my_action) { patch :downvote, id: my_comment.id, format: :json }
     end
   end
 end

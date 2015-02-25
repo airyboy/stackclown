@@ -10,6 +10,8 @@
 # add_index :answers, [:user_id], name: :index_answers_on_user_id, using: :btree
 
 class Answer < ActiveRecord::Base
+  include Votable
+
   belongs_to :question, counter_cache: true
   belongs_to :user, counter_cache: true
   has_many :comments, as: :commentable

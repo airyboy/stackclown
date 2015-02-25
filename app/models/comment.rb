@@ -11,6 +11,8 @@
 # add_index :comments, [:user_id], name: :index_comments_on_user_id, using: :btree
 
 class Comment < ActiveRecord::Base
+  include Votable
+
   belongs_to :commentable, polymorphic: true
   belongs_to :user, counter_cache: true
 

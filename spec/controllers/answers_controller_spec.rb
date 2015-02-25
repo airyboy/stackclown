@@ -169,4 +169,21 @@ RSpec.describe AnswersController, :type => :controller do
     end
   end
 
+  describe 'PATCH #upvote' do
+    it_behaves_like 'voting action' do
+      let!(:answer) { create(:answer, user: other_user) }
+      let!(:my_answer) { create(:answer, user: user) }
+      let(:action) { patch :upvote, id: answer.id, format: :json }
+      let(:my_action) { patch :upvote, id: my_answer.id, format: :json }
+    end
+  end
+
+  describe 'PATCH #downvote' do
+    it_behaves_like 'voting action' do
+      let!(:answer) { create(:answer, user: other_user) }
+      let!(:my_answer) { create(:answer, user: user) }
+      let(:action) { patch :downvote, id: answer.id, format: :json }
+      let(:my_action) { patch :downvote, id: my_answer.id, format: :json }
+    end
+  end
 end

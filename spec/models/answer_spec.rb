@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Answer, :type => :model do
   it { should have_many(:attachments) }
   it { should have_many(:comments) }
+  it { should have_many :votes }
   it { should belong_to(:question) }
   it { should belong_to(:user) }
   it { should accept_nested_attributes_for :attachments }
@@ -79,6 +80,29 @@ RSpec.describe Answer, :type => :model do
       end
 
       answer.save!
+    end
+  end
+
+
+  describe 'Answer.upvote' do
+    it_behaves_like 'voting up' do
+      let!(:resource) { create(:answer) }
+    end
+  end
+
+  describe 'Answer.downvote' do
+    it_behaves_like 'voting down' do
+      let!(:resource) { create(:answer) }
+    end
+  end
+
+  describe 'Answer.total_points' do
+    let!(:answer) { create(:answer) }
+
+    it 'should return right total' do
+      create_list(:vote, 3, votable: answer, points: 1)
+      create_list(:vote, 2, votable: answer, points: -1)
+      expect(answer.total_points).to eq 1
     end
   end
 

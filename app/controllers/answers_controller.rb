@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  include VotableController
   before_action :load_question, only: [:index, :create]
   # before_filter :require_login, only: [:create, :destroy, :update, :edit]
   before_action :load_answer, only: [:edit, :update, :destroy, :mark]
@@ -46,6 +47,9 @@ class AnswersController < ApplicationController
   end
 
   private
+    def set_resource
+      @resource = Answer.find(params[:id])
+    end
 
     def answer_params
       params.require(:answer).permit(:body, attachments_attributes: [:file]).merge(user: current_user)

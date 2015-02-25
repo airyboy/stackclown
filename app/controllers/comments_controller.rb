@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  include VotableController
+
   before_action :find_commentable, only: [:create]
   before_action :load_question
   # before_filter :require_login, except: [:show]
@@ -39,6 +41,10 @@ class CommentsController < ApplicationController
   end
 
   private
+    def set_resource
+      @resource = load_comment
+    end
+
     def find_commentable
       params.each do |name, value|
         if name =~ /(.+)_id$/

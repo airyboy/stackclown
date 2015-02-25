@@ -44,6 +44,10 @@ describe Ability do
       it { should be_able_to action, user }
     end
 
+    [:upvote, :downvote].product([:question, :answer, :comment_to_question]).collect do |action, resource|
+      it { should be_able_to action, create(resource) }
+    end
+
     it { should_not be_able_to :create, User }
     it { should_not be_able_to :new, User }
     it { should_not be_able_to :manage, :all }

@@ -103,4 +103,9 @@ FactoryGirl.define do
     question
   end
 
+  factory :vote do
+    user
+    points 1
+    association :votable, :factory => :question
+  end
 end

@@ -4,6 +4,7 @@
       .comment{data: {id: comm.id}}
         %span.comment-body
           = comm.body
+          = render 'shared/user', resource: comm
         - if current_user == comm.user
           |
           = link_to 'edit', '#', class: 'edit-comment'

@@ -4,12 +4,15 @@
 = render 'shared/bootstrap_edit_form'
 .full-question{data: {id: @question.id}}
   .qtitle= @question.title
+  %span.vote-form
+    = link_to '+', upvote_question_path(@question), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
+    %span.vote{data: { resource: 'question', id: @question.id }} #{@question.total_points}
+    = link_to '-', downvote_question_path(@question), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
   .qbody= @question.body
   = render 'attachments', resource: @question
   .question-footer
     = render 'shared/tags', question: @question
-    %span.user
-      = link_to @question.user.screen_name, user_path(@question.user)
+    = render 'shared/user', resource: @question
     - if current_user == @question.user
       |
       = link_to 'edit', edit_question_path(@question), remote: true

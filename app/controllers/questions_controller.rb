@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  include VotableController
+
 	before_action :load_question, only: [:show, :edit, :update, :destroy]
 	# before_filter :require_login, only: [:new, :create, :edit, :update, :destroy], :except => [:not_authenticated]
 	# before_filter :require_owning_object, only: [:edit, :update, :destroy]
@@ -44,6 +46,9 @@ class QuestionsController < ApplicationController
 	end
 
 	private
+    def set_resource
+      @resource = Question.find(params[:id])
+    end
 
 		def load_question
 			@question = Question.find(params[:id])

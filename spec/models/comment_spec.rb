@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Comment, :type => :model do
   it { should belong_to(:commentable) }
   it { should belong_to(:user) }
+  it { should have_many :votes }
 
   it { should validate_presence_of :user_id }
   it { should validate_presence_of(:body) }
@@ -17,6 +18,19 @@ RSpec.describe Comment, :type => :model do
       expect(Comment.all.to_a).to eq [old_comment, new_comment]
     end
   end
+
+  describe 'Comment.upvote' do
+    it_behaves_like 'voting up' do
+      let!(:resource) { create(:comment_to_question) }
+    end
+  end
+
+  describe 'Comment.downvote' do
+    it_behaves_like 'voting down' do
+      let!(:resource) { create(:comment_to_question) }
+    end
+  end
+
 
   describe '.question' do
     let(:question) { create(:question) }
@@ -35,6 +49,5 @@ RSpec.describe Comment, :type => :model do
         expect(comment.question).to eq question
       end
     end
-
   end
 end

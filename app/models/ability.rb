@@ -27,6 +27,7 @@ class Ability
     def common_user
       guest_user
       cannot :create, User
+      can [:upvote, :downvote], [Question, Answer, Comment, User]
       can [:edit, :update, :email, :submit_email], User, email: user.email
       can :create, [Question, Answer, Comment]
       can [:create, :destroy], Subscription, user: user

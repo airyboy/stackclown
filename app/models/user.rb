@@ -19,6 +19,8 @@
 # add_index :users, [:email], name: :index_users_on_email, unique: true, using: :btree
 
 class User < ActiveRecord::Base
+  include Votable
+
   authenticates_with_sorcery!
   has_many :questions
   has_many :answers
@@ -36,6 +38,10 @@ class User < ActiveRecord::Base
 
   authenticates_with_sorcery! do |config|
     config.authentications_class = Authentication
+  end
+
+  def user
+    self
   end
 
   def self.setup_oauth_user(provider, user)

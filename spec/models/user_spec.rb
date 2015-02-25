@@ -4,6 +4,7 @@ RSpec.describe User, :type => :model do
    it { should have_many :questions }
    it { should have_many :answers }
    it { should have_many :comments }
+   it { should have_many :votes }
 
    it { should respond_to :email }
    it { should respond_to :password }
@@ -28,6 +29,18 @@ RSpec.describe User, :type => :model do
       it 'should not overwrite email if it was given' do
          expect((User.setup_oauth_user('facebook', fb_user)).email).to eq 'some@email.com'
       end
+   end
+
+   describe 'User.upvote' do
+     it_behaves_like 'voting up' do
+       let!(:resource) { create(:user) }
+     end
+   end
+
+   describe 'User.downvote' do
+     it_behaves_like 'voting down' do
+       let!(:resource) { create(:user) }
+     end
    end
 
 end

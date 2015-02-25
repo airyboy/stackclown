@@ -10,6 +10,8 @@
 # add_index :questions, [:user_id], name: :index_questions_on_user_id, using: :btree
 
 class Question < ActiveRecord::Base
+  include Votable
+
   attr_accessor :tags_comma_separated
 
   belongs_to :user, :counter_cache => true
