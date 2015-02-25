@@ -8,21 +8,21 @@
     = link_to '+', upvote_question_path(@question), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
     %span.vote{data: { resource: 'question', id: @question.id }} #{@question.total_points}
     = link_to '-', downvote_question_path(@question), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
-  .qbody= @question.body
+    .qbody= @question.body
   = render 'attachments', resource: @question
-  .question-footer
-    = render 'shared/tags', question: @question
-    = render 'shared/user', resource: @question
-    - if current_user == @question.user
-      |
-      = link_to 'edit', edit_question_path(@question), remote: true
-      = link_to 'x', @question, method: :delete, data: { confirm: 'You sure?' }
-    - if logged_in?
-      .subscription
-        - if @subscription.nil?
-          = render 'shared/subscribe'
-        - else
-          = render 'shared/unsubscribe'
+.question-footer
+  = render 'shared/tags', question: @question
+  = render 'shared/user', resource: @question
+  - if current_user == @question.user
+    |
+    = link_to 'edit', edit_question_path(@question), remote: true
+    = link_to 'x', @question, method: :delete, data: { confirm: 'You sure?' }
+  - if logged_in?
+    .subscription
+      - if @subscription.nil?
+        = render 'shared/subscribe'
+      - else
+        = render 'shared/unsubscribe'
   = render 'comments', parent: @question
 %hr
 .answers

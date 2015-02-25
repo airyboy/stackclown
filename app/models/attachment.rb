@@ -13,5 +13,5 @@ class Attachment < ActiveRecord::Base
 
   default_scope -> { order('created_at ASC') }
 
-  belongs_to :attachable, polymorphic: true
+  belongs_to :attachable, polymorphic: true, touch: true
 end

@@ -13,7 +13,7 @@
 class Comment < ActiveRecord::Base
   include Votable
 
-  belongs_to :commentable, polymorphic: true
+  belongs_to :commentable, polymorphic: true, touch: true
   belongs_to :user, counter_cache: true
 
   validates :body, presence: true, length: { maximum: GlobalConstants::COMMENT_BODY_MAX_LENGTH }

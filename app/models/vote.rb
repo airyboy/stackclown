@@ -11,7 +11,7 @@
 # add_index :votes, [:votable_id, :votable_type], name: :index_votes_on_votable_id_and_votable_type, using: :btree
 
 class Vote < ActiveRecord::Base
-  belongs_to :votable, polymorphic: true
+  belongs_to :votable, polymorphic: true, touch: true
   belongs_to :user
 
   validates :user, presence: true
