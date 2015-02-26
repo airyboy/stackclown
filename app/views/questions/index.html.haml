@@ -1,7 +1,9 @@
 = javascript_include_tag 'questions'
 
 = provide(:title, 'All questions')
-
-.questions
--#= render 'questions', questions: @questions
-.paginator
+.row
+  .col-md-10
+    .questions
+    .paginator
+  .col-md-2
+    = render 'shared/top_tags'

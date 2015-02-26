@@ -31,6 +31,7 @@ class Answer < ActiveRecord::Base
       begin
         Answer.where(question: self.question).update_all(best: false)
         self.update_column(:best, true)
+        self.question.touch
       rescue Exception
         raise ActiveRecord::Rollback
       end

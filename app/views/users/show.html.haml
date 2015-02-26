@@ -1,6 +1,14 @@
 = image_tag @user.avatar.url
 
 %p
+  %span.vote-form
+    = link_to '+', upvote_user_path(@user), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
+    %span.vote{data: { resource: 'user', id: @user.id }} #{@user.total_points}
+    = link_to '-', downvote_user_path(@user), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
+%p
+  %b Screen Name:
+  = @user.screen_name
+%p
   %b Email:
   = @user.email
 

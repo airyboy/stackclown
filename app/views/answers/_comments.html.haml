@@ -2,10 +2,10 @@
   - if parent.comments.any?
     - parent.comments.each do |comm|
       .comment{data: {id: comm.id}}
-        - cache comm do
-          %span.comment-body
+        %span.comment-body
+          - cache comm do
             = comm.body
-            = render 'shared/user', resource: comm
+          = render 'shared/user', resource: comm
         - if current_user == comm.user
           |
           = link_to 'edit', '#', class: 'edit-comment'

@@ -1,0 +1,7 @@
+- cache @tags do
+  %h4 Popular tags
+  - @tags.each do |tag|
+    %p
+    %span.tag
+      = link_to "#{tag.tag_name}", tag_path(tag)
+    x #{tag.questions.size}

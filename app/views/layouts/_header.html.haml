@@ -1,7 +1,10 @@
 %header.navbar.navbar-inverse.navbar-fixed-top
   .navbar-inner
     .container
-      = link_to 'Stack Clown', root_path, id: 'logo'
+      %span#logo
+        = link_to 'Stack', root_path
+        = image_tag '/images/clown.jpg', height: 30
+        = link_to 'Clown', root_path
       %nav
         = link_to 'Ask question', new_question_path, class: 'btn btn-default navbar-btn', style: 'margin-left: 25px'
         %form.navbar-form.navbar-right{role: 'search', action: '/search', method: 'get'}

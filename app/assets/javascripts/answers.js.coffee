@@ -17,9 +17,15 @@ $ ->
     console.log('Restore subscriptions')
     subscribe_comet()
 
-  $(document).on 'ajax:success', 'a.vote', (e, data, status, xhr) ->
-    response = $.parseJSON(xhr.responseText)
-    $("span.vote[data-resource=#{response.resource}][data-id=#{response.id}]").html(response.total)
+  $(document).on 'click', 'span.best', (e) ->
+    $('.best').removeClass('glyphicon-star').addClass('glyphicon-star-empty')
+    $(this).removeClass('glyphicon-star-empty').addClass('glyphicon-star')
+    answer_id = $(this).closest('div.answer').data('id')
+    $.ajax
+      url: "/answers/#{answer_id}/mark"
+      type: 'PATCH'
+      success: (data) ->
+        console.log(data)
 
   $('form.new_answer').bind 'ajax:error', (e, xhr, status, error) ->
     errors = $.parseJSON(xhr.responseText)

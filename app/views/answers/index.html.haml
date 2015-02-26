@@ -2,39 +2,44 @@
 
 = provide(:title, 'Show question')
 = render 'shared/bootstrap_edit_form'
-.full-question{data: {id: @question.id}}
-  .qtitle= @question.title
-  %span.vote-form
-    = link_to '+', upvote_question_path(@question), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
-    %span.vote{data: { resource: 'question', id: @question.id }} #{@question.total_points}
-    = link_to '-', downvote_question_path(@question), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
-    .qbody= @question.body
-  = render 'attachments', resource: @question
-.question-footer
-  = render 'shared/tags', question: @question
-  = render 'shared/user', resource: @question
-  - if current_user == @question.user
-    |
-    = link_to 'edit', edit_question_path(@question), remote: true
-    = link_to 'x', @question, method: :delete, data: { confirm: 'You sure?' }
-  - if logged_in?
-    .subscription
-      - if @subscription.nil?
-        = render 'shared/subscribe'
-      - else
-        = render 'shared/unsubscribe'
-  = render 'comments', parent: @question
-%hr
-.answers
-  -#= render 'answers'
-%br
-  - if logged_in?
-    = simple_form_for (@question.answers.build), url: question_answers_path(@question), remote: true do |a|
-      = a.label :body, 'Your answer'
-      .answer-errors
-      = a.input :body, label: false, input_html: { rows: 6 }
-      = render 'shared/attachments_form', resource: 'answer'
-      = a.button :submit, 'Create'
+.row
+  .col-md-10
+    - cache @question do
+      .full-question{data: {id: @question.id, user: @question.user.id}}
+        .qtitle= @question.title
+        %span.vote-form
+          = link_to '+', upvote_question_path(@question), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
+          %span.vote{data: { resource: 'question', id: @question.id }} #{@question.total_points}
+          = link_to '-', downvote_question_path(@question), class: 'btn btn-default btn-xs vote', method: :patch, remote: true
+          .qbody= @question.body
+        = render 'attachments', resource: @question
+      .question-footer
+        = render 'shared/tags', question: @question
+        = render 'shared/user', resource: @question
+        - if current_user == @question.user
+          |
+          = link_to 'edit', edit_question_path(@question), remote: true
+          = link_to 'x', @question, method: :delete, data: { confirm: 'You sure?' }
+        - if logged_in?
+          .subscription
+            - if @subscription.nil?
+              = render 'shared/subscribe'
+            - else
+              = render 'shared/unsubscribe'
+        = render 'comments', parent: @question
+    %hr
+    .answers
+      -#= render 'answers'
+    %br
+      - if logged_in?
+        = simple_form_for (@question.answers.build), url: question_answers_path(@question), remote: true do |a|
+          = a.label :body, 'Your answer'
+          .answer-errors
+          = a.input :body, label: false, input_html: { rows: 6 }
+          = render 'shared/attachments_form', resource: 'answer'
+          = a.button :submit, 'Create'
+  .col-md-2
+    = render 'shared/top_tags'
 
 = subscribe_to "/questions/#{@question.id}/answers" unless Rails.env.test?
 = subscribe_to "/questions/#{@question.id}/comments" unless Rails.env.test?

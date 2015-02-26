@@ -1,5 +1,7 @@
 class AnswersController < ApplicationController
   include VotableController
+  include TopTags
+
   before_action :load_question, only: [:index, :create]
   # before_filter :require_login, only: [:create, :destroy, :update, :edit]
   before_action :load_answer, only: [:edit, :update, :destroy, :mark]

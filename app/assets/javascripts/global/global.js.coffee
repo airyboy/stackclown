@@ -8,6 +8,10 @@ $ ->
   #for acceptance tests
   $(".bootstrap-tagsinput").find('input').attr("id", "tags_comma_separated")
 
+  $(document).on 'ajax:success', 'a.vote', (e, data, status, xhr) ->
+    response = $.parseJSON(xhr.responseText)
+    $("span.vote[data-resource=#{response.resource}][data-id=#{response.id}]").html(response.total)
+
 @append_file_field = (res) ->
   id = _.uniqueId()
   html = file_input_tmpl({id:id, resource: res})

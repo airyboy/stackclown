@@ -2,10 +2,8 @@ json.answers_count @question.answers.size
 
 
 json.answers @answers do |answer|
-  json.cache! answer do
-    json.id answer.id
-    json.body answer.body
-    json.created_at answer.created_at
+  json.cache! [answer, answer.best] do
+    json.extract! answer, :id, :body, :created_at, :best
     json.points answer.total_points
 
     json.partial! 'shared/user', user: answer.user
@@ -16,8 +14,7 @@ json.answers @answers do |answer|
     end
 
     json.comments answer.comments do |comment|
-      json.id comment.id
-      json.body comment.body
+      json.extract! comment, :id, :body
       json.partial! 'shared/user', user: comment.user
     end
   end

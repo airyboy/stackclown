@@ -10,6 +10,13 @@ Handlebars.registerHelper('isCurrentUser', function(id, options){
     }
 });
 
+Handlebars.registerHelper('isCurrentUserQuestion', function(id, options){
+    var curQuestionAuthorId = $('.full-question').data('user');
+    if ($('#user-info').data('user-id') == curQuestionAuthorId) {
+        return options.fn(this);
+    }
+});
+
 Handlebars.registerHelper('isSignedIn', function(options){
     if ($('#user-info').data('user-signed')) {
         return options.fn(this);

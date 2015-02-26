@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include VotableController
+
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   # before_filter :require_login, only: [:email, :submit_email]
   authorize_resource
