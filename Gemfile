@@ -60,6 +60,7 @@ gem 'therubyracer'
 gem 'whenever'
 gem 'faker'
 gem 'unicorn'
+gem 'rails-observers'
 
 group :test, :development do
   gem 'rspec-rails'

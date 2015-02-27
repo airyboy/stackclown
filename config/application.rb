@@ -29,6 +29,8 @@ module Stackclown
 
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 
+    config.active_record.observers = :rating_observer
+
     config.generators do |g|
         g.test_framework    :rspec,
                             fixtures: true,

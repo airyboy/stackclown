@@ -13,6 +13,7 @@
 #   t.string   :activation_token
 #   t.datetime :activation_token_expires_at
 #   t.boolean  :admin
+#   t.integer  :rating,                      default: 0
 # end
 #
 # add_index :users, [:activation_token], name: :index_users_on_activation_token, using: :btree
