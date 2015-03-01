@@ -30,19 +30,13 @@ class Answer < ActiveRecord::Base
     Answer.transaction do
       begin
         Answer.where(question: self.question).update_all(best: false)
-        self.update_column(:best, true)
-        update_rating(self.user, 3)
-        self.question.touch
+        self.best = true
+        self.user.update_rating(3)
+        self.save
       rescue Exception
         raise ActiveRecord::Rollback
       end
     end
-  end
-
-  def update_rating(user, points)
-    user = User.find(user)
-    rating = user.rating
-    user.update_attribute(:rating, rating + points)
   end
 
   def send_notification

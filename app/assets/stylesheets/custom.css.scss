@@ -71,8 +71,17 @@ p {
   border-radius:5px 15px;
   border: 2px solid #fff;
   background:#fff;
-  &:hover {
-    text-decoration: none;
+  a {
+    &:hover {
+      color: #000;
+      text-decoration: none;
+      background:#fff;
+    }
+    &:visited {
+      color: #000;
+      text-decoration: none;
+      background:#fff;
+    }
   }
 }
 

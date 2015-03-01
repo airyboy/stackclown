@@ -52,4 +52,9 @@ class User < ActiveRecord::Base
     user.password_confirmation = random_password
     user
   end
+
+  def update_rating(points)
+    rating = user.rating
+    user.update_attribute(:rating, rating + points)
+  end
 end
